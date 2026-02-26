@@ -1,0 +1,681 @@
+#main_yourtree {
+  display: flex;
+  flex-direction: column;
+  /* background-color: #ffffff0a;
+  backdrop-filter: blur(20px);
+  border-radius: 30px; */
+  height: auto;
+}
+
+#general_area {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+#general_settings {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settings {
+  width: clamp(260px, 30vw, 360px);
+  min-width: 260px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  /* flat background and borders with soft shadow */
+  background: var(--color-fondo);
+  border-radius: 12px;
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto);
+  box-sizing: border-box;
+  overflow: auto;
+  box-shadow: 0 10px 25px -5px var(--color-sombra), 0 8px 10px -6px var(--color-sombra);
+}
+
+/* Internal controls inside .settings */
+.settings label {
+  display: block;
+  margin: 0 0 6px 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.settings input[type="text"],
+.settings input[type="url"],
+.settings input[type="email"],
+.settings input[type="password"],
+.settings textarea,
+.settings select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-borde);
+  background: var(--color-superficie);
+  color: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.settings input[type="text"]:focus,
+.settings input[type="url"]:focus,
+.settings input[type="email"]:focus,
+.settings input[type="password"]:focus,
+.settings textarea:focus,
+.settings select:focus {
+  outline: none;
+  border-color: var(--color-acento);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.settings input[type="file"] {
+  display: block;
+  margin-top: 6px;
+  width: 100%;
+  text-wrap: balance;
+}
+
+.settings input[type="range"] {
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* radio groups and small controls */
+.settings .choose_option {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 3px;
+}
+
+.settings .choose_option label {
+  margin: 0;
+  font-weight: 700;
+}
+
+.settings .choose_option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.settings .choosed_option {
+  margin-top: 10px;
+}
+
+/* buttons */
+.settings .button-row {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.settings input[type="submit"],
+.settings input[type="button"],
+.settings button,
+.btn-constrast {
+  padding: 8px 12px;
+  margin: 2px;
+  border-radius: 6px;
+  border: 1px solid var(--color-texto);
+  color: var(--color-fondo);
+  font-weight: 700;
+  background: var(--color-texto);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.settings input[type="reset"] {
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  cursor: pointer;
+}
+
+.settings input[type="submit"]:hover,
+.settings input[type="button"]:hover,
+.settings button:hover {
+  opacity: 0.8;
+}
+
+.settings input[type="submit"]:active,
+.settings input[type="button"]:active,
+.settings button:active {
+  opacity: 0.6;
+}
+
+/* small helper text */
+.settings .muted {
+  color: var(--color-texto-muted);
+  font-size: 0.85rem;
+}
+
+/* keep collapsible previews tidy inside settings */
+.settings [class^="collapsible_"]>button {
+  padding: 10px 12px;
+}
+
+.settings>section {
+  padding: 0.9rem;
+}
+
+.settings>h1 {
+  text-align: center;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  letter-spacing: 0.2px;
+  padding-bottom: 6px;
+}
+
+.settings>section {
+  margin: 0;
+  padding: 1rem;
+  background: var(--color-superficie);
+  border-radius: 12px;
+  border: 1px solid var(--color-borde);
+}
+
+/* ===== Collapsible (simple, theme-aware, mobile-friendly) ===== */
+/* Parent sections: .collapsible_<name> */
+[class^="collapsible_"] {
+  margin: 0 0 10px 0;
+  display: block;
+}
+
+/* Toggle button (clean, full-width, no heavy transforms) */
+[class^="collapsible_"]>button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--color-superficie);
+  border-radius: 8px;
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+[class^="collapsible_"]>button:hover {
+  background: var(--color-superficie-hover);
+  border-color: var(--color-texto-muted);
+}
+
+/* The body uses a class like .collapsible_body_<name> — match via substring */
+[class*="collapsible_body_"] {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 220ms ease,
+    opacity 180ms ease,
+    padding 180ms ease;
+  padding: 0 4px;
+  display: grid;
+  /* justify-content: center; */
+}
+
+/* Open state */
+[class^="collapsible_"].open [class*="collapsible_body_"] {
+  max-height: 1000px;
+  /* large enough for content */
+  opacity: 1;
+  padding: 10px 4px 0 4px;
+  /* allow interactive children (pickers, sliders) to use full pointer area */
+  overflow: visible;
+  pointer-events: auto;
+}
+
+/* Small screens: increase tappable area */
+@media (max-width: 600px) {
+  [class^="collapsible_"]>button {
+    padding: 14px 14px;
+    font-size: 1rem;
+  }
+}
+
+/* ============================================================= */
+
+#style_view {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+#style_view>div {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  cursor: pointer;
+  transition: border-color 0.12s ease;
+  min-height: 72px;
+  overflow: visible;
+}
+
+#style_view>div input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+#style_view>div label {
+  z-index: 1;
+  font-size: 0.95rem;
+  text-transform: capitalize;
+  color: var(--color-texto);
+  font-weight: 700;
+  pointer-events: none;
+  text-align: center;
+}
+
+#style_view>div:has(input:checked) {
+  border-color: var(--color-texto);
+  background: var(--color-borde);
+}
+
+#style_view>div:hover {
+  border-color: var(--color-secundario);
+}
+
+#style_view>div:has(input:focus) {
+  outline: 2px solid var(--color-texto);
+}
+
+#style_background>div {
+  margin-bottom: 12px;
+}
+
+#style_background>div label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-texto);
+  font-size: 0.9rem;
+}
+
+#back_color {
+  padding: 10px;
+}
+
+/* #style_background .react-colorful {
+  width: 100%;
+  min-height: 220px; 
+  border-radius: 8px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.12);
+  overflow: visible; 
+  padding: 6px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border-color);
+} */
+
+/* page background chooser: radio options and selected content */
+#style_page .choose_option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+#style_page .choose_option label {
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+#style_page .choose_option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+#style_page .choosed_option {
+  padding-top: 8px;
+}
+
+#style_page .react-colorful {
+  width: 100%;
+  min-height: 220px;
+  /* ensure full picker visible */
+  border-radius: 8px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.12);
+  overflow: visible;
+  /* don't crop the picker */
+  padding: 6px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border-color);
+}
+
+#style_page input[type="file"] {
+  display: block;
+  margin-top: 8px;
+}
+
+/* ensure both pickers are interactive and not clipped by collapsible or surrounding elements */
+#back_color,
+#back_color_page {
+  position: relative;
+  z-index: 3;
+  /* keep above default content but below modals */
+  overflow: visible;
+}
+
+#back_color .react-colorful,
+#back_color_page .react-colorful,
+#style_page .react-colorful,
+#style_background .react-colorful {
+  position: relative;
+  z-index: 4;
+  /* bring picker UI above nearby content */
+  pointer-events: auto;
+  min-height: 220px;
+  /* ensure full picker visible */
+  overflow: visible;
+}
+
+#style_page .choosed_option,
+#style_background>div {
+  position: relative;
+  z-index: 60;
+  /* bring wrapper and its ancestors above nearby content */
+  pointer-events: auto;
+}
+
+[class^="collapsible_"].open {
+  z-index: 55;
+}
+
+/* make blur control visually contrast with the background */
+#style_background>div:nth-child(2) {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* custom range: visible in both light and dark */
+#back_blur[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  /* pill */
+  padding: 2px;
+  background: linear-gradient(90deg,
+      rgba(0, 0, 0, 0.06),
+      rgba(255, 255, 255, 0.02));
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--color-range-border, rgba(255, 255, 255, 0.08));
+  /* subtle inner stroke to increase perception on busy backgrounds */
+  background-clip: padding-box;
+  outline: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+#back_blur[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--color-texto);
+  border: 2px solid var(--color-fondo);
+}
+
+#back_blur[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--color-texto);
+  border: 2px solid var(--color-fondo);
+}
+
+@media (prefers-color-scheme: dark) {
+  #back_blur[type="range"] {
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.04),
+        rgba(255, 255, 255, 0.02));
+  }
+
+  #back_blur[type="range"]::-webkit-slider-thumb,
+  #back_blur[type="range"]::-moz-range-thumb {
+    border: 2px solid rgba(0, 0, 0, 0.6);
+  }
+}
+
+#back_blur[type="range"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--color-texto-secundario);
+}
+
+/* small tweak so settings sits closer to preview */
+.settings {
+  margin-right: 6px;
+}
+
+/* responsive adjustments */
+@media (max-width: 900px) {
+  .settings {
+    width: 100%;
+    min-width: auto;
+    max-width: 100%;
+  }
+
+  #style_view {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+#pre_view {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  position: sticky;
+  top: -12px;
+}
+
+/* Center links inside preview */
+#pre_view>#link>.link_base {
+  width: 60%;
+  max-width: 900px;
+  min-width: 40%;
+  margin: 0 auto;
+}
+
+#main_yourtree>#link>.link_base {
+  width: 40%;
+}
+
+/* Mobile layout: place preview above settings and add orderly framing */
+@media (max-width: 900px) {
+
+  /* stack with preview first */
+  #general_area {
+    flex-direction: column-reverse;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  /* Make both sections full width and framed for neatness */
+  .settings,
+  #pre_view {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ensure settings sits below preview with spacing */
+  .settings {
+    margin: 12px 0 0 0;
+  }
+
+  #pre_view {
+    position: relative;
+    padding: 16px;
+    border-radius: 8px;
+    background: var(--color-fondo);
+    border: 1px solid var(--color-borde);
+  }
+
+  /* make the preview's link container full width on small screens */
+  #pre_view>#link>.link_base {
+    width: 100%;
+    min-width: 40%;
+    margin: 0;
+  }
+
+  #main_yourtree>#link>.link_base {
+    width: 100%;
+  }
+}
+
+/* vista de usuario y generales */
+
+#link {
+  display: inline-block;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
+
+#main_yourtree>#link {
+  padding: 2rem;
+}
+
+#pre_view>#link {
+  padding: 1rem;
+  border-radius: 30px;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header h1 {
+  display: flex;
+  flex-flow: column wrap;
+  text-align: center;
+  padding: 0px 30px;
+  margin-bottom: 30px;
+}
+
+.pre_page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: 50%;
+  padding: 5px;
+  width: 3rem;
+  height: 3rem;
+}
+
+.pre_page svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  max-width: 100%;
+  max-height: 100%;
+  transform: none;
+  transform: scale(1.5);
+  filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000) drop-shadow(0 0 3px #000);
+  /*mix-blend-mode: difference;
+   hace el cambio de color  */
+}
+
+.img_logo {
+  width: 3rem;
+  border-radius: 50%;
+}
+
+.img_logo img {
+  width: 3rem;
+  border-radius: 50%;
+  filter: drop-shadow(1px 1px 0 black) drop-shadow(1px 0px 0 black) drop-shadow(0px 1px 0 black) drop-shadow(-1px -1px 0 black);
+}
+
+.collapsible_body_style_link>ul {
+  list-style-type: none;
+}
+
+.collapsible_body_style_link>ul li {
+  text-align: center;
+  padding: 0.2rem 0.7rem;
+  margin-bottom: 0.8rem;
+  border: 2px solid var(--color-borde);
+  border-radius: 30px;
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.collapsible_body_style_link>ul>li a {
+  text-decoration: none;
+  color: var(--color-texto);
+}
+
+.collapsible_body_style_link>ul>li button {
+  padding: 2px 6px !important;
+  border-color: transparent;
+}
+
+.collapsible_body_style_link>button {
+  border-color: transparent;
+  justify-content: center;
+}
+
+/* layouts es el div que lo separa de las demas opciones */
+.collapsible_body_style_view {
+  display: grid;
+  row-gap: 1rem;
+}
+
+.collapsible_body_style_view>.layouts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.collapsible_body_style_view>.layouts>div {
+  display: grid;
+  justify-items: center;
+  margin: 0.4rem;
+}
+
+.layouts>div>label {
+  font-size: 1rem !important;
+}
+
+.layouts>div>input {
+  height: 1.4rem;
+  width: 1.4rem;
+}

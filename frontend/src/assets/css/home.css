@@ -1,0 +1,165 @@
+/* ---------- PREMIUM MINIMALIST HOME ----------- */
+#main_home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 80px;
+  font-family: var(--font-body);
+}
+
+#main_home h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  color: var(--color-texto);
+  letter-spacing: -0.02em;
+}
+
+#main_home h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--color-texto);
+}
+
+#main_home p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--color-texto-muted);
+  max-width: 700px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+/* INTRODUCTION AREA */
+#main_home #introduction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 100px;
+  width: 100%;
+}
+
+#main_home #introduction section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+/* LOGO SVG */
+#main_home #introduction section #YourTree {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin-bottom: 40px;
+}
+
+#main_home #introduction #YourTree #_title_ path,
+#main_home #introduction #YourTree #_underline_group_ path {
+  fill: var(--color-texto);
+}
+
+/* SVG INTERACTION */
+#main_home #people_thinking {
+  width: 100%;
+  max-width: 280px;
+  margin: 40px 0;
+  transition: transform 0.4s ease;
+  filter: drop-shadow(0 10px 15px var(--color-sombra));
+}
+
+#main_home #people_thinking:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+#main_home #introduction section svg path {
+  transition: fill 0.4s ease;
+}
+
+/* SVG COLOR HOVERS */
+#main_home #introduction:hover section svg #_woman_dress_ {
+  fill: var(--color-acento);
+}
+
+#main_home #introduction:hover section svg #_man_shirt_ path {
+  fill: var(--color-texto-secundario);
+}
+
+#main_home #introduction:hover svg #_hair_shine_ path {
+  fill: var(--color-texto-muted);
+}
+
+#main_home #introduction:hover svg #_marks_background_ path {
+  fill: var(--color-alerta);
+}
+
+#main_home #introduction:hover svg #_woman_skin_ path {
+  fill: #f4d0cd;
+}
+
+#main_home #introduction:hover svg #_man_face_ path {
+  fill: #db9e83;
+}
+
+/* ASIDES (CARDS) */
+#main_home>aside {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 16px;
+  padding: 48px;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 6px -1px var(--color-sombra), 0 2px 4px -2px var(--color-sombra);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+#main_home>aside:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 25px -5px var(--color-sombra-hover), 0 8px 10px -6px var(--color-sombra-hover);
+  border-color: var(--color-texto-muted);
+}
+
+#main_home>aside h2 {
+  font-size: 2rem;
+  margin-bottom: 24px;
+  text-align: left;
+  color: var(--color-texto);
+}
+
+#main_home>aside p {
+  text-align: left;
+  margin: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  #main_home {
+    padding: 80px 20px 40px;
+  }
+
+  #main_home #introduction {
+    gap: 40px;
+    margin-bottom: 60px;
+  }
+
+  #main_home>aside {
+    padding: 32px 24px;
+    border-radius: 12px;
+  }
+
+  #main_home h2 {
+    font-size: 2rem;
+  }
+
+  #main_home>aside h2 {
+    font-size: 1.75rem;
+  }
+}

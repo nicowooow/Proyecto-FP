@@ -1,0 +1,49 @@
+dialog {
+  justify-self: center;
+  align-self: center;
+  padding: 2.5rem;
+  border-radius: 16px;
+  background-color: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto);
+  box-shadow: 0 20px 25px -5px var(--color-sombra), 0 8px 10px -6px var(--color-sombra);
+}
+
+#upload_photo,
+dialog.upload_photo {
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: hidden;
+}
+
+dialog.upload_photo>* {
+  margin: 0.2rem;
+}
+
+/* Minimalist inputs */
+dialog input[type="text"],
+dialog input[type="number"],
+dialog input[type="file"] {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  color: var(--color-texto);
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+dialog input[type="text"]:focus,
+dialog input[type="number"]:focus,
+dialog input[type="file"]:focus {
+  outline: none;
+  border-color: var(--color-acento);
+  background: var(--color-fondo);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+dialog input[type="text"]::placeholder,
+dialog input[type="number"]::placeholder {
+  color: var(--color-texto-muted);
+}

@@ -1,0 +1,40 @@
+/* Minimalist Light Glow Animation */
+@keyframes background_light {
+    0% {
+        --x: 20%;
+        --y: 80%;
+    }
+
+    50% {
+        --x: 80%;
+        --y: 20%;
+    }
+
+    100% {
+        --x: 20%;
+        --y: 80%;
+    }
+}
+
+@property --x {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 20%;
+}
+
+@property --y {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 80%;
+}
+
+:root[data-theme="light"] {
+    --x: 20%;
+    --y: 80%;
+    background-color: #F5F7FA;
+    background-size: cover;
+    background-attachment: fixed;
+    background-image:
+        linear-gradient(to bottom, hsla(230, 59%, 70%, 0.12) 0%, transparent 50%);
+    animation: background_light 20s ease-in-out infinite;
+}

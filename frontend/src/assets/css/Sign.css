@@ -1,0 +1,196 @@
+/* Main container */
+#main_sign {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+#sign {
+  margin: 0 auto;
+  display: flex;
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 500px;
+  max-width: 900px;
+  width: 70vw;
+  color: var(--color-texto);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+#sign section {
+  flex: 1;
+  width: 50%;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#sign #message_sign {
+  background: var(--color-superficie-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  width: 100%;
+}
+
+#sign section:first-child#message_sign {
+  border-right: 1px solid var(--color-borde);
+}
+
+#sign section:last-child#message_sign {
+  border-left: 1px solid var(--color-borde);
+}
+
+#sign #message_sign h2 {
+  font-family: var(--font-body);
+  font-size: 2rem;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+#sign div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+#sign form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#sign label {
+  font-family: var(--font-body);
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+#sign input[type="text"],
+#sign input[type="email"],
+#sign input[type="email-username"],
+#sign #password,
+#sign #confirm_password {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  padding: 10px 16px;
+  color: var(--color-texto);
+  font-size: 1rem;
+  outline: none;
+}
+
+#sign input[type="text"]:focus,
+#sign input[type="email"]:focus,
+#sign input[type="email-username"]:focus,
+#sign #password:focus,
+#sign #confirm_password:focus {
+  border-color: var(--color-texto);
+  background: var(--color-fondo);
+}
+
+#sign input[type="text"]::placeholder,
+#sign input[type="email"]::placeholder,
+#sign input[type="email-username"]::placeholder,
+#sign #password::placeholder,
+#sign #confirm_password::placeholder {
+  color: var(--color-texto-muted);
+}
+
+#sign input[type="submit"] {
+  background: var(--color-texto);
+  border: 1px solid var(--color-texto);
+  border-radius: 6px;
+  padding: 10px 24px;
+  color: var(--color-fondo);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: opacity 0.2s;
+}
+
+#sign input[type="submit"]:hover {
+  opacity: 0.8;
+}
+
+#sign input[type="submit"]:disabled {
+  background: var(--color-borde);
+  border-color: var(--color-borde);
+  color: var(--color-texto-muted);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+#sign input[type="password"],
+#sign #password,
+#sign #confirm_password {
+  flex: 1;
+  min-width: 0;
+}
+
+#sign .show_passwd {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  padding: 8px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#sign .show_passwd:hover {
+  background: var(--color-borde);
+}
+
+.error {
+  color: #ff3333;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+@media (max-width: 968px) {
+  #sign {
+    width: 80vw;
+  }
+}
+
+@media (max-width: 768px) {
+  #sign {
+    flex-direction: column;
+    width: 90vw;
+  }
+
+  #sign section {
+    width: 100%;
+    flex: none;
+    padding: 30px;
+  }
+
+  #sign #message_sign {
+    border: none !important;
+    border-bottom: 1px solid var(--color-borde) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #sign {
+    width: 95vw;
+  }
+
+  #sign section {
+    padding: 20px;
+  }
+}

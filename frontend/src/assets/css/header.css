@@ -1,0 +1,394 @@
+/* Minimalist header CSS overrides */
+header {
+  position: sticky;
+  top: 0;
+  margin: var(--space-md);
+  border-radius: 8px;
+  background-color: var(--color-fondo);
+  z-index: 100;
+  opacity: 1;
+}
+
+.header-hidden {
+  transform: translateY(-120%);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.header_glass_background {
+  border-radius: 8px;
+  background-color: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  overflow: hidden;
+  z-index: -1;
+}
+
+header:hover .header_glass_background {
+  box-shadow: none;
+}
+
+#header section {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+#my_logo {
+  transition: opacity 0.3s ease;
+  width: 40px;
+  height: auto;
+}
+
+#my_logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+#header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+#header .Links {
+  display: inline-block;
+  text-decoration: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--color-texto);
+  margin: 6px 12px;
+  font-family: var(--font-body);
+  transition: opacity 0.2s;
+}
+
+#header a:hover {
+  opacity: 0.7;
+}
+
+/* ============================================
+   MENÚ MÓVIL - Botón Hamburguesa
+   ============================================ */
+
+/* Botón hamburguesa (oculto por defecto en desktop) */
+.menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  margin-left: var(--space-sm);
+}
+
+/* Líneas del botón hamburguesa */
+.menu span {
+  width: 100%;
+  height: 2.5px;
+  background: var(--color-texto);
+  border-radius: var(--radius-full);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+/* Animación cuando el menú está activo - Primera línea forma la X superior */
+.menu.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+/* Animación cuando el menú está activo - Línea central desaparece */
+.menu.active span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+/* Animación cuando el menú está activo - Tercera línea forma la X inferior */
+.menu.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ============================================
+   MENÚ MÓVIL - Panel Desplegable
+   ============================================ */
+
+.mobile_menu {
+  position: absolute;
+  top: calc(100% + var(--space-sm));
+  right: var(--space-lg);
+  width: 320px;
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  background-color: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  /* Estado inicial: oculto con animación */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s;
+  z-index: 999;
+}
+
+/* Estado abierto del menú móvil */
+.mobile_menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* Contenedor interno del menú móvil con padding */
+.mobile_menu_content {
+  padding: var(--space-lg);
+}
+
+/* ============================================
+   MENÚ MÓVIL - Secciones de Navegación
+   ============================================ */
+
+/* Sección de navegación (Navigation, Account, etc.) */
+.mobile_nav_section {
+  margin-bottom: var(--space-lg);
+}
+
+.mobile_nav_section:last-child {
+  margin-bottom: 0;
+}
+
+/* Títulos de las secciones (NAVIGATION, ACCOUNT) */
+.mobile_nav_section h3 {
+  font-size: 0.75rem;
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-texto-muted);
+  margin-bottom: var(--space-md);
+  padding-left: var(--space-sm);
+}
+
+/* ============================================
+   MENÚ MÓVIL - Enlaces
+   ============================================ */
+
+/* Enlaces dentro del menú móvil (soporta ambas clases) */
+.mobile_link,
+.mobile-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-sm);
+  margin-bottom: var(--space-xs);
+  border-radius: var(--radius-lg);
+  color: var(--color-texto);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: var(--fw-medium);
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+/* Iconos SVG dentro de los enlaces */
+.mobile_link svg,
+.mobile-link svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-principal);
+  flex-shrink: 0;
+}
+
+/* Efecto hover - fondo sutil y desplazamiento */
+.mobile_link:hover,
+.mobile-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+  color: var(--color-principal);
+}
+
+/* Efecto active - desplazamiento reducido */
+.mobile_link:active,
+.mobile-link:active {
+  transform: translateX(2px);
+}
+
+/* ============================================
+   MENÚ MÓVIL - Enlaces Destacados
+   ============================================ */
+
+.mobile_link.highlight {
+  background: var(--color-texto);
+  color: var(--color-fondo);
+  font-weight: var(--fw-semibold);
+  border-radius: 6px;
+}
+
+.mobile_link.highlight svg {
+  color: var(--color-fondo);
+}
+
+.mobile_link.highlight:hover {
+  background: var(--color-secundario);
+  transform: none;
+}
+
+/* ============================================
+   MENÚ MÓVIL - Divisor
+   ============================================ */
+
+.mobile_nav_divider {
+  height: 1px;
+  background: var(--color-borde);
+  margin: var(--space-md) 0;
+}
+
+/* ============================================
+   MENÚ MÓVIL - Overlay de Fondo
+   ============================================ */
+
+/* Overlay oscuro cuando el menú está abierto */
+.mobile_menu_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 998;
+  animation: fadeIn 0.3s ease-out;
+  border-radius: var(--radius-2xl);
+}
+
+/* Animación de aparición del overlay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  #my_logo {
+    width: 30px;
+  }
+
+  #header .Links {
+    font-size: 0.9rem;
+    /* margin: -3px; */
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Media Queries
+   ============================================ */
+
+/* Pantallas medianas - Activar menú móvil */
+@media (max-width: 968px) {
+
+  /* Mostrar botón hamburguesa */
+  .menu {
+    display: flex;
+  }
+
+  header {
+    margin: var(--space-md) var(--space-sm);
+  }
+
+  header.scrolled {
+    margin: var(--space-xs) var(--space-xs);
+  }
+
+  #my_logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  header.scrolled #my_logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  #header {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  header.scrolled #header {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  /* Ajustar ancho del menú móvil */
+  .mobile_menu {
+    right: var(--space-sm);
+    width: calc(100vw - 2rem);
+  }
+}
+
+/* Pantallas pequeñas - Ajustes adicionales */
+@media (max-width: 480px) {
+  header {
+    margin: var(--space-sm) var(--space-xs);
+  }
+
+  header.scrolled {
+    margin: var(--space-xs) var(--space-xs);
+  }
+
+  #my_logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  header.scrolled #my_logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  #header {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  header.scrolled #header {
+    padding: 4px var(--space-xs);
+  }
+
+  /* Ajustar posición del menú móvil */
+  .mobile_menu {
+    right: var(--space-xs);
+    top: calc(100% + var(--space-xs));
+  }
+
+  .mobile_menu_content {
+    padding: var(--space-md);
+  }
+
+  /* Reducir tamaño de fuente en móviles pequeños */
+  .mobile_link,
+  .mobile-link {
+    font-size: 0.9375rem;
+    padding: var(--space-sm);
+  }
+}
+
+/* ============================================
+   ACCESIBILIDAD - Movimiento Reducido
+   ============================================ */
+
+/* Desactivar animaciones para usuarios con preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+
+  header,
+  #header .Links,
+  #my_logo {
+    transition: none;
+  }
+}

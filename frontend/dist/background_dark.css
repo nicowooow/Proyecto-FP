@@ -1,0 +1,36 @@
+/* Minimalist Subtle Glow Animation */
+@keyframes background_dark {
+    0% {
+        --x: 20%;
+        --y: 80%;
+    }
+    50% {
+        --x: 80%;
+        --y: 20%;
+    }
+    100% {
+        --x: 20%;
+        --y: 80%;
+    }
+}
+
+@property --x {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 20%;
+}
+
+@property --y {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 80%;
+}
+
+:root[data-theme="dark"] {
+    --x: 20%;
+    --y: 80%;
+    background-color: #0A0E26;
+    background-image: 
+        radial-gradient(circle at var(--x) var(--y), hsla(248, 53%, 35%, 0.15) 0%, transparent 50%);
+    animation: background_minimal 20s ease-in-out infinite;
+}

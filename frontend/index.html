@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/YourTree.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YourTree</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="./src/assets/css/base.css" />
+    <link rel="stylesheet" href="/background_dark.css" />
+    <link rel="stylesheet" href="/background_light.css" />
+
+    <!-- fuentes para el documento -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Shadows+Into+Light&family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto|Merriweather|Alegreya&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.cdnfonts.com/css/made-gentle" rel="stylesheet" />
+
+    <script>//importante para la parte de tema
+      (function () {
+        try {
+          var savedTheme = localStorage.getItem("theme") || "dark";//tema que guardamos previamente en el navegador
+          document.documentElement.setAttribute("data-theme", savedTheme);//esto nos da el tema guardado en el navegador 
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "dark");//si el tema no esta o sale un error nos pone el negro por defecto
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./src/main.jsx"></script>
+  </body>
+</html>

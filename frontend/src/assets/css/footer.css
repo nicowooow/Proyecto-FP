@@ -1,0 +1,9 @@
+/* estilos footer */
+footer {
+    text-align: center;
+    background-color: var(--color-fondo);
+    color: var(--color-texto-muted);
+    border-top: 1px solid var(--color-borde);
+    padding: 20px 0;
+    margin-top: 40px;
+}

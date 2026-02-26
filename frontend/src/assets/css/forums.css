@@ -1,0 +1,203 @@
+#forums_page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 100px 20px 40px;
+  color: var(--color-texto);
+  font-family: var(--font-body);
+}
+
+.forums_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-borde);
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.forums_header_content h1 {
+  font-size: 2.5rem;
+  margin: 0 0 10px 0;
+  color: var(--color-texto);
+  font-weight: 700;
+}
+
+.forums_header_content p {
+  font-size: 1.1rem;
+  color: var(--color-texto-muted);
+  margin: 0;
+}
+
+.btn_create_forum {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-texto);
+  color: var(--color-fondo);
+  border: 1px solid var(--color-texto);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn_create_forum:hover {
+  opacity: 0.8;
+}
+
+.forums_list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.forum_card {
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  padding: 24px;
+  transition: border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.forum_card:hover {
+  border-color: var(--color-secundario);
+}
+
+.forum_card h2 {
+  font-size: 1.5rem;
+  margin: 0 0 12px 0;
+  color: var(--color-texto);
+}
+
+.forum_desc {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-texto-muted);
+  margin: 0 0 20px 0;
+  flex-grow: 1;
+}
+
+.forum_meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-borde);
+}
+
+.forum_status {
+  background: var(--color-superficie);
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: capitalize;
+  border: 1px solid var(--color-borde);
+}
+
+.forum_likes {
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.no_forums {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--color-texto-muted);
+  grid-column: 1 / -1;
+  padding: 40px;
+}
+
+/* Dialog Styles */
+.dialog_form_create {
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.dialog_form_create::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.dialog_form_create h2 {
+  margin: 0 0 24px 0;
+  font-size: 1.5rem;
+}
+
+.form_group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form_group label {
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.form_group input,
+.form_group textarea {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto);
+  padding: 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form_group input:focus,
+.form_group textarea:focus {
+  outline: none;
+  border-color: var(--color-texto);
+  background: var(--color-fondo);
+}
+
+.form_actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.btn_cancel,
+.btn_submit {
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.2s;
+}
+
+.btn_cancel {
+  background: transparent;
+  color: var(--color-texto);
+  border-color: var(--color-borde);
+}
+
+.btn_cancel:hover {
+  opacity: 0.7;
+}
+
+.btn_submit {
+  background: var(--color-texto);
+  color: var(--color-fondo);
+  border-color: var(--color-texto);
+}
+
+.btn_submit:hover {
+  opacity: 0.8;
+}
