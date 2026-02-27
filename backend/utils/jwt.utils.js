@@ -18,7 +18,7 @@ export const createAccessToken = (id, username, role) => {
       },
       JWT_ACCESS_SECRET,
       {
-        expiresIn: "20m",
+        expiresIn: "1d",
       }
     );
   } catch (error) {
