@@ -85,8 +85,9 @@
   border-radius: 6px;
   font-size: 1.2rem;
   margin: 12px 0;
-  background-color: var(--color-superficie);
+  background-color: var(--color-blur-border);
   transition: border-color 0.2s;
+  justify-content: center;
 }
 
 .link_body li:hover {

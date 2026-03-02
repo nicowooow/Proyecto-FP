@@ -12,6 +12,23 @@ export const get_users = async (req, res) => {
 	}
 };
 
+export const get_user_public = (req, res) => {
+	userRepository
+		.getUser(req.params.username)
+		.then((user) => {
+			if (!user) {
+				return res.status(404).json({
+					exists: false,
+					message: "user not found",
+				});
+			}
+			return res.status(200).json({ exists: true });
+		})
+		.catch((error) => {
+			console.log(error);
+			res.status(500).send("Error en el servidor error"); // importante
+		});
+};
 export const get_user = (req, res) => {
 	userRepository
 		.getUser(req.params.username)

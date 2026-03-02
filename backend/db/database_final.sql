@@ -38,12 +38,25 @@ create table users (
     created_at TIMESTAMP default CURRENT_TIMESTAMP,
     last_login_at TIMESTAMP,
     role_id INT default 2 not null,
-    token_version INT default 0 not null,
     verify_code VARCHAR(7) default null,
     primary key (id),
     unique (username),
     unique (email),
     constraint fk_users_role_id foreign key (role_id) references roles (id)
+);
+-- ==================================================
+-- TABLA: token
+-- ==================================================
+CREATE TABLE refresh_tokens (
+    id SERIAL PRIMARY KEY,
+    refresh_token TEXT NOT NULL UNIQUE,
+    user_id INT NOT NULL,
+    token_version INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    revoked BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT fk_refresh_user 
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- =====================================================

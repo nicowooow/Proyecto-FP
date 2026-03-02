@@ -10,8 +10,10 @@ const AuthContext = createContext();
 // un objeto cualquiera
 export function AuthProvider({ children }) {
 	// isLogged y loading lo ponemos con sus valores por defecto
-	let [isLogged, setIsLogged] = useState(false);
-
+	const [isLogged, setIsLogged] = useState(false);
+	//loading serviara para saber si los tokens estan cargado o no, una vez cargados cambia a false
+	// el cual nos indica que ya termino de cargarse
+	const [loading, setLoading] = useState(true);
 	// usamos un efecto en el cual metemos una funcion asincrona para esperar la repuesta del servidor
 	useEffect(() => {
 		//hacemos una funcion vacia para por asi decirlo para ejecutar el verifytoken
@@ -24,7 +26,7 @@ export function AuthProvider({ children }) {
 			// ponemos los datos
 			// el resultado de verifyToken sera un boolean lo cual nos dira si esta logueado o no
 			setIsLogged(logged);
-			// setLoading(false);
+			setLoading(false);
 			// esto nos serviria para el loader de la paginal si es falso desaparece el loader de la vista princial
 		})();
 	}, []);
@@ -44,7 +46,7 @@ export function AuthProvider({ children }) {
 			sameSite: "strict",
 		});
 		// almacena los datos que sacamos de usuario en el almacenamiento local
-		cookies.set("user", JSON.stringify(user), { expires: 7 });
+		cookies.set("user", JSON.stringify(user));
 		// cambiamos el valor de isLogged a true por ende si se logro loguear
 		console.log("se creo el token y su refresh");
 		setIsLogged(true);
@@ -65,7 +67,7 @@ export function AuthProvider({ children }) {
 	//retornamos la etiqueta que generamos con el contexto y que tiene los valores de
 	// isLogged, login, logout  y loading
 	// cuales pueden tener elementos adentro
-	const value = { isLogged, login, logout };
+	const value = { isLogged, loading, login, logout };
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

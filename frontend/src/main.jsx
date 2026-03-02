@@ -7,6 +7,7 @@ import { AuthProvider } from "./components/auth.jsx";
 
 import Header from "./components/header";
 import YourTree from "./pages/YourTree.jsx";
+import YourTreeUser from "./pages/YourTreeUser.jsx";
 import Home from "./pages/Home.jsx";
 import Templates from "./pages/Templates.jsx";
 import Top_Pages from "./pages/Top_Pages.jsx";
@@ -29,7 +30,7 @@ function AppWithHeader() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/YourTree" element={<YourTree />} />
-        <Route path="/YourTree/:username" element={<YourTree />} />
+        <Route path="/YourTree/:username" element={<YourTreeUser />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/Templates" element={<Templates />} />
         <Route path="/Top_Pages" element={<Top_Pages />} />
@@ -39,6 +40,7 @@ function AppWithHeader() {
         <Route path="/Sign_in" element={<Sign_in />} />
         <Route path="/Sign_up" element={<Sign_up />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/404" element={<NotFound />} />
       </Routes>
     </>
   );
