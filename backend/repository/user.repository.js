@@ -56,13 +56,15 @@ class UserRepository {
 
 		return pool
 			.query(sql, [username, email, password, status, date, roleId, verifyCode])
-			.then(({ rows, rowCount }) => {
+			.then(({ rows }) => {
 				setTimeout(
 					() => {
-						// we can't reliably update verify code without id context here, but keeping logic
-						this.updateVerifyCode().then((rowCount) => {
-							if (rowCount === 0) throw new Error("Verify code was not updated");
-						}).catch(e => console.log(e));
+						this.updateVerifyCode(null,rows[0].id)
+							.then((rowCount) => {
+								if (rowCount === 0)
+									throw new Error("Verify code was not updated");
+							})
+							.catch((e) => console.log(e));
 					},
 					5 * 60 * 1000,
 				);
@@ -148,9 +150,14 @@ class UserRepository {
 	 * @param {string|null} verifyCode
 	 * @returns
 	 */
-	updateVerifyCode = (verifyCode = null) => {
+	updateVerifyCode = (verifyCode = null, id) => {
+		console.log(verifyCode, id);
+
 		const sql = `update users set verify_code = $1 where id = $2 `;
-		return pool.query(sql, [verifyCode, id]).then(({ rowCount }) => rowCount);
+		return pool
+			.query(sql, [verifyCode, id])
+			.then(({ rowCount }) => rowCount)
+			.catch((e) => console.log(e));
 	};
 }
 

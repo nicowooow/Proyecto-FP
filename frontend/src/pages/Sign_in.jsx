@@ -37,6 +37,8 @@ function Sign_in() {
 			if (res.ok) {
 				// console.log("LOGIN OK:", data);
 				// return setMessage(data.message)
+				// console.log(data.user);
+
 				login(data.accessToken, data.refreshToken, data.user);
 
 				navigate("/home");

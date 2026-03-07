@@ -23,14 +23,14 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 						let data = await linksRes.json();
 						setLinks(data);
 					}
-				}
+				}				
 			} catch (e) {
 				console.error("Error fetching links:", e);
 			}
 		}
 		if (username) fetchLinks();
-	}, [username, rest.textColor]);
-
+	}, [username]);
+	
 	const list_links = useMemo(
 		() =>
 			(links || []).map((link, i) => {
@@ -38,11 +38,11 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 					React.isValidElement(child)
 						? React.cloneElement(child, { linkId: link.id, profileId })
 						: child,
-				);
+				);					
 				return (
 					<li key={link.id ?? i}>
 						<section className="links">
-							<a href={link.url ?? "#"} style={{ color: rest.textColor }}>
+							<a href={link.url ?? "#"}>
 								{link.title ?? link.name ?? "name link"}
 							</a>
 						</section>
@@ -60,13 +60,9 @@ export const Links_base = React.memo(function Links_base({
 	optionCheck,
 	usernameUser,
 	descriptionInput,
-	colorInput,
-	colorPageInput,
 	blurInput,
-	textColor,
 }) {
 	// console.log(username_input);
-	// console.log(colorInput, colorPageInput);
 
 	// la opcion de visualizacion
 	let option = Number(optionCheck);
@@ -90,24 +86,24 @@ export const Links_base = React.memo(function Links_base({
 			return (
 				<>
 					<img src={urlImage} alt="user image" />
-					<h2 style={{ color: textColor }}>{username}</h2>
-					<p style={{ color: textColor }}>{description}</p>
+					<h2>{username}</h2>
+					<p>{description}</p>
 				</>
 			);
 		} else if (option === 2) {
 			return (
 				<>
-					<h2 style={{ color: textColor }}>{username}</h2>
+					<h2>{username}</h2>
 					<img src={urlImage} alt="user image" />
-					<p style={{ color: textColor }}>{description}</p>
+					<p>{description}</p>
 				</>
 			);
 		} else if (option === 3) {
 			return (
 				<>
-					<h2 style={{ color: textColor }}>{username}</h2>
+					<h2>{username}</h2>
 					<img src={urlImage} alt="user image" />
-					<p style={{ color: textColor }}>{description}</p>
+					<p>{description}</p>
 				</>
 			);
 		}
@@ -117,24 +113,18 @@ export const Links_base = React.memo(function Links_base({
 					<img src={urlImage} alt="user image" />
 				</div>
 				<div>
-					<h2 style={{ color: textColor }}>{username}</h2>
-					<p style={{ color: textColor }}>{description}</p>
+					<h2>{username}</h2>
+					<p>{description}</p>
 				</div>
 			</>
 		);
-	}, [option, username, description, urlImage, textColor]);
+	}, [option, username, description, urlImage]);
 
 	return (
-		<section
-			className="link_base"
-			style={{
-				backgroundColor: colorInput,
-				backdropFilter: `blur(${blurInput}px)`,
-			}}
-		>
+		<section className="link_base">
 			<section className={`link_head ${headOption}`}>{linkHeadOption}</section>
 			<section className="link_body">
-				<PutLinks username={username} textColor={textColor} />
+				<PutLinks username={username} />
 			</section>
 		</section>
 	);
@@ -162,7 +152,6 @@ export const General_tree = React.memo(function General_tree({
 	return (
 		<section
 			id="link"
-			style={{ backgroundColor: rest.colorPage, color: rest.textColor }}
 		>
 
 			<section className="header">
@@ -182,9 +171,7 @@ export const General_tree = React.memo(function General_tree({
 				optionCheck={option}
 				usernameUser={username}
 				descriptionInput={descrition}
-				colorInput={rest.color}
-				blurInput={rest.blur}
-				textColor={rest.textColor}
+
 			/>
 			<ShareIcon username={username}/>
 		</section>

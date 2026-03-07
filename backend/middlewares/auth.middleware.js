@@ -25,7 +25,7 @@ export const authenticate = (req, res, next) => {
 			});
 		}
 
-/* 		puede ser repetitivo
+		/* 		puede ser repetitivo
 		if (!jwt.verify(token, JWT_ACCESS_SECRET)) {
 		  return res.status(401).json({
 		    message: "we can not found your access key",
@@ -44,7 +44,7 @@ export const authenticate = (req, res, next) => {
 		next();
 	} catch (error) {
 		console.log(error);
-		
+
 		return res.status(401).json({
 			message: "invalid or expired access key",
 			isLogged: false,
@@ -52,13 +52,15 @@ export const authenticate = (req, res, next) => {
 	}
 };
 
-export const verifyAccount = async (req, res, next) => {
+export const sendCode = async (req, res, next) => {
 	try {
 		const { email } = req.body;
 		const code = crearClaveAuth();
 		req.verifyCode = code;
 
 		const enviado = await sendEmail(email, code);
+		console.log(enviado);
+
 		if (!enviado) {
 			// 502: El servidor recibió una respuesta inválida del servidor upstream (Brevo)
 			return res.status(502).json({
@@ -71,6 +73,7 @@ export const verifyAccount = async (req, res, next) => {
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
+
 
 // ------------------------ MIDDLES DE PRUEBA ------------------------
 // HAY QUE CREAR DISTINTOS MIDDLEWARES PARA CADA COSA, POR EJEMPLO PARA LOGEAR LOS REQUESTS, PARA VALIDAR LOS DATOS DE ENTRADA, PARA ENCRIPTAR CONTRASEÑAS, ETC

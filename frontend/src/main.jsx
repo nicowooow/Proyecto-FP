@@ -19,39 +19,39 @@ import Profile from "./pages/Profile.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 function AppWithHeader() {
-  const location = useLocation();
+	const location = useLocation();
 
-  // true si la ruta es /YourTree/:username (empieza por /YourTree/ y tiene algo más)
-  const hideHeader = /^\/YourTree\/[^/]+$/.test(location.pathname);
+	// true si la ruta es /YourTree/:username (empieza por /YourTree/ y tiene algo más)
+	const hideHeader = /^\/[yY]our[tT]ree\/[^/]+$/.test(location.pathname);
 
-  return (
-    <>
-      {!hideHeader && <Header />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/YourTree" element={<YourTree />} />
-        <Route path="/YourTree/:username" element={<YourTreeUser />} />
-        <Route path="/Home" element={<Home />} />
-        <Route path="/Templates" element={<Templates />} />
-        <Route path="/Top_Pages" element={<Top_Pages />} />
-        <Route path="/Forums" element={<Forums />} />
-        <Route path="/Profile" element={<Profile />} />
-        <Route path="/Log_out" element={<Log_out />} />
-        <Route path="/Sign_in" element={<Sign_in />} />
-        <Route path="/Sign_up" element={<Sign_up />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="/404" element={<NotFound />} />
-      </Routes>
-    </>
-  );
+	return (
+		<>
+			{!hideHeader && <Header />}
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="/YourTree" element={<YourTree />} />
+				<Route path="/YourTree/:username" element={<YourTreeUser />} />
+				<Route path="/Home" element={<Home />} />
+				<Route path="/Templates" element={<Templates />} />
+				<Route path="/Top_Pages" element={<Top_Pages />} />
+				<Route path="/Forums" element={<Forums />} />
+				<Route path="/Profile" element={<Profile />} />
+				<Route path="/Log_out" element={<Log_out />} />
+				<Route path="/Sign_in" element={<Sign_in />} />
+				<Route path="/Sign_up" element={<Sign_up />} />
+				<Route path="*" element={<NotFound />} />
+				<Route path="/404" element={<NotFound />} />
+			</Routes>
+		</>
+	);
 }
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-        <AppWithHeader />
-      </BrowserRouter>
-    </AuthProvider>
-  </StrictMode>
+	<StrictMode>
+		<AuthProvider>
+			<BrowserRouter>
+				<AppWithHeader />
+			</BrowserRouter>
+		</AuthProvider>
+	</StrictMode>,
 );

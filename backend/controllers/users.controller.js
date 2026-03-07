@@ -72,7 +72,7 @@ export const post_user = (req, res) => {
 			if (rowCount === 0) {
 				return res
 					.status(500)
-					.json({ message: "insert failed, no rows affected" });
+					.json({ message: "your user was not created, try again late" });
 			}
 			return res.status(201).json({ message: "user created successfully" });
 		})

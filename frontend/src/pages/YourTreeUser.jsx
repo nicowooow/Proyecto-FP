@@ -34,6 +34,7 @@ function YourTreeUser() {
 
 			if (!exists) {
 				navigate("/404", { replace: true }); // Redirige a tu ruta 404
+                // y en el historial no deja la busqueda mal hecha
 			}
 		})();
 	}, [navigate, username]);

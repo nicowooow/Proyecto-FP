@@ -27,7 +27,6 @@ class profileRepository {
    * Crear un nuevo perfil.
    *
    * @param {int} userId - id del usuario al que pertenece el perfil
-   * @param {int} planId - id del plan al que pertenece el perfil
    * @param {string} firstName - nombre del perfil
    * @param {string} lastName - apellido del perfil
    * @param {date} birthDate - fecha de nacimiento del perfil
@@ -42,7 +41,6 @@ class profileRepository {
    */
   createProfile(
     userId,
-    planId,
     firstName,
     lastName,
     birthDate,
@@ -54,12 +52,11 @@ class profileRepository {
     isMonthlyPlan,
     isPublic,
   ) {
-    const sql = `insert into profiles (user_id, plan_id, first_name, last_name, birth_date, phone, recovery_email, bio, image_url, theme, is_monthly_plan, is_public, created_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`;
+    const sql = `insert into profiles (user_id,  first_name, last_name, birth_date, phone, recovery_email, bio, image_url, theme, is_monthly_plan, is_public, created_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`;
     const createdAt = new Date();
     return pool
       .query(sql, [
         userId,
-        planId,
         firstName,
         lastName,
         birthDate,
@@ -100,7 +97,6 @@ class profileRepository {
    * @param {string} theme - tema del perfil claro u oscuro
    * @param {boolean} isMonthlyPlan - si el plan es mensual o anual
    * @param {boolean} isPublic - si el perfil es público o privado
-   * @param {int} planId - id del plan al que pertenece el perfil
    * @returns {Promise<number>} filas afectadas
    */
   patchProfile(
@@ -115,9 +111,8 @@ class profileRepository {
     theme,
     isMonthlyPlan,
     isPublic,
-    planId,
   ) {
-    const sql = `update profiles set first_name = COALESCE($1,first_name), last_name = COALESCE($2,last_name), birth_date = COALESCE($3,birth_date), phone = COALESCE($4,phone), recovery_email = COALESCE($5,recovery_email), bio = COALESCE($6,bio), image_url = COALESCE($7,image_url), theme = COALESCE($8,theme), is_monthly_plan = COALESCE($9,is_monthly_plan), is_public = COALESCE($10,is_public), plan_id = COALESCE($11,plan_id), updated_at = $12 where id = $13`;
+    const sql = `update profiles set first_name = COALESCE($1,first_name), last_name = COALESCE($2,last_name), birth_date = COALESCE($3,birth_date), phone = COALESCE($4,phone), recovery_email = COALESCE($5,recovery_email), bio = COALESCE($6,bio), image_url = COALESCE($7,image_url), theme = COALESCE($8,theme), is_monthly_plan = COALESCE($9,is_monthly_plan), is_public = COALESCE($10,is_public), updated_at = $11 where id = $12`;
     const updatedAt = new Date();
     return pool
       .query(sql, [
@@ -131,7 +126,6 @@ class profileRepository {
         theme,
         isMonthlyPlan,
         isPublic,
-        planId,
         updatedAt,
         id,
       ])

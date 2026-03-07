@@ -1,13 +1,14 @@
 import "./../assets/css/home.css";
-import { useNavigate } from "react-router-dom";
+import { FormCodeVerification } from "../components/forms.jsx";
+import { useAuth } from "../components/auth.jsx";
 
 function Home() {
-	const navigate = useNavigate();
-	let isLogged = false;
-	if (isLogged) navigate("/");
+	const { isLogged } = useAuth();
+
 	// biome-ignore format: necesito los espacios
 	return (
 		<main id="main_home">
+			{isLogged && <FormCodeVerification/>}
 			<section id="introduction">
 				<section>
 					<svg id="YourTree" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.96 211.34">
@@ -94,21 +95,18 @@ function Home() {
 				</section>
 			</section>
 			<aside>
-				<h2> YourTree, "something special for you"</h2>
+				<h2>YourTree — “a place to share and connect”</h2>
 				<p>
-					Well, this website started because I needed to make somethig relared
-					with Web Developer.
+					YourTree started as a small project to explore ideas in web development and build a space for sharing.
 				</p>
 				<p>
-					So I think how people can met new ones without look for someone
-					special and just explore and find someone interesting.
+					Here, you can post links, start discussions, and join forums to exchange knowledge and discover new perspectives.
 				</p>
-			</aside>
-			<aside>
-				<h2>How can we can do that??</h2>
+				</aside>
+				<aside>
+				<h2>What can you do here?</h2>
 				<p>
-					here you can share your ideas, photos, links, videos, opinios,
-					experiences and much more.
+					Share useful links, participate in community forums, and connect with people who enjoy exploring ideas just like you.
 				</p>
 			</aside>
 			<aside>

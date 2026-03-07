@@ -1,67 +1,74 @@
-js;
 // models/Link.js
 
 class Link {
-  #id;
-  #profileId;
-  title;
-  url;
-  position;
-  isVisible;
+	#id;
+	#profileId;
+	title;
+	url;
+	urlImage;
+	position;
+	isVisible;
 
-  constructor(id, profileId, title, url, position, isVisible) {
-    this.#id = id;
-    this.#profileId = profileId;
-    this.title = title;
-    this.url = url;
-    this.position = position;
-    this.isVisible = isVisible;
-  }
+	constructor(link) {
+		this.#id = link.id;
+		this.#profileId = link.profil_id;
+		this.title = link.title;
+		this.url = link.url;
+		this.urlImage = link.url_image;
+		this.position = link.position;
+		this.isVisible = link.is_visible;
+	}
 
-  getId() {
-    return this.#id;
-  }
-  setId(id) {
-    this.#id = id;
-  }
+	getId() {
+		return this.#id;
+	}
+	setId(id) {
+		this.#id = id;
+	}
 
-  getProfileId() {
-    return this.#profileId;
-  }
-  setProfileId(profileId) {
-    this.#profileId = profileId;
-  }
+	getProfileId() {
+		return this.#profileId;
+	}
+	setProfileId(profileId) {
+		this.#profileId = profileId;
+	}
 
-  // getTitle() { return this.title }
-  // setTitle(title) { this.title = title }
+	// getTitle() { return this.title }
+	// setTitle(title) { this.title = title }
 
-  // getUrl() { return this.url }
-  // setUrl(url) { this.url = url }
+	// getUrl() { return this.url }
+	// setUrl(url) { this.url = url }
 
-  // getPosition() { return this.position }
-  // setPosition(position) { this.position = position }
+	// getUrlImage() { return this.urlImage }
+	// setUrlImage(urlImage) { this.urlImage = urlImage }
 
-  // getIsVisible() { return this.isVisible }
-  // setIsVisible(isVisible) { this.isVisible = isVisible }
+	// getPosition() { return this.position }
+	// setPosition(position) { this.position = position }
 
-  toJSON() {
-    return {
-      id: this.#id,
-      profileId: this.#profileId,
-      title: this.title,
-      url: this.url,
-      position: this.position,
-      isVisible: this.isVisible,
-    };
-  }
-  toPublic() {
-    return {
-      title: this.title,
-      url: this.url,
-      position: this.position,
-      isVisible: this.isVisible,
-    };
-  }
+	// getIsVisible() { return this.isVisible }
+	// setIsVisible(isVisible) { this.isVisible = isVisible }
+
+	toJSON() {
+		return {
+			id: this.#id,
+			profileId: this.#profileId,
+			title: this.title,
+			url: this.url,
+			urlImage: this.urlImage,
+			position: this.position,
+			isVisible: this.isVisible,
+		};
+	}
+	toPublic() {
+		return {
+			id: this.#id,
+			title: this.title,
+			url: this.url,
+			urlImage: this.urlImage,
+			position: this.position,
+			isVisible: this.isVisible,
+		};
+	}
 }
 
 export default Link;

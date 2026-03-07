@@ -32,6 +32,7 @@ export const sign_in_user = (req, res) => {
 		.then((result) => {
 			// si nos da TRUE
 			if (result) {
+				// console.log(safeUser);
 				// creasmos un token con el id, username y el rol que tiene
 				let accessToken = createAccessToken(
 					safeUser.getId(),
@@ -46,7 +47,7 @@ export const sign_in_user = (req, res) => {
 				// y regresamos al front un mensaje, usuario y sus tokens creados
 				return res.status(200).json({
 					message: "user logged in successfully",
-					user: safeUser,
+					user: safeUser.toPublic(),
 					accessToken,
 					refreshToken,
 				});
@@ -66,12 +67,13 @@ export const sign_in_user = (req, res) => {
 export const sign_up_user = (req, res) => {
 	// sacamos los datos que envio el front
 	let { username, email, password } = req.body;
+	let { verifyCode } = req;
 	// sacamos el rol que tomara el usuario, todo dependera del query que tenga en la URL del fetch del frontend
 	let role = req.query.role;
 
 	// creamos un usuario
 	userRepository
-		.createUser(username, email, password, "pending", role)
+		.createUser(username, email, password, "pending", role, verifyCode)
 		.then((userId) => {
 			// si en el proceso sucedio un error y dicho error envio una respuesta HTTP retornamos la funcion con el resultado que nos dio
 			if (res.headersSent) return;
@@ -80,7 +82,6 @@ export const sign_up_user = (req, res) => {
 				return profileRepository
 					.createProfile(
 						userId,
-						1, // planId default free
 						username, // firstName
 						null, // lastName
 						"2000-01-01", // birthDate
@@ -113,6 +114,8 @@ export const sign_up_user = (req, res) => {
 			}
 			// y si en todo dicho proceso no se encontro otra respuesta HTTP y es un error lo mandamos con el 500
 			if (!res.headersSent) {
+				console.log(error);
+
 				return res
 					.status(500)
 					.json({ message: "Server error", detail: String(error) });
@@ -121,12 +124,23 @@ export const sign_up_user = (req, res) => {
 };
 
 export const log_out_user = (req, res) => {
-  try {
-	console.log(req.user);
-		
-	
-  } catch (error) {
-	console.log(error);
-	res.status(500).json({ error: 'Internal server error' });
-  }
+	try {
+		console.log(req.user);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const verifyAccount = async (req, res) => {
+	try {
+		const { code, username } = req.body;
+		const { id, verify_code } = await userRepository.getUser(username);
+		if (code === verify_code.split("-").join(""))
+			return res.json({ verificated: true });
+		return res.json({ verificated: false });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal server error" });
+	}
 };

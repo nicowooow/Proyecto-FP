@@ -11,6 +11,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
 	// isLogged y loading lo ponemos con sus valores por defecto
 	const [isLogged, setIsLogged] = useState(false);
+	const [isVerify, setIsVerify] = useState(false);
 	//loading serviara para saber si los tokens estan cargado o no, una vez cargados cambia a false
 	// el cual nos indica que ya termino de cargarse
 	const [loading, setLoading] = useState(true);
@@ -64,10 +65,14 @@ export function AuthProvider({ children }) {
 		setIsLogged(false);
 	};
 
+	const verifyStatus = () => {
+		setIsVerify(true);
+	};
 	//retornamos la etiqueta que generamos con el contexto y que tiene los valores de
 	// isLogged, login, logout  y loading
 	// cuales pueden tener elementos adentro
-	const value = { isLogged, loading, login, logout };
+	const value = { isLogged, isVerify, loading, login, logout, verifyStatus };
+	
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

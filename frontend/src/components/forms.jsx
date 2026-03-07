@@ -1,30 +1,63 @@
 import React, { useRef, useEffect, useState, useMemo, useId } from "react";
-
+import VerificationInput from "react-verification-input";
+import { useNavigate } from "react-router-dom";
 import "./../assets/css/forms.css";
+import { useAuth } from "./auth";
+import { getUser } from "./token";
 
-export const FormUpdateLink = React.memo(function FormUpdateLink({
-	element,
-	display,
-	linkId,
-	profileId,
-}) {
+const getLink = async (linkId) => {
+	try {
+		const response = await fetch(`yourtree/api/link/${linkId}`);
+		const data = await response.json();
+		// console.log(data[0]);
+		return {
+			title: data[0].title,
+			url: data[0].url,
+			urlImage: data[0].urlImage,
+			position: data[0].position,
+		};
+	} catch (error) {
+		console.error("Error fetching link:", error);
+		return {
+			title: "",
+			url: "",
+			urlImage: "",
+			position: 0,
+		};
+	}
+};
+
+export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 	const dialogRef = useRef(null);
 	const baseId = useId();
+	const [title, setTitle] = useState("");
+	const [url, setUrl] = useState("");
+	const [urlImage, setUrlImage] = useState("");
+	const [position, setPosition] = useState("");
 	const [isOpen, setIsOpen] = useState(false); // estado para cuando este abierto el dialog
 	const openDialog = () => setIsOpen(true);
 	const closeDialog = () => setIsOpen(false);
 
 	useEffect(() => {
+		getLink(linkId).then(({ title, url, urlImage, position }) => {
+			setTitle(title || "");
+			setUrl(url || "");
+			setUrlImage(urlImage || "");
+			setPosition(position || "");
+		});
 		if (isOpen) {
 			dialogRef.current?.showModal();
 		} else {
 			dialogRef.current?.close();
 		}
-	}, [isOpen]);
+	}, [isOpen, linkId]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const formData = new FormData(e.target);
+		const title = e.target.title_form_link.value;
+		const url = e.target.url_form_link.value;
+		const url_image = e.target.url_image_form_link.value;
+		const position = e.target.position_form_link.value;
 		try {
 			const res = await fetch(`/yourtree/api/link/${linkId}`, {
 				method: "PUT",
@@ -33,9 +66,10 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({
 					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
 				},
 				body: JSON.stringify({
-					title: formData.get("title_form_link"),
-					url: formData.get("url_form_link"),
-					position: Number(formData.get("position_form_link") || 0),
+					title,
+					url,
+					url_image,
+					position,
 					is_visible: true,
 				}),
 			});
@@ -70,6 +104,8 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({
 		[],
 	);
 
+	// console.log(url, urlImage, position, title);
+
 	return (
 		<>
 			<button type="button" className="btn-constrast" onClick={openDialog}>
@@ -77,11 +113,29 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({
 			</button>
 			<dialog className="form_update" data-link-id={linkId} ref={dialogRef}>
 				<form data-link-id={linkId} onSubmit={handleSubmit}>
+					<label htmlFor={`${baseId}-img-url`}>image url : </label>
+					<input
+						type="text"
+						name="url_image_form_link"
+						id={`${baseId}-img-url`}
+						placeholder={urlImage}
+					/>
+
 					<label htmlFor={`${baseId}-title`}>title : </label>
-					<input type="text" name="title_form_link" id={`${baseId}-title`} />
+					<input
+						type="text"
+						name="title_form_link"
+						id={`${baseId}-title`}
+						placeholder={title}
+					/>
 
 					<label htmlFor={`${baseId}-url`}>url : </label>
-					<input type="text" name="url_form_link" id={`${baseId}-url`} />
+					<input
+						type="text"
+						name="url_form_link"
+						id={`${baseId}-url`}
+						placeholder={url}
+					/>
 
 					<label htmlFor={`${baseId}-position`}>position : </label>
 					<input
@@ -89,6 +143,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({
 						min={0}
 						name="position_form_link"
 						id={`${baseId}-position`}
+						placeholder={position}
 					/>
 
 					<input
@@ -105,7 +160,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({
 });
 
 export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
-	let dialogRef = useRef(null);
+	const dialogRef = useRef(null);
 	const baseId = useId();
 	function openDialog() {
 		dialogRef.current?.showModal();
@@ -118,8 +173,8 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 		e.preventDefault();
 		const title = e.target.title_form_link.value;
 		const url = e.target.url_form_link.value;
+		const url_image = e.target.url_image_form_link.value;
 		const position = e.target.position_form_link.value;
-
 		try {
 			let profileRes = await fetch(`/yourtree/api/profile/${username}`);
 			if (!profileRes.ok) return;
@@ -136,6 +191,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 					profile_id: profile.id,
 					title,
 					url,
+					url_image,
 					position,
 					is_visible: true,
 				}),
@@ -180,11 +236,29 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 			</button>
 			<dialog className="form_create" ref={dialogRef}>
 				<form onSubmit={handleSubmit}>
+					<label htmlFor={`${baseId}-img-url`}>image url : </label>
+					<input
+						type="text"
+						name="url_image_form_link"
+						id={`${baseId}-img-url`}
+						placeholder="URL of the image for this link"
+					/>
+
 					<label htmlFor={`${baseId}-title`}>title : </label>
-					<input type="text" name="title_form_link" id={`${baseId}-title`} />
+					<input
+						type="text"
+						name="title_form_link"
+						id={`${baseId}-title`}
+						placeholder="Title of the link"
+					/>
 
 					<label htmlFor={`${baseId}-url`}>url : </label>
-					<input type="text" name="url_form_link" id={`${baseId}-url`} />
+					<input
+						type="text"
+						name="url_form_link"
+						id={`${baseId}-url`}
+						placeholder="Link you want to share"
+					/>
 
 					<label htmlFor={`${baseId}-position`}>position : </label>
 					<input
@@ -192,6 +266,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 						min={0}
 						name="position_form_link"
 						id={`${baseId}-position`}
+						placeholder="Order in the list"
 					/>
 
 					<input
@@ -200,7 +275,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 						value="cancel"
 						onClick={closeDialog}
 					/>
-					<input className="btn-constrast" type="submit" value="update" />
+					<input className="btn-constrast" type="submit" value="create" />
 				</form>
 			</dialog>
 		</>
@@ -324,6 +399,65 @@ export const FormUploadImage = React.memo(function FormUploadImage() {
 					Cancel
 				</button>
 			</dialog>
+		</>
+	);
+});
+
+export const FormCodeVerification = React.memo(function FormCodeVerification() {
+	const navigate = useNavigate();
+	const { isLogged, isVerify } = useAuth();
+	const { status, username } = getUser();
+
+	useEffect(() => {
+		console.log(isLogged, isVerify);
+		if (status === "active") {
+			console.log(status);
+		}
+	}, [isVerify, isLogged, status]);
+
+	const [code, setCode] = useState("");
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		// Lógica de verificación
+		console.log("Código:", code);
+		fetch("/yourtree/api/verify-code", {
+			method: "POST",
+			headers: { "Content-Type": "Application/json" },
+			body: JSON.stringify({
+				code,
+				username,
+			}),
+		})
+			.then((result) => result.json())
+			.then((data) => {
+				console.log(data);
+			});
+	};
+	return (
+		<>
+			{isLogged && (
+				<div className="modal-overlay">
+					<form method="post" onSubmit={handleSubmit} className="verify_code">
+						<label htmlFor="input_code">Verify Code</label>
+						<VerificationInput
+							id="input_code"
+							type="number"
+							fields={6}
+							value={code}
+							onChange={setCode}
+						/>
+						<input
+							type="button"
+							value="Log out"
+							onClick={() => {
+								navigate("/Log_out");
+							}}
+						/>
+						<input type="submit" value="Verify code" />
+					</form>
+				</div>
+			)}
 		</>
 	);
 });

@@ -1,10 +1,12 @@
 /* import {useAuth} from "./auth.jsx";
 let {logout} = useAuth(); */
 import cookie from "js-cookie";
+export const getUser = () => {
+	return JSON.parse(cookie.get("user"));
+};
 
 export const getToken = () => {
 	// obtenemos el primer token que tenemos
-
 	return cookie.get("token");
 };
 
@@ -44,7 +46,7 @@ export const verifyToken = async () => {
 	try {
 		//si tenemos un token activo lo buscamos
 		const token = getToken();
-    
+
 		//si no lo tenemos el valor es flase ara el header y ahi queda
 		if (!token) return false;
 		// enviamos al back el token con la clave de authorization
@@ -55,12 +57,12 @@ export const verifyToken = async () => {
 			},
 		});
 		// console.log(res);
-    // console.log(res.body); 
+		// console.log(res.body);
 
 		// si no lo encuentra pasamos al generar el token de nuevo
 		if (res.status === 401) {
 			// llamamos al metodo que tenemos arriba el cual se encarga del proceso de enviar datos
-			const newToken = await refreshToken();      
+			const newToken = await refreshToken();
 			// si lo nos regresa nada entonces no se puede regenerar el token y por ende no esta logueado
 			// osea que el header es falso y nos muestra dichas opciones
 			if (!newToken) return false;
@@ -68,7 +70,7 @@ export const verifyToken = async () => {
 			res = await fetch("/yourtree/api/authenticate", {
 				headers: { Authorization: `Bearer ${newToken}` },
 			});
-			console.log("se refresco el token");
+			// console.log("se refresco el token");
 		}
 		// si nos dice que la respuesta HTTP esta entre los 400 a 500 retornamos falso
 		if (!res.ok) {

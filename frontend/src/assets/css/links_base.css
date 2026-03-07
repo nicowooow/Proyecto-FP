@@ -1,179 +1,175 @@
 /* generales */
 .link_base {
-  align-self: center;
-  width: 100%;
-  border-radius: 8px;
-  background-color: var(--color-fondo);
-  border: 1px solid var(--color-borde);
-  padding: 2vh;
-  padding-top: 3vh;
+	align-self: center;
+	width: 100%;
+	border-radius: 8px;
+	background-color: var(--color-fondo);
+	border: 1px solid var(--color-borde);
+	padding: 2vh;
+	padding-top: 3vh;
 }
 
 /* generales para el head del link */
 .link_head {
-  display: flex;
-  align-items: center;
-  /* center vertically */
-  justify-content: center;
-  /* center horizontally */
-  gap: 0.75rem;
-  text-align: center;
-  color: var(--color-texto);
+	display: flex;
+	align-items: center;
+	/* center vertically */
+	justify-content: center;
+	/* center horizontally */
+	gap: 0.75rem;
+	text-align: center;
+	color: var(--color-texto);
 }
 
 /* Ensure profile images are consistent, not distorted or cropped */
 .link_head img,
-.link_head>div img {
-  width: clamp(64px, 18vw, 120px);
-  aspect-ratio: 1/1;
-  /* mantiene el aspecto en cuadrado por asi decirlo */
-  height: auto;
-  border-radius: 50%;
-  object-fit: contain;
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  padding: 4px;
-  display: block;
+.link_head > div img {
+	width: clamp(64px, 18vw, 120px);
+	aspect-ratio: 1 / 1;
+	/* mantiene el aspecto en cuadrado por asi decirlo */
+	height: auto;
+	border-radius: 50%;
+	object-fit: contain;
+	background: var(--color-superficie);
+	border: 1px solid var(--color-borde);
+	padding: 4px;
+	display: block;
 }
 
+.link_base h2,
+.link_base p,
+.link_base {
+	color: var(--color-texto);
+}
 .link_head h2 {
-  font-size: 2rem;
-  font-weight: 700;
+	font-size: 2rem;
+	font-weight: 700;
 }
 
 .link_head p {
-  font-size: 1.2rem;
-  color: var(--color-texto-muted);
+	font-size: 1.2rem;
 }
-
 
 /* especificos para cada opcion del head de link */
 /* opcion 0 de la forma de verlo */
 .link_base .link_head.layout0 {
-  text-align: start;
-  flex-direction: row;
+	text-align: start;
+	flex-direction: row;
 }
 
 .link_base .link_head.layout1 {
-  flex-direction: column;
-  gap: 0px;
+	flex-direction: column;
+	gap: 0px;
 }
 
 .link_base .link_head.layout2 {
-  flex-direction: row;
+	flex-direction: row;
 }
 
 .link_base .link_head.layout3 {
-  flex-direction: column;
+	flex-direction: column;
 }
-
 
 /* generales para el body del link */
 
 .link_body ul {
-  list-style: none;
-  /* quitamos la viñeta normal */
-  list-style-position: inside;
-  padding: 0;
+	list-style: none;
+	/* quitamos la viñeta normal */
+	list-style-position: inside;
+	padding: 0;
 }
 
 .link_body li {
-  display: flex;
-  align-items: center;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--color-borde);
-  border-radius: 6px;
-  font-size: 1.2rem;
-  margin: 12px 0;
-  background-color: var(--color-blur-border);
-  transition: border-color 0.2s;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	padding: 0.8rem 1rem;
+	border: 1px solid var(--color-borde);
+	border-radius: 6px;
+	font-size: 1.2rem;
+	margin: 12px 0;
+	background-color: var(--color-blur-border);
+	transition: border-color 0.2s;
+	justify-content: center;
 }
 
 .link_body li:hover {
-  border-color: var(--color-texto);
+	border-color: var(--color-texto);
 }
 
-.link_body li>a {
-  /* con esto hacemos que el enlace ocupe el mayor espacio del li */
-  display: flex;
-  align-items: center;
-  width: 100%;
-  color: var(--color-texto);
-  font-weight: 600;
+.link_body li > a {
+	/* con esto hacemos que el enlace ocupe el mayor espacio del li */
+	display: flex;
+	align-items: center;
+	width: 100%;
+	color: var(--color-texto);
+	font-weight: 600;
 }
 
 .link_body a {
-  text-decoration: none;
+	text-decoration: none;
 }
 
 .link_body li::before {
-  content: "";
-  position: relative;
-  width: 2rem;
-  height: 1.9rem;
-  /* esta altura solo nos servira en el caso de querer poner imagenes, si es con emojis tenemos que quitarla*/
-  margin-right: 1rem;
-  background-image: url("./../images/Facebook_icon.svg");
-  background-size: cover;
-  border-radius: 4px;
+	content: "";
+	position: relative;
+	width: 2rem;
+	height: 1.9rem;
+	/* esta altura solo nos servira en el caso de querer poner imagenes, si es con emojis tenemos que quitarla*/
+	margin-right: 1rem;
+	background-image: url("./../images/Facebook_icon.svg");
+	background-size: cover;
+	border-radius: 4px;
 }
-
-
 
 /* On small screens, allow wrapping and normal flow (stacked) */
 @media (max-width: 600px) {
+	.link_head h2,
+	.link_head p {
+		display: block;
+		width: auto;
+		white-space: normal;
+		margin: 0;
+		text-align: start;
+	}
 
-  .link_head h2,
-  .link_head p {
-    display: block;
-    width: auto;
-    white-space: normal;
-    margin: 0;
-    text-align: start;
-  }
+	.link_head h2 {
+		font-size: 1.6rem;
+	}
 
-  .link_head h2 {
-    font-size: 1.6rem;
-
-  }
-
-  .link_head p {
-    font-size: 1.2rem;
-
-  }
+	.link_head p {
+		font-size: 1.2rem;
+	}
 }
 
 @media (max-width: 420px) {
-
-  .link_head img,
-  .link_head>div img {
-    width: clamp(48px, 20vw, 80px);
-    padding: 2px;
-  }
+	.link_head img,
+	.link_head > div img {
+		width: clamp(48px, 20vw, 80px);
+		padding: 2px;
+	}
 }
 
 @media (max-width: 600px) {
-  .link_head {
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: center;
-  }
+	.link_head {
+		flex-direction: column;
+		gap: 0.5rem;
+		align-items: center;
+		justify-content: center;
+	}
 
-  .link_head img,
-  .link_head>div img {
-    width: clamp(56px, 28vw, 96px);
-    height: clamp(56px, 28vw, 96px);
-  }
+	.link_head img,
+	.link_head > div img {
+		width: clamp(56px, 28vw, 96px);
+		height: clamp(56px, 28vw, 96px);
+	}
 }
 
 /* Responsiveness for .link_base: keep 100% on small screens, 80% (min 50%) on large */
 @media (min-width: 900px) {
-  .link_base {
-    width: 80%;
-    min-width: 40%;
-    margin: 24px auto;
-    /* center horizontally and add vertical spacing */
-  }
+	.link_base {
+		width: 80%;
+		min-width: 40%;
+		margin: 24px auto;
+		/* center horizontally and add vertical spacing */
+	}
 }

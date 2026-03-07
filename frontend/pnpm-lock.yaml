@@ -23,6 +23,9 @@ importers:
       react-router-dom:
         specifier: ^7.9.6
         version: 7.12.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      react-verification-input:
+        specifier: ^4.2.2
+        version: 4.2.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
     devDependencies:
       '@eslint/js':
         specifier: ^9.36.0
@@ -809,6 +812,12 @@ packages:
       react-dom:
         optional: true
 
+  react-verification-input@4.2.2:
+    resolution: {integrity: sha512-GqcsiZ5iwcXD4V0cKbZv1pbknqAZRszPoXzSKc5LLlfSdo3iOnxLxEbmDi+BWN1LfhCx2iXhEDGke9Bdk3q+4A==}
+    peerDependencies:
+      react: 16.8.0 - 19.x.x || >=19.0.0-rc
+      react-dom: 16.8.0 - 19.x.x || >=19.0.0-rc
+
   react@19.2.3:
     resolution: {integrity: sha512-Ku/hhYbVjOQnXDZFv2+RibmLFGwFdeeKHFcOTlrt7xplBnya5OGn/hIRDsqDiSUcfORsDC7MPxwork8jBwsIWA==}
     engines: {node: '>=0.10.0'}
@@ -1514,6 +1523,11 @@ snapshots:
       react: 19.2.3
       set-cookie-parser: 2.7.2
     optionalDependencies:
+      react-dom: 19.2.3(react@19.2.3)
+
+  react-verification-input@4.2.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+    dependencies:
+      react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
   react@19.2.3: {}

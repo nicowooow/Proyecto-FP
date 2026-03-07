@@ -97,11 +97,12 @@ class User {
 			verifyCode: this.#verifyCode,
 		};
 	}
-
+	
 	toPublic() {
 		return {
 			username: this.username,
 			email: this.email,
+			status: this.#status,
 		};
 	}
 }
