@@ -16,13 +16,15 @@ import {
   patch_link_stats,
 } from "../controllers/link_stats.controller.js";
 
+import { authenticate } from "../middlewares/auth.middleware.js";
+
 const router = new Router();
-router.get("/links/:profileId",get_links);
-router.get("/link/:id",get_link);
-router.post("/link/",post_link);
-router.delete("/link/:id",delete_link);
-router.put("/link/:id",put_link);
-router.patch("/link/:id",patch_link);
+router.get("/links/:profileId", get_links);
+router.get("/link/:id", get_link);
+router.post("/link/", authenticate, post_link);
+router.delete("/link/:id", authenticate, delete_link);
+router.put("/link/:id", authenticate, put_link);
+router.patch("/link/:id", authenticate, patch_link);
 
 router.get("/links/stats/:profileId", get_links_stats);
 router.get("/link/stats/:id", get_link_stats);

@@ -57,18 +57,18 @@ class UserRepository {
 		return pool
 			.query(sql, [username, email, password, status, date, roleId, verifyCode])
 			.then(({ rows }) => {
-				setTimeout(
-					() => {
-						this.updateVerifyCode(null,rows[0].id)
+				const userId = rows[0] ? rows[0].id : null;
+				if (userId) {
+					setTimeout(() => {
+						this.updateVerifyCode(null, userId)
 							.then((rowCount) => {
 								if (rowCount === 0)
 									throw new Error("Verify code was not updated");
 							})
 							.catch((e) => console.log(e));
-					},
-					5 * 60 * 1000,
-				);
-				return rows[0] ? rows[0].id : null;
+					}, 5 * 60 * 1000);
+				}
+				return userId;
 			});
 	};
 

@@ -157,6 +157,7 @@ class Profile {
 
   toPublic() {
     return {
+      id: this.#id,
       firstName: this.firstName,
       lastName: this.lastName,
       bio: this.bio,

@@ -31,8 +31,8 @@ export const get_link = async (req, res) => {
 export const post_link = async (req, res) => {
 	try {
 		let { profile_id, title, url, url_image, position, is_visible } = req.body;
-		// console.log(profile_id, title, url, url_image, position, is_visible);
-		
+		console.log(profile_id, title, url, url_image, position, is_visible);
+
 		let rowCount = await linkRepository.createLink(
 			profile_id,
 			title,
@@ -67,7 +67,7 @@ export const put_link = async (req, res) => {
 	try {
 		let { id } = req.params;
 		let { title, url, url_image, position, is_visible } = req.body;
-		console.log({id, title, url,url_image, position, is_visible});
+		console.log({ id, title, url, url_image, position, is_visible });
 
 		let rowCount = await linkRepository.putLink(
 			id,

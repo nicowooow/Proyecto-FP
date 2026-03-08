@@ -52,15 +52,13 @@ export const authenticate = (req, res, next) => {
 	}
 };
 
-export const sendCode = async (req, res, next) => {
+export const verifyAccount = async (req, res, next) => {
 	try {
 		const { email } = req.body;
 		const code = crearClaveAuth();
 		req.verifyCode = code;
 
 		const enviado = await sendEmail(email, code);
-		console.log(enviado);
-
 		if (!enviado) {
 			// 502: El servidor recibió una respuesta inválida del servidor upstream (Brevo)
 			return res.status(502).json({

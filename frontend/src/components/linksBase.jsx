@@ -23,14 +23,14 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 						let data = await linksRes.json();
 						setLinks(data);
 					}
-				}				
+				}
 			} catch (e) {
 				console.error("Error fetching links:", e);
 			}
 		}
 		if (username) fetchLinks();
 	}, [username]);
-	
+
 	const list_links = useMemo(
 		() =>
 			(links || []).map((link, i) => {
@@ -38,7 +38,7 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 					React.isValidElement(child)
 						? React.cloneElement(child, { linkId: link.id, profileId })
 						: child,
-				);					
+				);
 				return (
 					<li key={link.id ?? i}>
 						<section className="links">
@@ -61,6 +61,7 @@ export const Links_base = React.memo(function Links_base({
 	usernameUser,
 	descriptionInput,
 	blurInput,
+	imageUrl,
 }) {
 	// console.log(username_input);
 
@@ -70,7 +71,7 @@ export const Links_base = React.memo(function Links_base({
 	let description = descriptionInput;
 	// el formato en el que se mostrar
 	// aqui ira la imagen de perfil del usuario
-	let urlImage = profile_default;
+	let urlImage = imageUrl || profile_default;
 	// aqui ira el tipo que escojio, el cual se dara su css respectivo
 	let headOption;
 	//  console.log(typeof(option),option)
@@ -134,6 +135,7 @@ export const General_tree = React.memo(function General_tree({
 	username,
 	option,
 	descrition,
+	imageUrl,
 	...rest
 }) {
 	const navegate = useNavigate();
@@ -171,9 +173,9 @@ export const General_tree = React.memo(function General_tree({
 				optionCheck={option}
 				usernameUser={username}
 				descriptionInput={descrition}
-
+				imageUrl={imageUrl}
 			/>
-			<ShareIcon username={username}/>
+			<ShareIcon username={username} />
 		</section>
 	);
 });

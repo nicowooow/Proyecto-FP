@@ -13,6 +13,7 @@ import {
 	FormUploadImage,
 } from "../components/forms.jsx";
 import { useAuth } from "../components/auth.jsx";
+import { getToken } from "../components/token.jsx";
 
 function YourTree() {
 	// si no esta loggeado lo manda al incio
@@ -20,96 +21,94 @@ function YourTree() {
 	const navigate = useNavigate();
 	const [layout, setLayout] = useState("3");
 	const [description, setDescription] = useState("");
+	const [selectedFile, setSelectedFile] = useState(null);
+	const [imageUrl, setImageUrl] = useState("");
+	const [deleteImage, setDeleteImage] = useState(false);
+
+	const cookieUser = cookies.get("user") ? JSON.parse(cookies.get("user")) : null;
+	const currentUsername = cookieUser ? cookieUser.username : "";
 
 	useEffect(() => {
-		// console.log(auth.isLogged, auth.loading);
-
 		if (!auth.isLogged && !auth.loading) {
 			navigate("/Sign_in");
 		}
-		// console.log(auth.isVerify);
 	}, [auth.isLogged, auth.loading, navigate]);
 
+	useEffect(() => {
+		if (currentUsername) {
+			fetch(`/yourtree/api/profile/${currentUsername}`)
+				.then(res => res.json())
+				.then(data => {
+					if (data.bio) setDescription(data.bio);
+					if (data.imageUrl) setImageUrl(data.imageUrl);
+				})
+				.catch(err => console.error("Error fetching profile", err));
+		}
+	}, [currentUsername]);
 
 	if (!auth.isLogged) {
 		return null;
 	}
 
-	const cookieUser = JSON.parse(cookies.get("user"));
-	const currentUsername = cookieUser.username;
-	// console.log('cookie',cookieUser);
-	// console.log('nombre',currentUsername);
+	const handleSaveProfile = async (e) => {
+		e.preventDefault();
 
-	// console.log("YourTree username:", username);
+		const formData = new FormData();
+		formData.append("description", description);
+		if (selectedFile) {
+			formData.append("profile_photo", selectedFile);
+		}
+		if (deleteImage) {
+			formData.append("delete_image", "true");
+		}
+
+		try {
+			const token = getToken();
+			const response = await fetch(`/yourtree/api/profile/${currentUsername}`, {
+				method: "PATCH",
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+				body: formData,
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				console.log("Profile updated successfully:", data);
+				alert("Profile saved successfully");
+			} else {
+				console.error("Failed to update profile");
+				alert("Failed to save profile");
+			}
+		} catch (error) {
+			console.error(error);
+			alert("Error trying to save profile");
+		}
+	};
 
 	return (
 		<main id="main_yourtree">
 			<section id="general_area">
 				<section id="general_settings">
-					<form className="settings" method="POST">
+					<form className="settings" onSubmit={handleSaveProfile}>
 						<h1>Settings View</h1>
 						<Collapsible title="head" section="style_view">
-							{/* <h3>Head Style</h3> */}
-							<div className="layouts">
-								<div>
-									<label htmlFor="layout0">view 1</label>
-									<input
-										type="radio"
-										id="layout0"
-										name="layout"
-										value="0"
-										checked={layout === "0"}
-										onChange={(e) => {
-											setLayout(e.currentTarget.value);
-										}}
-									/>
-								</div>
-								<div>
-									<label htmlFor="layout1">view 2</label>
-									<input
-										type="radio"
-										id="layout1"
-										name="layout"
-										value="1"
-										checked={layout === "1"}
-										onChange={(e) => {
-											setLayout(e.currentTarget.value);
-										}}
-									/>
-								</div>
-								<div>
-									<label htmlFor="layout2">view 3</label>
-									<input
-										type="radio"
-										id="layout2"
-										name="layout"
-										value="2"
-										checked={layout === "2"}
-										onChange={(e) => {
-											setLayout(e.currentTarget.value);
-										}}
-									/>
-								</div>
-								<div>
-									<label htmlFor="layout3">view 4</label>
-									<input
-										type="radio"
-										id="layout3"
-										name="layout"
-										value="3"
-										checked={layout === "3"}
-										onChange={(e) => {
-											setLayout(e.currentTarget.value);
-										}}
-									/>
-								</div>
-							</div>
 							<div>
-								<FormUploadImage />
+								<FormUploadImage
+									onFileSelect={(file) => {
+										setSelectedFile(file);
+										setDeleteImage(false);
+									}}
+									onDeleteImage={() => {
+										setSelectedFile(null);
+										setDeleteImage(true);
+										setImageUrl("");
+									}}
+								/>
 							</div>
 							<div>
 								<label htmlFor="description">
-									<strong>description : </strong>
+									<strong>bio : </strong>
 								</label>
 								<input
 									type="text"
@@ -123,7 +122,7 @@ function YourTree() {
 						</Collapsible>
 
 						<input type="button" value="cancel" className="btn-constrast" />
-						<input type="button" value="save" className="btn-constrast" />
+						<input type="submit" value="save" className="btn-constrast" />
 					</form>
 					<section className="settings">
 						<Collapsible title="list of links" section="style_link">
@@ -135,15 +134,13 @@ function YourTree() {
 							<FormCreateLink username={currentUsername} />
 						</Collapsible>
 					</section>
-					<section className="settings">
-						<Collapsible title="" section=""></Collapsible>
-					</section>
 				</section>
 				<section id="pre_view">
 					<General_tree
 						username={currentUsername}
 						option={layout}
 						descrition={description}
+						imageUrl={imageUrl}
 					/>
 				</section>
 			</section>

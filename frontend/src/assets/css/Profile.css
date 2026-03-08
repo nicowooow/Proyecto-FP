@@ -1,0 +1,285 @@
+/* GitHub Style Profile tailored to base.css */
+.profile-page-container {
+    min-height: 100vh;
+    color: var(--color-texto);
+    font-family: var(--font-body);
+    padding: var(--space-xl);
+    display: flex;
+    justify-content: center;
+}
+
+.profile-layout {
+    display: flex;
+    gap: var(--space-xl);
+    max-width: 1280px;
+    width: 100%;
+    padding: 0 5rem;
+}
+
+.profile-sidebar {
+    flex: 0 0 296px;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-avatar-container {
+    margin-bottom: var(--space-md);
+    position: relative;
+}
+
+.profile-avatar {
+    width: 296px;
+    height: 296px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    border: 1px solid var(--color-borde);
+    box-shadow: 0 0 0 1px var(--color-sombra);
+    background-color: var(--color-superficie);
+    display: block;
+}
+
+.status-badge {
+    position: absolute;
+    bottom: 30px;
+    right: 15px;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-superficie);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-badge.active {
+    background-color: var(--color-exito);
+}
+
+.status-badge.inactive {
+    background-color: var(--color-secundario);
+}
+
+.status-badge.banned {
+    background-color: var(--color-alerta);
+}
+
+.status-badge.pending {
+    background-color: var(--color-warning);
+}
+
+.profile-names {
+    padding: var(--space-md) 0;
+}
+
+.profile-name {
+    font-size: 24px;
+    line-height: 1.25;
+    font-weight: var(--fw-semibold);
+    margin: 0;
+    color: var(--color-texto);
+    font-family: var(--font-heading);
+}
+
+.profile-username {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: var(--fw-light);
+    line-height: 24px;
+    color: var(--color-texto-muted);
+    margin: 0;
+}
+
+.profile-bio {
+    font-size: 16px;
+    margin-bottom: var(--space-md);
+    color: var(--color-texto);
+    line-height: 1.5;
+}
+
+.profile-actions {
+    margin-bottom: var(--space-md);
+}
+
+.btn-edit-profile {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: var(--space-xs) var(--space-md);
+    font-size: 14px;
+    font-weight: var(--fw-medium);
+    line-height: 20px;
+    color: var(--color-texto);
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    transition-property: color, background-color, border-color;
+    font-family: var(--font-body);
+}
+
+.btn-edit-profile:hover {
+    background-color: var(--color-superficie-hover);
+    border-color: var(--color-texto-muted);
+}
+
+.profile-details {
+    border-top: 1px solid var(--color-borde);
+    padding-top: var(--space-md);
+    font-size: 14px;
+    color: var(--color-texto);
+}
+
+.profile-detail-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.profile-detail-item svg {
+    fill: var(--color-texto-muted);
+}
+
+/* Main content area */
+.profile-main {
+    display: block;
+    flex: 1;
+    padding-top: var(--space-md);
+}
+
+.tabs-nav {
+    display: flex;
+    border-bottom: 1px solid var(--color-borde);
+    margin-bottom: var(--space-md);
+}
+
+.tab-item {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 14px;
+    color: var(--color-texto);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.tab-item:hover {
+    background-color: var(--color-superficie-hover);
+}
+
+.tab-item.active {
+    font-weight: var(--fw-semibold);
+    border-bottom-color: var(--color-acento);
+}
+
+.overview-content {
+    padding: var(--space-md) 0;
+}
+
+/* Loading State */
+.profile-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+}
+
+.loader {
+    border: 3px solid var(--color-borde);
+    border-top: 3px solid var(--color-acento);
+    border-radius: var(--radius-full);
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--space-md);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-layout {
+        flex-direction: column;
+    }
+
+    .profile-sidebar {
+        width: 100%;
+        flex: none;
+        align-items: center;
+    }
+
+    .profile-avatar {
+        width: 260px;
+        height: 260px;
+    }
+
+    .profile-names {
+        text-align: center;
+    }
+}
+
+/* Edit Form Styles */
+.profile-form-container {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    gap: var(--space-md);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.form-group label {
+    font-weight: var(--fw-semibold);
+    color: var(--color-texto);
+    font-size: 14px;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--color-fondo);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-sm);
+    color: var(--color-texto);
+    font-family: var(--font-body);
+    font-size: 14px;
+    transition: var(--transition-fast);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--color-acento);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Solo si son de lectura, dar un estilo distinto opcional */
+.form-input[readonly],
+.form-textarea[readonly] {
+    background-color: var(--color-superficie-hover);
+    cursor: default;
+}

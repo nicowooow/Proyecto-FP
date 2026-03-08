@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { General_tree } from "../components/linksBase";
 
 import "./../assets/css/YourTree.css";
@@ -7,6 +7,9 @@ import "./../assets/css/YourTree.css";
 function YourTreeUser() {
 	const navigate = useNavigate();
 	let { username } = useParams();
+
+	const [description, setDescription] = useState("");
+	const [imageUrl, setImageUrl] = useState("");
 
 	useEffect(() => {
 		async function existsUser(username) {
@@ -34,13 +37,25 @@ function YourTreeUser() {
 
 			if (!exists) {
 				navigate("/404", { replace: true }); // Redirige a tu ruta 404
-                // y en el historial no deja la busqueda mal hecha
+				// y en el historial no deja la busqueda mal hecha
+			} else {
+				fetch(`/yourtree/api/profile/${username}`)
+					.then(res => res.json())
+					.then(data => {
+						if (data.bio) setDescription(data.bio);
+						if (data.imageUrl) setImageUrl(data.imageUrl);
+					})
+					.catch(err => console.error("Error fetching profile", err));
 			}
 		})();
 	}, [navigate, username]);
 	return (
 		<main id="main_yourtree">
-			<General_tree username={username} />
+			<General_tree
+				username={username}
+				descrition={description}
+				imageUrl={imageUrl}
+			/>
 		</main>
 	);
 }

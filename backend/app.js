@@ -1,9 +1,11 @@
 // librerias que ne necesitan
-// import cors from "cors";
-// app.use(cors()); // permitir peticiones desde el frontend
+import cors from "cors";
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 
-//middlewares
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // rutas que usaremos
 import tokenRoutes from "./routes/token.routes.js";
@@ -14,12 +16,19 @@ import styleRoutes from "./routes/style.routes.js";
 import forumRoutes from "./routes/forum.routes.js";
 import linkRoutes from "./routes/links.routes.js";
 
-// import { upload_images } from "./middlewares/multer-S3.middleware.js";
-
-
-// import {} from './../controllers/.controller.js'
 const app = express();
+
+const corsOptions = {
+  origin: "http://localhost:5173", // Solo permite peticiones desde este origen
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions)); // permitir peticiones desde el frontend de forma segura
 app.use(express.json()); // esto nos permite usar el formato JSON
+
+// Servir la carpeta de uploads estáticamente
+app.use("/yourtree/api/upload", express.static(path.join(process.cwd(), "upload", "profiles")));
+
 // Ruta principal (HTML)
 app.get("/", (req, res) => {
   //vamos a tener el get del endpoint base "/" el cual nos dira si funciona o no el programa

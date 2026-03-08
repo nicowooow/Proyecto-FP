@@ -3,7 +3,8 @@ import VerificationInput from "react-verification-input";
 import { useNavigate } from "react-router-dom";
 import "./../assets/css/forms.css";
 import { useAuth } from "./auth";
-import { getUser } from "./token";
+import { getUser, getToken } from "./token.jsx";
+import cookie from 'js-cookie'
 
 const getLink = async (linkId) => {
 	try {
@@ -63,7 +64,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+					Authorization: `Bearer ${getToken()}`,
 				},
 				body: JSON.stringify({
 					title,
@@ -185,7 +186,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+					Authorization: `Bearer ${getToken()}`,
 				},
 				body: JSON.stringify({
 					profile_id: profile.id,
@@ -297,7 +298,7 @@ export const FormDeleteLink = React.memo(function FormDeleteLink({ linkId }) {
 			const res = await fetch(`/yourtree/api/link/${linkId}`, {
 				method: "DELETE",
 				headers: {
-					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+					Authorization: `Bearer ${getToken()}`,
 				},
 			});
 			if (res.ok) {
@@ -352,7 +353,7 @@ export const FormDeleteLink = React.memo(function FormDeleteLink({ linkId }) {
 	);
 });
 
-export const FormUploadImage = React.memo(function FormUploadImage() {
+export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelect, onDeleteImage }) {
 	const dialogRef = useRef(null); // referencia que usamos para dialogo que se mostrara
 	const [isOpen, setIsOpen] = useState(false);
 	const fileInputRef = useRef(null);
@@ -365,10 +366,14 @@ export const FormUploadImage = React.memo(function FormUploadImage() {
 		const file = e.target.files[0];
 		if (file) {
 			// Preview o upload
-			console.log("File:", file.name);
-			// Tu lógica upload
+			console.log("File selected:", file.name);
+			if (onFileSelect) onFileSelect(file);
 		}
 		closeDialog();
+	};
+
+	const handleDeleteClick = () => {
+		if (onDeleteImage) onDeleteImage();
 	};
 
 	useEffect(() => {
@@ -379,7 +384,7 @@ export const FormUploadImage = React.memo(function FormUploadImage() {
 	return (
 		<>
 			<strong>profile image : </strong>
-			<button type="button" className="btn-constrast">
+			<button type="button" className="btn-constrast" onClick={handleDeleteClick}>
 				delete
 			</button>
 			<button type="button" className="btn-constrast" onClick={openDialog}>
@@ -406,16 +411,46 @@ export const FormUploadImage = React.memo(function FormUploadImage() {
 export const FormCodeVerification = React.memo(function FormCodeVerification() {
 	const navigate = useNavigate();
 	const { isLogged, isVerify } = useAuth();
-	const { status, username } = getUser();
+	const user = getUser();
+	const status = user ? user.status : null;
+	const username = user ? user.username : null;
 
 	useEffect(() => {
 		console.log(isLogged, isVerify);
+		console.log(status);
+
 		if (status === "active") {
 			console.log(status);
 		}
 	}, [isVerify, isLogged, status]);
 
 	const [code, setCode] = useState("");
+	const [timeLeft, setTimeLeft] = useState(0);
+
+	useEffect(() => {
+		if (timeLeft > 0) {
+			const timerId = setTimeout(() => {
+				setTimeLeft(timeLeft - 1);
+			}, 1000);
+			return () => clearTimeout(timerId);
+		}
+	}, [timeLeft]);
+
+	const handleResend = () => {
+		if (timeLeft > 0) return;
+		setTimeLeft(30);
+
+		fetch("/yourtree/api/resend-code", {
+			method: "POST",
+			headers: { "Content-Type": "Application/json" },
+			body: JSON.stringify({ username }),
+		})
+			.then((result) => result.json())
+			.then((data) => {
+				console.log(data);
+			})
+			.catch((err) => console.error(err));
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -432,11 +467,20 @@ export const FormCodeVerification = React.memo(function FormCodeVerification() {
 			.then((result) => result.json())
 			.then((data) => {
 				console.log(data);
+				if (data.verificated) {
+					// Actualizar cookie user.status a active
+					let userCookie = getUser();
+					if (userCookie) {
+						userCookie.status = "active";
+						cookie.set("user", JSON.stringify(userCookie));
+					}
+					window.location.reload();
+				}
 			});
 	};
 	return (
 		<>
-			{isLogged && (
+			{isLogged && status === "pending" && (
 				<div className="modal-overlay">
 					<form method="post" onSubmit={handleSubmit} className="verify_code">
 						<label htmlFor="input_code">Verify Code</label>
@@ -447,14 +491,22 @@ export const FormCodeVerification = React.memo(function FormCodeVerification() {
 							value={code}
 							onChange={setCode}
 						/>
-						<input
-							type="button"
-							value="Log out"
-							onClick={() => {
-								navigate("/Log_out");
-							}}
-						/>
-						<input type="submit" value="Verify code" />
+						<div className="verify_actions" style={{ display: 'flex', gap: '10px', marginTop: '10px', justifyContent: 'center' }}>
+							<input
+								type="button"
+								value="Log out"
+								onClick={() => {
+									navigate("/Log_out");
+								}}
+							/>
+							<input
+								type="button"
+								value={timeLeft > 0 ? `Resend (${timeLeft}s)` : "Resend Code"}
+								onClick={handleResend}
+								disabled={timeLeft > 0}
+							/>
+							<input type="submit" value="Verify code" />
+						</div>
 					</form>
 				</div>
 			)}

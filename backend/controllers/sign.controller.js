@@ -4,7 +4,8 @@ import userRepository from "../repository/user.repository.js";
 import User from "./../models/user.model.js";
 import { createAccessToken, createRefreshToken } from "./../utils/jwt.utils.js";
 import profileRepository from "../repository/profile.repository.js";
-
+import { crearClaveAuth } from "../utils/crearclave.js";
+import { sendEmail } from '../utils/nodemailer.utils.js'
 export const sign_in_user = (req, res) => {
 	// console.log(req.body);
 
@@ -135,10 +136,66 @@ export const log_out_user = (req, res) => {
 export const verifyAccount = async (req, res) => {
 	try {
 		const { code, username } = req.body;
-		const { id, verify_code } = await userRepository.getUser(username);
-		if (code === verify_code.split("-").join(""))
+		const user = await userRepository.getUser(username);
+
+		if (!user || user.verify_code === null) {
+			return res.json({ verificated: false });
+		}
+
+		if (code === user.verify_code.split("-").join("")) {
+			await userRepository.patchUser(
+				user.id,
+				null,
+				null,
+				null,
+				"active",
+				null,
+				null
+			);
+			await userRepository.updateVerifyCode(null, user.id);
 			return res.json({ verificated: true });
+		}
 		return res.json({ verificated: false });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const resendCode = async (req, res) => {
+	try {
+		const { username } = req.body;
+		const user = await userRepository.getUser(username);
+
+		if (!user) return res.status(404).json({ message: "User not found" });
+		console.log(user);
+		console.log(username);
+
+		if (user.status === "active") {
+			return res
+				.status(400)
+				.json({ verify: true, message: "User is already verified" });
+		}
+
+		const newVerifyCode = crearClaveAuth();
+
+		// Actualizar el código en la base de datos
+		await userRepository.updateVerifyCode(newVerifyCode, user.id);
+
+		setTimeout(() => {
+			userRepository
+				.updateVerifyCode(null, user.id)
+				.catch((e) => console.log(e));
+		}, 5 * 60 * 1000);
+
+		// Enviar el nuevo código por correo
+		const emailSent = await sendEmail(user.email, newVerifyCode);
+		if (!emailSent) {
+			console.log("Email failed to send properly");
+			return res.status(500).json({ message: "Failed to send email" });
+		}
+
+		return res.status(200).json({ message: "Code resent successfully" });
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: "Internal server error" });
