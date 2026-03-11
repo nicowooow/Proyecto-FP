@@ -5,8 +5,6 @@ services:
     # Asegúrate de configurar las variables de entorno que necesita tu backend
     env_file:
       - ./backend/.env
-    ports:
-      - "3000:3000" # Mapea tu ND_PORT (por defecto suele ser 3000)
     volumes:
       - ./backend/upload:/app/upload # Para que las imágenes no se borren si reinicias el contenedor (opcional)
     restart: unless-stopped
@@ -15,24 +13,10 @@ services:
     build: ./frontend
     container_name: yourtree_frontend
     ports:
-      - "5173:80" # El contenedor nginx expone el 80, lo mapeamos al 5173 o al puerto que prefieras
+      - "80:80" # El contenedor nginx expone el 80, lo mapeamos al 5173 o al puerto que prefieras
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro  # Certs (vacío OK)
     depends_on:
       - backend
     restart: unless-stopped
-
-  # Descomenta esto si también quieres correr la base de datos Postgres con Docker
-  # db:
-  #   image: postgres:15-alpine
-  #   container_name: yourtree_db
-  #   environment:
-  #     POSTGRES_USER: usuario_db
-  #     POSTGRES_PASSWORD: password_db
-  #     POSTGRES_DB: yourtree
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-  #   restart: unless-stopped
-
-# volumes:
-#   pgdata:
