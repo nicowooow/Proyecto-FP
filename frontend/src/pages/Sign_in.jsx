@@ -2,7 +2,7 @@ import "../assets/css/Sign.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { PasswordField } from "../components/usePassword.jsx";
+import { PasswordField } from "../components/UsePassword.jsx";
 import { useAuth } from "../components/auth.jsx";
 
 function Sign_in() {

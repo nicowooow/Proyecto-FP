@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../assets/css/Sign.css";
 import { useNavigate } from "react-router-dom";
 
-import { PasswordField, VerifyPassword } from "../components/usePassword.jsx";
+import { PasswordField, VerifyPassword } from "../components/UsePassword.jsx";
 //password field es el componente del input de password con el icono de mostrar/ocultar
 // verify password es la funcion que compara las dos contraseñas y devuelve si son iguales, la clase css y el mensaje de error
 
