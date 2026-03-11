@@ -20,13 +20,18 @@ FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 
 # La configuración por defecto de Nginx en Alpine a veces necesita ajustarse para React/React-Router
-# Añadimos un conf personalizado muy simple para evitar errores 404 al recargar páginas
+# Añadimos un conf personalizado para React-Router y el proxy hacia el backend
 RUN echo "server { \
     listen 80; \
     location / { \
         root /usr/share/nginx/html; \
         index index.html index.htm; \
         try_files \$uri \$uri/ /index.html; \
+    } \
+    location /yourtree/api/ { \
+        proxy_pass http://backend:3000; \
+        proxy_set_header Host \$host; \
+        proxy_set_header X-Real-IP \$remote_addr; \
     } \
 }" > /etc/nginx/conf.d/default.conf
 

@@ -62,7 +62,7 @@ export default function Recent_Pages() {
                 optionCheck={profile.theme === 'dark' ? 1 : 0}
                 usernameUser={profile.username}
                 descriptionInput={profile.bio || "Hello, I'm new here"}
-                imageUrl={profile.image_url ? `http://localhost:3000${profile.image_url}` : LogoUrl}
+                imageUrl={profile.image_url ? profile.image_url : LogoUrl}
               />
             </article>
           ))}

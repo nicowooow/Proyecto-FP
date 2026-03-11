@@ -122,7 +122,7 @@ export default function Forums() {
                     <h1>Community Forums</h1>
                     <p>Join the conversation with other creators. Discuss ideas and share your thoughts.</p>
                 </div>
-                {isLogged && <FormCreateForum username={currentUsername} onCreated={() => { setOffset(0); fetchForums(0, true); }} />}
+                <FormCreateForum isLogged={isLogged} username={currentUsername} onCreated={() => { setOffset(0); fetchForums(0, true); }} />
             </header>
             <section className="forums_list">
                 {forums.length > 0 ? forums.map((forum, index) => {
@@ -312,11 +312,15 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername }) {
     );
 }
 
-const FormCreateForum = React.memo(function FormCreateForum({ username, onCreated }) {
+const FormCreateForum = React.memo(function FormCreateForum({ isLogged, username, onCreated }) {
     let dialogRef = useRef(null);
     const baseId = useId();
 
     function openDialog() {
+        if (!isLogged) {
+            alert("You must be logged in to create a forum.");
+            return;
+        }
         dialogRef.current?.showModal();
     }
     function closeDialog() {
