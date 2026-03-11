@@ -16,7 +16,7 @@ function Sign_in() {
 		const form = new FormData(e.currentTarget);
 		const username_or_email = form.get("username_or_email");
 		const passwd = form.get("password");
-		// console.log(e);  console.log(form);  console.log(username_or_email); console.log(password);
+		//// console.log(e)// console.log(form)// console.log(username_or_email)// console.log(password);
 		try {
 			const res = await fetch("/yourtree/api/sign-in/", {
 				method: "POST",
@@ -29,15 +29,15 @@ function Sign_in() {
 				}),
 			});
 
-			const data = await res.json().catch((error) => console.log(error));
+			const data = await res.json().catch((error) =// console.log(error));
 			// usamos el catch(() => ({})) para que si el back da un error o envia HTML no se rompa el front
 			if (!res.ok) {
 				return setMessage(data.message || "Login failed");
 			}
 			if (res.ok) {
-				// console.log("LOGIN OK:", data);
+				//// console.log("LOGIN OK:", data);
 				// return setMessage(data.message)
-				// console.log(data.user);
+				//// console.log(data.user);
 
 				login(data.accessToken, data.refreshToken, data.user);
 

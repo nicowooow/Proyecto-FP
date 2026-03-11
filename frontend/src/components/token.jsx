@@ -19,7 +19,7 @@ export const refreshToken = async () => {
 	// traemos el segundo token el cual sera para refrescarlo
 	const refreshToken = getRefreshToken();
 	// si no lo encuentra regresa un valor nulo
-	// console.log(refreshToken);
+	//// console.log(refreshToken);
 
 	if (!refreshToken) return null;
 	// enviamos el contenido del token pero esta vez por el metodo post =
@@ -56,8 +56,8 @@ export const verifyToken = async () => {
 				Authorization: `Bearer ${token}`,
 			},
 		});
-		// console.log(res);
-		// console.log(res.body);
+		//// console.log(res);
+		//// console.log(res.body);
 
 		// si no lo encuentra pasamos al generar el token de nuevo
 		if (res.status === 401) {
@@ -70,7 +70,7 @@ export const verifyToken = async () => {
 			res = await fetch("/yourtree/api/authenticate", {
 				headers: { Authorization: `Bearer ${newToken}` },
 			});
-			// console.log("se refresco el token");
+			//// console.log("se refresco el token");
 		}
 		// si nos dice que la respuesta HTTP esta entre los 400 a 500 retornamos falso
 		if (!res.ok) {
@@ -79,7 +79,7 @@ export const verifyToken = async () => {
 		}
 		// sino esperamos la resuesta del backend
 		let data = await res.json();
-		// console.log(data);
+		//// console.log(data);
 		// retornamos los datos del back y en especifico si esta logueado o no
 		// ponemos el !! para asegurarnos que el valor sea un boooleano por la doble negacion
 		return !!data.isLogged;

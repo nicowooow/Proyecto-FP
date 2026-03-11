@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
 		(async () => {
 			const logged = await verifyToken();
 			// si no encuentra su refresh lo elimina, loss tokens guardados previamente
-			// console.log(logged);
+			//// console.log(logged);
 
 			if (!logged) logout();
 			// ponemos los datos
@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
 		// almacena los datos que sacamos de usuario en el almacenamiento local
 		cookies.set("user", JSON.stringify(user));
 		// cambiamos el valor de isLogged a true por ende si se logro loguear
-		console.log("se creo el token y su refresh");
+		// console.log("se creo el token y su refresh");
 		setIsLogged(true);
 	};
 
@@ -72,7 +72,7 @@ export function AuthProvider({ children }) {
 	// isLogged, login, logout  y loading
 	// cuales pueden tener elementos adentro
 	const value = { isLogged, isVerify, loading, login, logout, verifyStatus };
-	
+
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

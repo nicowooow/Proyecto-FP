@@ -30,7 +30,7 @@ function Header() {
     // esto lo estamos usando para el responsive del ancho de la pagina
     const handleResize = () => {
       setMobile(window.innerWidth <= 768);
-      // console.log(window.innerWidth <= 768);
+      //// console.log(window.innerWidth <= 768);
     };
 
     //al ejercutar agrega un evento el cuial es la funcion que hicimos arriba

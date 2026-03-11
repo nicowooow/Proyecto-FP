@@ -23,7 +23,7 @@ function Sign_up() {
   async function handleSubmit(e) {
     e.preventDefault(); // para que no se recargue la pagina
     if (!isSame) {
-      // console.log("passwords are not the same");
+      //// console.log("passwords are not the same");
       return;
     }
     let form = new FormData(e.currentTarget);
@@ -34,7 +34,7 @@ function Sign_up() {
     //   confirm_password: form.get("confirm_password"),
     // }; es igual a Object.fromEntries(form.entries())
     try {
-      // console.log("submitting form");
+      //// console.log("submitting form");
 
       let res = await fetch(
         "/yourtree/api/sign-up?role=1",
@@ -52,7 +52,7 @@ function Sign_up() {
       }
 
       if (res.ok) {
-        // console.log("REGISTER OK:", data);
+        //// console.log("REGISTER OK:", data);
         navigate("/sign_in");
         return setMessage("");
       }

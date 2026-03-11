@@ -16,7 +16,7 @@ function YourTreeUser() {
 			try {
 				const exists = await fetch(`/yourtree/api/user/verify/${username}`);
 				const result = await exists.json();
-				// console.log(result);
+				//// console.log(result);
 
 				return result.exists;
 			} catch (error) {
@@ -25,7 +25,7 @@ function YourTreeUser() {
 			}
 		}
 
-		console.log(username);
+		// console.log(username);
 		if (!username) {
 			navigate("/Sign_in");
 		}
@@ -33,7 +33,7 @@ function YourTreeUser() {
 		// para que se ejecute la funcion asincrona, para comprobar si existe dicho usuario
 		(async () => {
 			const exists = await existsUser(username);
-			// console.log("User exists?", exists);
+			//// console.log("User exists?", exists);
 
 			if (!exists) {
 				navigate("/404", { replace: true }); // Redirige a tu ruta 404

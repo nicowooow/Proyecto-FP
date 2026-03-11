@@ -63,7 +63,7 @@ export const Links_base = React.memo(function Links_base({
 	blurInput,
 	imageUrl,
 }) {
-	// console.log(username_input);
+	//// console.log(username_input);
 
 	// la opcion de visualizacion
 	let option = Number(optionCheck);
@@ -74,8 +74,8 @@ export const Links_base = React.memo(function Links_base({
 	let urlImage = imageUrl || profile_default;
 	// aqui ira el tipo que escojio, el cual se dara su css respectivo
 	let headOption;
-	//  console.log(typeof(option),option)
-	// console.log(usernameUser);
+	//// console.log(typeof(option),option)
+	//// console.log(usernameUser);
 
 	if (option === 0) headOption = "layout0";
 	else if (option === 1) headOption = "layout1";
@@ -147,8 +147,8 @@ export const General_tree = React.memo(function General_tree({
 		[username],
 	);
 	descrition = descrition === "" ? `Hello, i'm new here` : descrition;
-	// console.log("General_tree username:", username);
-	// console.log(username, option, descrition);
+	//// console.log("General_tree username:", username);
+	//// console.log(username, option, descrition);
 
 	// biome-ignore format: necesito que los svg no exparsan atributos
 	return (

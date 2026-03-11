@@ -74,7 +74,7 @@ function YourTree() {
 
 			if (response.ok) {
 				const data = await response.json();
-				console.log("Profile updated successfully:", data);
+				// console.log("Profile updated successfully:", data);
 				alert("Profile saved successfully");
 			} else {
 				console.error("Failed to update profile");

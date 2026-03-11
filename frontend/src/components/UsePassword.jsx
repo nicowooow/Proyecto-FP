@@ -42,16 +42,16 @@ export function PasswordField({
 
 // funcion para verificar si las contraseñas son iguales solo en el frontend, el cual nos permitira el poder enviar la contraseña
 export function VerifyPassword(password, confirmPassword) {
-  // console.log(password, confirmPassword);
-  
+  //// console.log(password, confirmPassword);
+
   // si son iguales nos da true , sino false. 
   // se que es algo repetitivo pero para dejarlo en claro o si ocurre un bug lo pongo asi
-  let isSame = (password === confirmPassword)?true:false;
+  let isSame = (password === confirmPassword) ? true : false;
 
   // nos envia el nombre de la clase si es declinada o no
   let confirmedClass = isSame ? "" : "declined";
   // para enviar un mensaje segun si son iguales o no
   let action = isSame ? "" : "passwords are not equals";
-  // console.log(isSame,confirmedClass,message)
+  //// console.log(isSame,confirmedClass,message)
   return { isSame, confirmedClass, action };
 }

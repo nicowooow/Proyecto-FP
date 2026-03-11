@@ -204,7 +204,7 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername }) {
     const handleComment = () => {
         if (!isLogged) return alert("You must be logged in to comment.");
         // Mock comment action
-        console.log("Commented on", forum.id);
+        // console.log("Commented on", forum.id);
     };
 
     return (

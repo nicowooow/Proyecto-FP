@@ -10,7 +10,7 @@ const getLink = async (linkId) => {
 	try {
 		const response = await fetch(`yourtree/api/link/${linkId}`);
 		const data = await response.json();
-		// console.log(data[0]);
+		//// console.log(data[0]);
 		return {
 			title: data[0].title,
 			url: data[0].url,
@@ -105,7 +105,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 		[],
 	);
 
-	// console.log(url, urlImage, position, title);
+	//// console.log(url, urlImage, position, title);
 
 	return (
 		<>
@@ -366,7 +366,7 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 		const file = e.target.files[0];
 		if (file) {
 			// Preview o upload
-			console.log("File selected:", file.name);
+			// console.log("File selected:", file.name);
 			if (onFileSelect) onFileSelect(file);
 		}
 		closeDialog();
@@ -416,11 +416,11 @@ export const FormCodeVerification = React.memo(function FormCodeVerification() {
 	const username = user ? user.username : null;
 
 	useEffect(() => {
-		console.log(isLogged, isVerify);
-		console.log(status);
+		// console.log(isLogged, isVerify);
+		// console.log(status);
 
 		if (status === "active") {
-			console.log(status);
+			// console.log(status);
 		}
 	}, [isVerify, isLogged, status]);
 
@@ -447,7 +447,7 @@ export const FormCodeVerification = React.memo(function FormCodeVerification() {
 		})
 			.then((result) => result.json())
 			.then((data) => {
-				console.log(data);
+				// console.log(data);
 			})
 			.catch((err) => console.error(err));
 	};
@@ -455,7 +455,7 @@ export const FormCodeVerification = React.memo(function FormCodeVerification() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		// Lógica de verificación
-		console.log("Código:", code);
+		// console.log("Código:", code);
 		fetch("/yourtree/api/verify-code", {
 			method: "POST",
 			headers: { "Content-Type": "Application/json" },
@@ -466,7 +466,7 @@ export const FormCodeVerification = React.memo(function FormCodeVerification() {
 		})
 			.then((result) => result.json())
 			.then((data) => {
-				console.log(data);
+				// console.log(data);
 				if (data.verificated) {
 					// Actualizar cookie user.status a active
 					let userCookie = getUser();

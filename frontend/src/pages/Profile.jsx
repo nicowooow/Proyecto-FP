@@ -54,7 +54,7 @@ function Profile() {
         );
     }
 
-    console.log(userData, profileData);
+    // console.log(userData, profileData);
 
 
     const { firstName, lastName, bio, imageUrl } = profileData;
