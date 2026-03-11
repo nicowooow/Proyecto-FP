@@ -90,7 +90,7 @@ function Header() {
                     </Link>
                     <Link
                       className="mobile-link"
-                      to="Top_Pages"
+                      to="Recent_Pages"
                       onClick={handleLinkClick}
                     >
                       <svg
@@ -101,26 +101,28 @@ function Header() {
                       >
                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                       </svg>
-                      Top Pages
+                      Recent Pages
                     </Link>
-                    <Link
-                      className="mobile-link"
-                      to={isLogged ? "YourTree" : "Templates"}
-                      onClick={handleLinkClick}
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
+                    {isLogged && (
+                      <Link
+                        className="mobile-link"
+                        to="YourTree"
+                        onClick={handleLinkClick}
                       >
-                        <rect x="3" y="3" width="7" height="7" />
-                        <rect x="14" y="3" width="7" height="7" />
-                        <rect x="14" y="14" width="7" height="7" />
-                        <rect x="3" y="14" width="7" height="7" />
-                      </svg>
-                      {isLogged ? "YourTree" : "Templates"}
-                    </Link>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <rect x="3" y="3" width="7" height="7" />
+                          <rect x="14" y="3" width="7" height="7" />
+                          <rect x="14" y="14" width="7" height="7" />
+                          <rect x="3" y="14" width="7" height="7" />
+                        </svg>
+                        YourTree
+                      </Link>
+                    )}
                     <Link
                       className="mobile-link"
                       to="Forums"
@@ -145,22 +147,7 @@ function Header() {
                     <h3>Account</h3>
                     {isLogged ? (
                       <>
-                        <Link
-                          className="mobile-link"
-                          to="Profile"
-                          onClick={handleLinkClick}
-                        >
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                            <circle cx="12" cy="7" r="4" />
-                          </svg>
-                          Profile
-                        </Link>
+
                         <Link
                           className="mobile-link"
                           to="Log-out"
@@ -247,12 +234,14 @@ function Header() {
               <Link className="Links" to="Home">
                 Home
               </Link>
-              <Link className="Links" to="Top_Pages">
-                Top Pages
+              <Link className="Links" to="Recent_Pages">
+                Recent Pages
               </Link>
-              <Link className="Links" to={isLogged ? "YourTree" : "Templates"}>
-                {isLogged ? "YourTree" : "Templates"}
-              </Link>
+              {isLogged && (
+                <Link className="Links" to="YourTree">
+                  YourTree
+                </Link>
+              )}
               <Link className="Links" to="Forums">
                 Forums
               </Link>
@@ -262,9 +251,7 @@ function Header() {
             <section className="right_header">
               {isLogged ? (
                 <>
-                  <Link className="Links" to="Profile">
-                    Profile
-                  </Link>
+
                   <Link className="Links" to="Log_out">
                     Logout
                   </Link>

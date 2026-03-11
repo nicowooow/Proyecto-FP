@@ -87,14 +87,14 @@ export const Links_base = React.memo(function Links_base({
 			return (
 				<>
 					<img src={urlImage} alt="user image" />
-					<h2>{username}</h2>
+					<h2>@{username}</h2>
 					<p>{description}</p>
 				</>
 			);
 		} else if (option === 2) {
 			return (
 				<>
-					<h2>{username}</h2>
+					<h2>@{username}</h2>
 					<img src={urlImage} alt="user image" />
 					<p>{description}</p>
 				</>
@@ -102,7 +102,7 @@ export const Links_base = React.memo(function Links_base({
 		} else if (option === 3) {
 			return (
 				<>
-					<h2>{username}</h2>
+					<h2>@{username}</h2>
 					<img src={urlImage} alt="user image" />
 					<p>{description}</p>
 				</>
@@ -114,7 +114,7 @@ export const Links_base = React.memo(function Links_base({
 					<img src={urlImage} alt="user image" />
 				</div>
 				<div>
-					<h2>{username}</h2>
+					<h2>@{username}</h2>
 					<p>{description}</p>
 				</div>
 			</>

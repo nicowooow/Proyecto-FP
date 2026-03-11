@@ -8,7 +8,7 @@ function Home() {
 	// biome-ignore format: necesito los espacios
 	return (
 		<main id="main_home">
-			{isLogged && <FormCodeVerification/>}
+			{isLogged && <FormCodeVerification />}
 			<section id="introduction">
 				<section>
 					<svg id="YourTree" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.96 211.34">
@@ -102,8 +102,8 @@ function Home() {
 				<p>
 					Here, you can post links, start discussions, and join forums to exchange knowledge and discover new perspectives.
 				</p>
-				</aside>
-				<aside>
+			</aside>
+			<aside>
 				<h2>What can you do here?</h2>
 				<p>
 					Share useful links, participate in community forums, and connect with people who enjoy exploring ideas just like you.
@@ -112,7 +112,7 @@ function Home() {
 			<aside>
 				<h2>
 					This page is a demo. The full version will be available at{" "}
-					<a href="treedlink.com" title="link to treedlink.com">
+					<a href="https://treedlink.com" title="link to treedlink.com">
 						{" "}
 						treedlink
 					</a>
@@ -121,7 +121,7 @@ function Home() {
 				<p>
 					You’ll be able to create posts and view statistics related to your
 					profile. All the progress you make on this demo will be transferred to <a href="https://treedlink.com" title="Link to treedlink.com"> Treedlink</a>.
-        </p>
+				</p>
 			</aside>
 		</main>
 	);

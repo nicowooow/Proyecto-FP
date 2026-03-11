@@ -19,7 +19,7 @@ import linkRoutes from "./routes/links.routes.js";
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:5173", // Solo permite peticiones desde este origen
+  origin: process.env.FRONTEND_URL || "http://localhost:5173", // Permite el origen definido en entorno, o localhost por defecto
   optionsSuccessStatus: 200,
 };
 

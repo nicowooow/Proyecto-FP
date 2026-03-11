@@ -12,12 +12,11 @@ class forumRepository {
   }
 
   /**
-   * Obtener todos los foros.
-   * @returns {Promise<Array>} retorna un array con todos los foros registrados
+   * Obtener todos los foros permitiendo paginacion con limit y offset
    */
-  getForums() {
-    const sql = "select * from forums";
-    return pool.query(sql, []).then(({ rows }) => rows);
+  getForums(limit = 10, offset = 0) {
+    const sql = "select * from forums LIMIT $1 OFFSET $2";
+    return pool.query(sql, [limit, offset]).then(({ rows }) => rows);
   }
 
   /**
@@ -89,13 +88,15 @@ class forumRepository {
    * @param {boolean|null} isSensitive - si el foro es sensible o no, o null para no cambiar
    * @param {boolean|null} isPublic - si el foro es público o privado, o null para no cambiar
    * @param {string|null} status - estado del foro, puede ser "active", "hidden" o "deleted", o null para no cambiar
+   * @param {number|null} likes - cantidad de likes
+   * @param {number|null} shares - cantidad de shares
    * @returns {Promise<number>} filas afectadas
    */
-  patchForum(id, profileId, title, description, isSensitive, isPublic, status) {
+  patchForum(id, profileId, title, description, isSensitive, isPublic, status, likes, shares) {
     const sql =
-      "update forums set profile_id = COALESCE($1,profile_id), title = COALESCE($2,title), description = COALESCE($3,description), is_sensitive = COALESCE($4,is_sensitive), is_public = COALESCE($5,is_public), status = COALESCE($6,status) where id = $7";
+      "update forums set profile_id = COALESCE($1,profile_id), title = COALESCE($2,title), description = COALESCE($3,description), is_sensitive = COALESCE($4,is_sensitive), is_public = COALESCE($5,is_public), status = COALESCE($6,status), likes = COALESCE($7,likes), shares = COALESCE($8,shares) where id = $9";
     return pool
-      .query(sql, [profileId, title, description, isSensitive, isPublic, status, id])
+      .query(sql, [profileId, title, description, isSensitive, isPublic, status, likes, shares, id])
       .then(({ rowCount }) => rowCount);
   }
 }

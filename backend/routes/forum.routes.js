@@ -11,6 +11,7 @@ import {
 import {
   delete_forum_comment,
   get_forum_comment,
+  get_forum_comments_by_forum_id,
   patch_forum_comment,
   post_forum_comment,
   put_forum_comment,
@@ -20,6 +21,7 @@ const router = new Router();
 // rutas que no estaran protegidas por el token
 router.get("/forums/", get_forums);
 router.get("/forums/:id", get_forum);
+router.get("/forum/:id/comments", get_forum_comments_by_forum_id);
 router.get("/forum/comments/:id", get_forum_comment);
 
 // rutas que estaran protegidas por el token

@@ -15,6 +15,17 @@ export const get_forum_comment = async (req, res) => {
   }
 };
 
+export const get_forum_comments_by_forum_id = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const rows = await forumCommentRepository.getForumCommentsByForum(id);
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const post_forum_comment = async (req, res) => {
   try {
     const { profileId, forumId, content, status } = req.body;

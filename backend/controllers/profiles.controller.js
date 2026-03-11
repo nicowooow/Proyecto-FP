@@ -11,6 +11,45 @@ export const get_profiles = async (req, res) => {
 		console.log(error);
 	}
 };
+export const get_recent_profiles = async (req, res) => {
+	try {
+		const sql = `
+			SELECT 
+				p.id as profile_id, p.first_name, p.last_name, p.image_url, p.theme, p.bio,
+				u.username, u.created_at,
+				(
+					SELECT json_agg(json_build_object('id', l.id, 'title', l.title, 'url', l.url, 'url_image', l.url_image))
+					FROM (
+						SELECT * FROM links 
+						WHERE profile_id = p.id AND is_visible = true
+						ORDER BY position ASC 
+						LIMIT 3
+					) l
+				) as recent_links
+			FROM profiles p
+			JOIN users u ON p.user_id = u.id
+			WHERE p.is_public = true 
+			  AND EXISTS (
+				  SELECT 1 FROM links 
+				  WHERE profile_id = p.id AND is_visible = true
+			  )
+			ORDER BY u.created_at DESC
+			LIMIT 30
+		`;
+		let { rows } = await pool.query(sql);
+
+		// If recent_links is null, ensure it returns an empty array
+		const formattedRows = rows.map(row => ({
+			...row,
+			recent_links: row.recent_links || []
+		}));
+
+		res.send(formattedRows);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ message: "Error en el servidor" });
+	}
+};
 
 export const get_profile = async (req, res, next) => {
 	try {

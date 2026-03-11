@@ -36,9 +36,9 @@ export const refreshToken = async () => {
 
 	// obtenemos los datos del back
 	let data = await res.json();
-	//guardamos el token en el almacenamiento local
-	localStorage.setItem("token", data.token);
-	//regredamos los datos de token
+	//guardamos el token en las cookies para mantener consistencia
+	cookie.set("token", data.token);
+	//regresamos los datos de token
 	return data.token;
 };
 

@@ -1,26 +1,119 @@
-import React, { useState, useEffect, useRef, useId, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useId, useMemo, useCallback } from 'react';
 import { useAuth } from '../components/auth.jsx';
+import cookies from "js-cookie";
+import { useParams, useNavigate } from 'react-router-dom';
 import './../assets/css/forums.css';
+
+const formatDate = (dateString) => {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("es-ES", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+    });
+};
 
 export default function Forums() {
     const [forums, setForums] = useState([]);
-    const { isLogged, user } = useAuth();
+    const [offset, setOffset] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-    const fetchForums = () => {
-        fetch('/yourtree/api/forums')
-            .then(res => {
-                if (!res.ok) throw new Error("Failed to fetch");
-                return res.json();
-            })
-            .then(data => {
-                if (Array.isArray(data)) setForums(data);
-            })
-            .catch(console.error);
-    };
+    // For specific forum post popup
+    const { forumId } = useParams();
+    const navigate = useNavigate();
+    const [selectedForum, setSelectedForum] = useState(null);
 
+    const { isLogged } = useAuth();
+    const cookieUser = cookies.get("user") ? JSON.parse(cookies.get("user")) : null;
+    const currentUsername = cookieUser ? cookieUser.username : "";
+    const observer = useRef();
+
+    const limit = 10;
+
+    const fetchForums = useCallback(async (currentOffset, overwrite = false) => {
+        if (loading) return;
+        setLoading(true);
+        try {
+            const res = await fetch(`/yourtree/api/forums?limit=${limit}&offset=${currentOffset}`);
+            if (!res.ok) throw new Error("Failed to fetch");
+            const data = await res.json();
+            if (Array.isArray(data)) {
+                if (data.length < limit) setHasMore(false);
+                else setHasMore(true);
+
+                if (overwrite) setForums(data);
+                else setForums(prev => [...prev, ...data]);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }, [loading]);
+
+    // Initial load
     useEffect(() => {
-        fetchForums();
+        fetchForums(0, true);
     }, []);
+
+    // Last element ref for infinite scroll
+    const lastForumElementRef = useCallback(node => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setOffset(prev => {
+                    const nextOffset = prev + limit;
+                    fetchForums(nextOffset, false);
+                    return nextOffset;
+                });
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, hasMore, fetchForums]);
+
+    // Handle fetching specific forum logic if URL has forumId
+    useEffect(() => {
+        if (forumId) {
+            // Check if already fetched to prevent flashing
+            if (selectedForum && selectedForum.id === parseInt(forumId)) {
+                return;
+            }
+
+            const f = forums.find(f => f.id === parseInt(forumId));
+            if (f) {
+                setSelectedForum(f);
+            } else {
+                fetch(`/yourtree/api/forums/${forumId}`)
+                    .then(async res => {
+                        if (!res.ok) throw new Error("Failed to fetch specific forum");
+                        const text = await res.text();
+                        return text ? JSON.parse(text) : {};
+                    })
+                    .then(data => {
+                        if (data && !data.error && Object.keys(data).length > 0) {
+                            setSelectedForum(data);
+                        } else {
+                            navigate('/Forums');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        navigate('/Forums');
+                    });
+            }
+        } else {
+            setSelectedForum(null);
+        }
+    }, [forumId, forums, selectedForum, navigate]);
+
+    const handleCardClick = (id) => {
+        navigate(`/Forums/${id}`);
+    };
+    const handleClosePopup = () => {
+        navigate(`/Forums`);
+    };
 
     return (
         <main id="forums_page">
@@ -29,23 +122,193 @@ export default function Forums() {
                     <h1>Community Forums</h1>
                     <p>Join the conversation with other creators. Discuss ideas and share your thoughts.</p>
                 </div>
-                {isLogged && <FormCreateForum username={user?.username} onCreated={fetchForums} />}
+                {isLogged && <FormCreateForum username={currentUsername} onCreated={() => { setOffset(0); fetchForums(0, true); }} />}
             </header>
             <section className="forums_list">
-                {forums.length > 0 ? forums.map(forum => (
-                    <article key={forum.id} className="forum_card">
-                        <h2>{forum.title}</h2>
-                        <p className="forum_desc">{forum.description}</p>
-                        <div className="forum_meta">
-                            <span className="forum_status">{forum.status}</span>
-                            <span className="forum_likes">Likes: {forum.likes}</span>
-                        </div>
-                    </article>
-                )) : (
+                {forums.length > 0 ? forums.map((forum, index) => {
+                    if (forums.length === index + 1) {
+                        return (
+                            <article ref={lastForumElementRef} key={forum.id} className="forum_card" onClick={() => handleCardClick(forum.id)}>
+                                <h2 className="forum_title_card">{forum.title}</h2>
+                                <p className="forum_description_card">{forum.description}</p>
+                                <span className="forum_date">{formatDate(forum.created_at)}</span>
+                            </article>
+                        );
+                    } else {
+                        return (
+                            <article key={forum.id} className="forum_card" onClick={() => handleCardClick(forum.id)}>
+                                <h2 className="forum_title_card">{forum.title}</h2>
+                                <p className="forum_description_card">{forum.description}</p>
+                                <span className="forum_date">{formatDate(forum.created_at)}</span>
+                            </article>
+                        );
+                    }
+                }) : (
                     <p className="no_forums">No forums available yet. Be the first to create one!</p>
                 )}
+                {loading && <p>Loading more forums...</p>}
             </section>
+
+            {selectedForum && (
+                <ForumDetailDialog
+                    forum={selectedForum}
+                    onClose={handleClosePopup}
+                    isLogged={isLogged}
+                    currentUsername={currentUsername}
+                />
+            )}
         </main>
+    );
+}
+
+// Dialog to show detailed forum post, with like, share and comment
+function ForumDetailDialog({ forum, onClose, isLogged, currentUsername }) {
+    const dialogRef = useRef(null);
+    const [commentsList, setCommentsList] = useState([]);
+    const [newCommentText, setNewCommentText] = useState("");
+    const [myProfileId, setMyProfileId] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (dialogRef.current) {
+            dialogRef.current.showModal();
+        }
+        // Fetch comments for this forum
+        fetch(`/yourtree/api/forum/${forum.id}/comments`)
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) setCommentsList(data);
+            })
+            .catch(err => console.error("Error fetching comments:", err));
+
+        // Fetch user profile id if logged in
+        if (isLogged && currentUsername) {
+            fetch(`/yourtree/api/profile/${currentUsername}`)
+                .then(res => res.json())
+                .then(profile => {
+                    if (profile && profile.id) setMyProfileId(profile.id);
+                })
+                .catch(err => console.error("Error fetching my profile", err));
+        }
+    }, [forum.id, isLogged, currentUsername]);
+
+    const handleClose = () => {
+        if (dialogRef.current) dialogRef.current.close();
+        onClose();
+    };
+
+    const handleShare = () => {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard!");
+    };
+    const handleComment = () => {
+        if (!isLogged) return alert("You must be logged in to comment.");
+        // Mock comment action
+        console.log("Commented on", forum.id);
+    };
+
+    return (
+        <dialog className="forum_detail_dialog" ref={dialogRef} onCancel={handleClose}>
+            <div className="dialog_content">
+                <div className="dialog_top_bar">
+                    <button className="btn_back_icon" onClick={handleClose}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="24" height="24">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <h2 className="forum_title_detail">{forum.title}</h2>
+
+                <div className="forum_description_area">
+                    {forum.description && <p className="post_text_detail">{forum.description}</p>}
+                </div>
+                <span className="forum_date detail_date">{formatDate(forum.created_at)}</span>
+
+                <div className="forum_card_actions detail_actions">
+                    <button className="btn_action_small">💬 Comentarios</button>
+                    <button className="btn_action_small" onClick={handleShare}>➦ Compartir</button>
+                </div>
+
+                <div className="comments_section_detail">
+                    {/* Add Comment Area */}
+                    <div className="add_comment_container">
+                        <textarea
+                            className="comment_input_box"
+                            placeholder="Añadir un comentario..."
+                            value={newCommentText}
+                            onChange={(e) => setNewCommentText(e.target.value)}
+                            onClick={(e) => {
+                                if (!isLogged) {
+                                    e.preventDefault();
+                                    navigate("/Sign_in");
+                                }
+                            }}
+                        />
+                        <button
+                            className="btn_submit_comment"
+                            onClick={async () => {
+                                if (!isLogged) {
+                                    navigate("/Sign_in");
+                                    return;
+                                }
+                                if (newCommentText.trim() === "") return;
+                                if (!myProfileId) {
+                                    alert("No public profile found for your user. Please complete your profile to comment.");
+                                    return;
+                                }
+
+                                const token = localStorage.getItem('accessToken') || cookies.get('token');
+                                try {
+                                    const res = await fetch('/yourtree/api/forum/comment/', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${token}`
+                                        },
+                                        body: JSON.stringify({
+                                            profileId: myProfileId,
+                                            forumId: forum.id,
+                                            content: newCommentText,
+                                            status: 'active'
+                                        })
+                                    });
+                                    if (res.ok) {
+                                        // Fake pushing the comment to UI immediately for responsivness, wait for refresh on reopen
+                                        setCommentsList([{ id: Date.now(), first_name: "You", last_name: "", content: newCommentText }, ...commentsList]);
+                                        setNewCommentText("");
+                                    } else {
+                                        alert("Failed to submit comment");
+                                    }
+                                } catch (error) {
+                                    console.error(error);
+                                }
+                            }}
+                        >
+                            Comentar
+                        </button>
+                    </div>
+
+                    {commentsList.length === 0 ? (
+                        <p className="comment_text no_comments_text">No comments yet, this is a placeholder mimicking the UI.</p>
+                    ) : (
+                        commentsList.map(comment => (
+                            <div className="comment_thread" key={comment.id}>
+                                <div className="comment_body">
+                                    <div className="comment_header">
+                                        <div className="comment_avatar"></div>
+                                        <span className="comment_author">{comment.first_name || "Unknown"} {comment.last_name || ""}</span>
+                                    </div>
+                                    <p className="comment_content"> {comment.content}</p>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+
+            </div>
+        </dialog>
     );
 }
 

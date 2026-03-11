@@ -10,6 +10,17 @@ class forumCommentRepository {
 		const sql = "select * from forum_comments where id = $1 limit 1";
 		return pool.query(sql, [id]).then(({ rows }) => rows || null);
 	}
+
+	getForumCommentsByForum(forumId) {
+		const sql = `
+			SELECT fc.*, p.first_name, p.last_name 
+			FROM forum_comments fc 
+			LEFT JOIN profiles p ON fc.profile_id = p.id 
+			WHERE fc.forum_id = $1 
+			ORDER BY fc.created_at DESC
+		`;
+		return pool.query(sql, [forumId]).then(({ rows }) => rows || []);
+	}
 	/**
 	 * obtenemos los comentarios del foro por el id del foro
 	 *

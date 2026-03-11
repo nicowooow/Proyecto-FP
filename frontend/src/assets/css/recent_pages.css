@@ -1,0 +1,133 @@
+.recent_pages_container {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.recent_pages_title {
+    font-size: 2.5rem;
+    color: var(--color-texto);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.profiles_grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(2rem, 1fr));
+    padding: 2rem;
+}
+
+.link_base h2,
+.link_base p,
+.link_base {
+    font-size: 1.2rem;
+}
+
+.profile_card {
+    background: var(--color-fondo-card, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-align: center;
+}
+
+.profile_card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.profile_card_mini {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 8px;
+}
+
+.profile_card_mini:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.profile_avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    background-color: #eee;
+}
+
+.profile_name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-texto);
+    margin: 0;
+}
+
+.profile_username {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.2rem;
+    margin-bottom: 1rem;
+}
+
+.profile_links_preview {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+}
+
+.preview_link_item {
+    background: #f8f9fa;
+    padding: 0.5rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: #333;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #e9ecef;
+    transition: background 0.2s;
+}
+
+.preview_link_item:hover {
+    background: #e2e6ea;
+}
+
+.loading_text,
+.error_text,
+.empty_text {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--color-texto);
+    margin-top: 3rem;
+}
+
+/* Limit the height of the links inside the profile cards to approximately 3 links */
+.profile_card_mini .link_body {
+    max-height: 220px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Apply a fade-out effect at the bottom if there are more links */
+.profile_card_mini .link_body::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--color-fondo));
+    pointer-events: none;
+}
