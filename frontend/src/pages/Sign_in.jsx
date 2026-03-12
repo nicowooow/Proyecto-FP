@@ -29,7 +29,7 @@ function Sign_in() {
 				}),
 			});
 
-			const data = await res.json().catch((error) =// console.log(error));
+			const data = await res.json().catch((error) => console.log(error));
 			// usamos el catch(() => ({})) para que si el back da un error o envia HTML no se rompa el front
 			if (!res.ok) {
 				return setMessage(data.message || "Login failed");
