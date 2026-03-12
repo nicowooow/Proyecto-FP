@@ -65,63 +65,60 @@ export const sign_in_user = (req, res) => {
 		});
 };
 
-export const sign_up_user = (req, res) => {
+export const sign_up_user = async (req, res) => {
 	// sacamos los datos que envio el front
 	let { username, email, password } = req.body;
-	let { verifyCode } = req;
 	// sacamos el rol que tomara el usuario, todo dependera del query que tenga en la URL del fetch del frontend
 	let role = req.query.role;
 
-	// creamos un usuario
-	userRepository
-		.createUser(username, email, password, "pending", role, verifyCode)
-		.then((userId) => {
-			// si en el proceso sucedio un error y dicho error envio una respuesta HTTP retornamos la funcion con el resultado que nos dio
-			if (res.headersSent) return;
-			// si obtuvimos el ID del usuario creado
-			if (userId) {
-				return profileRepository
-					.createProfile(
-						userId,
-						username, // firstName
-						null, // lastName
-						"2000-01-01", // birthDate
-						null, // phone
-						null, // recoveryEmail
-						"", // bio
-						null, // imageUrl
-						"light", // theme
-						null, // monthly plan
-						true, // isPublic
-					)
-					.then(() => {
-						if (res.headersSent) return;
-						// retornamos con estado 201, el cual significa que ya creo el usuario
-						return res.status(201).json({
-							message: "user created successfully",
-						});
-					});
-			}
-			// sino no se pudo crear el usuario de forma correcta
-			return res.status(400).json({ message: "User not created" });
-		})
-		.catch((error) => {
-			// console.log(error);
-			// si el error de la BBDD nos da por el unique lo ponemos de esta manera (codigo de error respectivo de postgres)
-			if (error.code === "23505") {
-				return res
-					.status(409)
-					.json({ message: "Username or email already exists" });
-			}
-			// y si en todo dicho proceso no se encontro otra respuesta HTTP y es un error lo mandamos con el 500
-			if (!res.headersSent) {
-				console.log(error);
+	// generamos el codigo de verificacion
+	const verifyCode = crearClaveAuth();
 
-				return res
-					.status(500)
-					.json({ message: "Server error", detail: String(error) });
-			}
-		});
+	try {
+		const userId = await userRepository.createUser(username, email, password, "pending", role, verifyCode);
+
+		if (res.headersSent) return;
+
+		if (!userId) {
+			return res.status(400).json({ message: "User not created" });
+		}
+
+		await profileRepository.createProfile(
+			userId,
+			username, // firstName
+			null, // lastName
+			"2000-01-01", // birthDate
+			null, // phone
+			null, // recoveryEmail
+			"", // bio
+			null, // imageUrl
+			"light", // theme
+			null, // monthly plan
+			true, // isPublic
+		);
+
+		// enviar email con el codigo de verificacion
+		const emailSent = await sendEmail(email, verifyCode);
+		if (!emailSent) {
+			console.log("Email failed to send properly");
+		}
+
+		// limpiar el codigo de verificacion tras 5 minutos
+		setTimeout(() => {
+			userRepository.updateVerifyCode(null, userId).catch((e) => console.log(e));
+		}, 5 * 60 * 1000);
+
+		return res.status(201).json({ message: "user created successfully" });
+
+	} catch (error) {
+		if (error.code === "23505") {
+			return res.status(409).json({ message: "Username or email already exists" });
+		}
+		if (!res.headersSent) {
+			console.log(error);
+			return res.status(500).json({ message: "Server error", detail: String(error) });
+		}
+	}
 };
 
 export const log_out_user = (req, res) => {
