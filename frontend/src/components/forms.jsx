@@ -55,10 +55,10 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const title = e.target.title_form_link.value;
-		const url = e.target.url_form_link.value;
-		const url_image = e.target.url_image_form_link.value;
-		const position = e.target.position_form_link.value;
+		const titleVal = e.target.title_form_link.value || title;
+		const urlVal = e.target.url_form_link.value || url;
+		const urlImageVal = e.target.url_image_form_link.value || urlImage;
+		const positionVal = e.target.position_form_link.value || position;
 		try {
 			const res = await fetch(`/yourtree/api/link/${linkId}`, {
 				method: "PUT",
@@ -67,10 +67,10 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 					Authorization: `Bearer ${getToken()}`,
 				},
 				body: JSON.stringify({
-					title,
-					url,
-					url_image,
-					position,
+					title: titleVal,
+					url: urlVal,
+					url_image: urlImageVal,
+					position: positionVal,
 					is_visible: true,
 				}),
 			});
@@ -119,7 +119,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 						type="text"
 						name="url_image_form_link"
 						id={`${baseId}-img-url`}
-						placeholder={urlImage}
+						defaultValue={urlImage}
 					/>
 
 					<label htmlFor={`${baseId}-title`}>title : </label>
@@ -127,7 +127,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 						type="text"
 						name="title_form_link"
 						id={`${baseId}-title`}
-						placeholder={title}
+						defaultValue={title}
 					/>
 
 					<label htmlFor={`${baseId}-url`}>url : </label>
@@ -135,7 +135,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 						type="text"
 						name="url_form_link"
 						id={`${baseId}-url`}
-						placeholder={url}
+						defaultValue={url}
 					/>
 
 					<label htmlFor={`${baseId}-position`}>position : </label>
@@ -144,7 +144,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 						min={0}
 						name="position_form_link"
 						id={`${baseId}-position`}
-						placeholder={position}
+						defaultValue={position}
 					/>
 
 					<input

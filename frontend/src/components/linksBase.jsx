@@ -43,8 +43,21 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 					typeof link.url === "string" &&
 					link.url.startsWith("https://");
 
+				let iconUrl = "";
+				if (isImage) {
+					const isImageFile = /\.(svg|png|jpe?g|webp|gif|ico)(\?.*)?$/i.test(link.url);
+					if (isImageFile) {
+						iconUrl = link.url;
+					} else {
+						try {
+							const hostname = new URL(link.url).hostname;
+							iconUrl = `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
+						} catch (_) {}
+					}
+				}
+
 				const liStyle = isImage
-					? { "--link-icon": `url(${link.url})` }
+					? { "--link-icon": `url(${iconUrl})` }
 					: {};
 
 				return (
