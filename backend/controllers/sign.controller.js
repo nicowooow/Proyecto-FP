@@ -103,11 +103,6 @@ export const sign_up_user = async (req, res) => {
 			console.log("Email failed to send properly");
 		}
 
-		// limpiar el codigo de verificacion tras 5 minutos
-		setTimeout(() => {
-			userRepository.updateVerifyCode(null, userId).catch((e) => console.log(e));
-		}, 5 * 60 * 1000);
-
 		return res.status(201).json({ message: "user created successfully" });
 
 	} catch (error) {
