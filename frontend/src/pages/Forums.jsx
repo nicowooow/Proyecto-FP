@@ -276,7 +276,7 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername }) {
                                     });
                                     if (res.ok) {
                                         // Fake pushing the comment to UI immediately for responsivness, wait for refresh on reopen
-                                        setCommentsList([{ id: Date.now(), first_name: "You", last_name: "", content: newCommentText }, ...commentsList]);
+                                        setCommentsList([{ id: Date.now(), username: currentUsername || "You", content: newCommentText, created_at: new Date().toISOString() }, ...commentsList]);
                                         setNewCommentText("");
                                     } else {
                                         alert("Failed to submit comment");
@@ -297,10 +297,12 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername }) {
                             <div className="comment_thread" key={comment.id}>
                                 <div className="comment_body">
                                     <div className="comment_header">
-                                        <div className="comment_avatar"></div>
-                                        <span className="comment_author">{comment.first_name || "Unknown"} {comment.last_name || ""}</span>
+                                        <span className="comment_username">@{comment.username || comment.first_name || "unknown"}</span>
+                                        {comment.created_at && (
+                                            <span className="comment_date">{formatDate(comment.created_at)}</span>
+                                        )}
                                     </div>
-                                    <p className="comment_content"> {comment.content}</p>
+                                    <p className="comment_content">{comment.content}</p>
                                 </div>
                             </div>
                         ))

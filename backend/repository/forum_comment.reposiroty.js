@@ -13,9 +13,10 @@ class forumCommentRepository {
 
 	getForumCommentsByForum(forumId) {
 		const sql = `
-			SELECT fc.*, p.first_name, p.last_name 
+			SELECT fc.*, p.first_name, p.last_name, u.username
 			FROM forum_comments fc 
-			LEFT JOIN profiles p ON fc.profile_id = p.id 
+			LEFT JOIN profiles p ON fc.profile_id = p.id
+			LEFT JOIN users u ON p.user_id = u.id
 			WHERE fc.forum_id = $1 
 			ORDER BY fc.created_at DESC
 		`;
