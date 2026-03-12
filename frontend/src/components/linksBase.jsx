@@ -43,14 +43,20 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 					typeof link.url === "string" &&
 					link.url.startsWith("https://");
 
+				const liStyle = isImage
+					? { "--link-icon": `url(${link.url})` }
+					: {};
+
 				return (
-					<li key={link.id ?? i}>
+					<li
+						key={link.id ?? i}
+						className={isImage ? "link-image" : "link-text"}
+						style={liStyle}
+					>
 						<section className="links">
-							{isImage ? (
-								<img src={link.url} alt={link.title ?? link.name ?? "link image"} />
-							) : (
-								<p>{link.title ?? link.name ?? "name link"}</p>
-							)}
+							<a href={link.url ?? "#"}>
+								{link.title ?? link.name ?? "name link"}
+							</a>
 						</section>
 						<section className="links_actions">{actions}</section>
 					</li>

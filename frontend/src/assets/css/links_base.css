@@ -109,16 +109,24 @@
 	text-decoration: none;
 }
 
-.link_body li::before {
+/* link con imagen (url empieza por https://) */
+.link_body li.link-image::before {
 	content: "";
 	position: relative;
 	width: 2rem;
 	height: 1.9rem;
-	/* esta altura solo nos servira en el caso de querer poner imagenes, si es con emojis tenemos que quitarla*/
 	margin-right: 1rem;
-	background-image: url("./../images/Facebook_icon.svg");
+	background-image: var(--link-icon);
 	background-size: cover;
 	border-radius: 4px;
+}
+
+/* link sin imagen (url sin https://) → muestra emoji */
+.link_body li.link-text::before {
+	content: "🔗";
+	position: relative;
+	margin-right: 0.5rem;
+	font-size: 1.3rem;
 }
 
 /* On small screens, allow wrapping and normal flow (stacked) */

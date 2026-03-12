@@ -3,7 +3,7 @@ import { useState } from "react";
 export const ShareIcon = ({ username }) => {
 	const [copied, setCopied] = useState(false);
 	const handleCopy = async () => {
-		const link = `http://localhost:5173/yourtree/${username}`;
+		const link = `https://demo.treedlink.com/YourTree/${username}`;
 		try {
 			// console.log(username);
 			// console.log(link);
