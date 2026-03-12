@@ -39,12 +39,18 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 						? React.cloneElement(child, { linkId: link.id, profileId })
 						: child,
 				);
+				const isImage =
+					typeof link.url === "string" &&
+					link.url.startsWith("https://");
+
 				return (
 					<li key={link.id ?? i}>
 						<section className="links">
-							<a href={link.url ?? "#"}>
-								{link.title ?? link.name ?? "name link"}
-							</a>
+							{isImage ? (
+								<img src={link.url} alt={link.title ?? link.name ?? "link image"} />
+							) : (
+								<p>{link.title ?? link.name ?? "name link"}</p>
+							)}
 						</section>
 						<section className="links_actions">{actions}</section>
 					</li>
