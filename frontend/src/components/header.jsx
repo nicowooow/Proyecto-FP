@@ -45,7 +45,7 @@ function Header() {
     return (
       <header>
         {/*esta es la parte izquierda de header */}
-        <div className="header-glass-background">
+        <div className="header_glass_background">
           <nav id="header">
             <section className="left_header">
               <Link className="Links" to="/" id="my_logo">
