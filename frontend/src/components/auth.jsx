@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import cookies from "js-cookie";
-import { verifyToken } from "./token.jsx";
+import { verifyToken, getUser } from "./token.jsx";
 
 const AuthContext = createContext();
 // creamos un contexto de autenticacion general para la aplicacion es decir
@@ -12,6 +12,13 @@ export function AuthProvider({ children }) {
 	// isLogged y loading lo ponemos con sus valores por defecto
 	const [isLogged, setIsLogged] = useState(false);
 	const [isVerify, setIsVerify] = useState(false);
+	const [user, setUser] = useState(() => {
+		try {
+			return getUser();
+		} catch {
+			return null;
+		}
+	});
 	//loading serviara para saber si los tokens estan cargado o no, una vez cargados cambia a false
 	// el cual nos indica que ya termino de cargarse
 	const [loading, setLoading] = useState(true);
@@ -33,7 +40,7 @@ export function AuthProvider({ children }) {
 	}, []);
 
 	// esta sera una funcion para almacenar los tokens en el login
-	const login = (token, refreshToken, user) => {
+	const login = (token, refreshToken, userData) => {
 		// token inicial el cual es token de autenticacion original
 		cookies.set("token", token, {
 			expires: 1,
@@ -47,7 +54,8 @@ export function AuthProvider({ children }) {
 			sameSite: "strict",
 		});
 		// almacena los datos que sacamos de usuario en el almacenamiento local
-		cookies.set("user", JSON.stringify(user));
+		cookies.set("user", JSON.stringify(userData));
+		setUser(userData);
 		// cambiamos el valor de isLogged a true por ende si se logro loguear
 		// console.log("se creo el token y su refresh");
 		setIsLogged(true);
@@ -61,6 +69,7 @@ export function AuthProvider({ children }) {
 		cookies.remove("refreshToken");
 		//removemos los datos del usuario
 		cookies.remove("user");
+		setUser(null);
 		// retornamos que el login es falso, es decir que no tiene la sesion abierta
 		setIsLogged(false);
 	};
@@ -71,7 +80,7 @@ export function AuthProvider({ children }) {
 	//retornamos la etiqueta que generamos con el contexto y que tiene los valores de
 	// isLogged, login, logout  y loading
 	// cuales pueden tener elementos adentro
-	const value = { isLogged, isVerify, loading, login, logout, verifyStatus };
+	const value = { isLogged, isVerify, loading, login, logout, verifyStatus, user };
 
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

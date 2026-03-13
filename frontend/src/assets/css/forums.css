@@ -68,6 +68,9 @@
   transition: border-color 0.2s;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .forum_card:hover {
@@ -306,11 +309,15 @@
 
 .forum_description_area {
   margin-bottom: 20px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .post_text_detail {
   font-size: 1.05rem;
   line-height: 1.6;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .comments_section_detail {
@@ -327,6 +334,9 @@
 
 .comment_body {
   flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .comment_header {
@@ -351,6 +361,8 @@
   font-size: 0.95rem;
   margin: 0 0 12px 0;
   line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .comment_actions {

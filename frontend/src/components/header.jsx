@@ -16,7 +16,7 @@ import { useAuth } from "../components/auth.jsx";
 function Header() {
   // sacamos la funciones de autenticacion, para que el header obtenga la un estado
   // true o false y saber que opciones mostrar
-  const { isLogged } = useAuth(); // esto nos servira para usarlo con las tokens
+  const { isLogged, user } = useAuth(); // esto nos servira para usarlo con las tokens
   //const isLogged = true; // esto nos servira para la prueba rapida
   /*esto estaba en ela parte del primer a ( el que contiene la imagen )index.html*/
   let [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -147,7 +147,11 @@ function Header() {
                     <h3>Account</h3>
                     {isLogged ? (
                       <>
-
+                        {user && (
+                          <span className="mobile-link profile-name">
+                            @{user.username || user.name || user.email}
+                          </span>
+                        )}
                         <Link
                           className="mobile-link"
                           to="Log-out"
@@ -251,7 +255,11 @@ function Header() {
             <section className="right_header">
               {isLogged ? (
                 <>
-
+                  {user && (
+                    <span className="Links profile-name">
+                      @{user.username || user.name || user.email}
+                    </span>
+                  )}
                   <Link className="Links" to="Log_out">
                     Logout
                   </Link>
