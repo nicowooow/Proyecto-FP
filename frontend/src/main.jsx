@@ -14,7 +14,7 @@ import Sign_in from "./pages/Sign_in.jsx";
 import Sign_up from "./pages/Sign_up.jsx";
 import Log_out from "./pages/Log_out.jsx";
 import Recent_Pages from "./pages/Recent_Pages.jsx";
-
+import AnalyticsTracker from "./components/GA_4.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 function AppWithHeader() {
@@ -25,6 +25,7 @@ function AppWithHeader() {
 
 	return (
 		<>
+			<AnalyticsTracker />
 			{!hideHeader && <Header />}
 			<Routes>
 				<Route path="/" element={<Home />} />

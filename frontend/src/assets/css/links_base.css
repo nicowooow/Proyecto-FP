@@ -97,30 +97,37 @@
 	margin: 12px 0;
 	background-color: var(--color-blur-border);
 	transition: border-color 0.2s;
-	justify-content: center;
-	min-width: 0;
-	overflow-wrap: break-word;
-	word-break: break-word;
+	min-width: 0; /* Permite que el li se encoja si es necesario */
 }
 
 .link_body li:hover {
 	border-color: var(--color-texto);
 }
 
-.link_body li > a {
-	/* con esto hacemos que el enlace ocupe el mayor espacio del li */
+.link_body .links {
+	flex: 1;
+	min-width: 0; /* CRITICO para que el texto dentro pueda romper linea */
 	display: flex;
 	align-items: center;
-	width: 100%;
-	color: var(--color-texto);
-	font-weight: 600;
-	overflow-wrap: break-word;
-	word-break: break-word;
-	min-width: 0;
+	justify-content: center;
 }
 
-.link_body a {
+.link_body .links a {
+	color: var(--color-texto);
+	font-weight: 600;
 	text-decoration: none;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+	text-align: center;
+	width: 100%;
+}
+
+.link_body li.link-image .links {
+	justify-content: flex-start; /* Alinear al inicio si hay icono */
+}
+
+.link_body li.link-image .links a {
+	text-align: start;
 }
 
 /* link con imagen (url empieza por https://) */
