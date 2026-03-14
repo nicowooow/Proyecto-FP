@@ -630,18 +630,39 @@
 
 .collapsible_body_style_link>ul li {
   text-align: center;
-  padding: 0.2rem 0.7rem;
+  padding: 0.5rem 1rem;
   margin-bottom: 0.8rem;
-  border: 2px solid var(--color-borde);
-  border-radius: 30px;
-  display: inline-flex;
+  border: 1px solid var(--color-borde);
+  border-radius: 12px;
+  display: flex; /* cambiado de inline-flex para mejor control */
   width: 100%;
   justify-content: space-between;
+  align-items: center;
+  min-width: 0; /* Permite que el contenido se encoja */
+  box-sizing: border-box;
 }
 
-.collapsible_body_style_link>ul>li a {
+.collapsible_body_style_link .links {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.collapsible_body_style_link .links a {
   text-decoration: none;
   color: var(--color-texto);
+  font-weight: 600;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  text-align: start;
+}
+
+.collapsible_body_style_link .links_actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 4px;
 }
 
 .collapsible_body_style_link>ul>li button {
