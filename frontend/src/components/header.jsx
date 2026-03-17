@@ -154,7 +154,7 @@ function Header() {
                         )}
                         <Link
                           className="mobile-link"
-                          to="Log-out"
+                          to="Log_out"
                           onClick={handleLinkClick}
                         >
                           <svg

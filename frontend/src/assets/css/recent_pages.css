@@ -9,14 +9,38 @@
 .recent_pages_title {
     font-size: 2.5rem;
     color: var(--color-texto);
-    margin-bottom: 2rem;
+    margin: 1rem 0 2rem;
     text-align: center;
+}
+
+@media (max-width: 600px) {
+    .recent_pages_title {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
 }
 
 .profiles_grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(2rem, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
     padding: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .profiles_grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .profiles_grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
 }
 
 .link_base h2,
