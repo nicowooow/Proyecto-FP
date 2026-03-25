@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { PasswordField } from "../components/UsePassword.jsx";
 import { useAuth } from "../components/auth.jsx";
+import SEO from './../components/seo.jsx';
 
 function Sign_in() {
 	const { login } = useAuth();
@@ -52,6 +53,10 @@ function Sign_in() {
 	}
 	return (
 		<main id="main_sign">
+<SEO 
+  title="Sign In - YourTree"
+  description="Access your YourTree account and manage your custom link pages."
+/>
 			<section id="sign">
 				<section>
 					<form id="form_sign" onSubmit={handleSubmit} method="POST">

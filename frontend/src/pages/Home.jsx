@@ -1,6 +1,7 @@
 import "./../assets/css/home.css";
 import { FormCodeVerification } from "../components/forms.jsx";
 import { useAuth } from "../components/auth.jsx";
+import SEO from './../components/seo.jsx';
 
 function Home() {
 	const { isLogged } = useAuth();
@@ -8,6 +9,10 @@ function Home() {
 	// biome-ignore format: necesito los espacios
 	return (
 		<main id="main_home">
+<SEO 
+  title="YourTree - Share links and connect with creators"
+  description="Discover YourTree: create your custom link-in-bio page, join forums, and share with the community. Full-stack React+Node demo."
+/>
 			{isLogged && <FormCodeVerification />}
 			<section id="introduction">
 				<section>

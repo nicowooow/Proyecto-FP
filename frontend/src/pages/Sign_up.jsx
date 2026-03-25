@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { PasswordField, VerifyPassword } from "../components/UsePassword.jsx";
 //password field es el componente del input de password con el icono de mostrar/ocultar
 // verify password es la funcion que compara las dos contraseñas y devuelve si son iguales, la clase css y el mensaje de error
+import SEO from './../components/seo.jsx';
 
 
 function Sign_up() {
@@ -65,6 +66,10 @@ function Sign_up() {
 
   return (
     <main id="main_sign">
+<SEO 
+  title="Sign Up - YourTree Link in Bio"
+  description="Create free YourTree account and start building your custom link page."
+/>
       <section id="sign">
         <section id="message_sign">
           <h2>Hello there</h2>

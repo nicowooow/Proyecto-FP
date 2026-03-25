@@ -15,6 +15,7 @@ import {
 import { useAuth } from "../components/auth.jsx";
 import { getToken } from "../components/token.jsx";
 
+import SEO from './../components/seo.jsx';
 function YourTree() {
 	// si no esta loggeado lo manda al incio
 	const auth = useAuth();
@@ -88,6 +89,10 @@ function YourTree() {
 
 	return (
 		<main id="main_yourtree">
+<SEO 
+  title="YourTree Editor - Create Custom Link Page"
+  description="Customize your link-in-bio on YourTree: add links, change colors, upload photo, and share your unique profile."
+/>
 			<section id="general_area">
 				<section id="general_settings">
 					<form className="settings" onSubmit={handleSaveProfile}>

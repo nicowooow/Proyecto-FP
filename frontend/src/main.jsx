@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "./components/auth.jsx";
+import { Helmet } from "react-helmet-async";
 
 //import "./assets/css/index.css";
 
@@ -22,9 +23,18 @@ function AppWithHeader() {
 
 	// true si la ruta es /YourTree/:username (empieza por /YourTree/ y tiene algo más)
 	const hideHeader = /^\/[yY]our[tT]ree\/[^/]+$/.test(location.pathname);
-
+	const titles = {
+	'/': 'YourTree - Link in Bio & Community',
+	'/forums': 'YourTree Forums',
+	'/signin': 'Sign In - YourTree',
+	'/signup': 'Sign Up - YourTree',
+	'/profile/:username': 'Profile - YourTree'
+	};
 	return (
 		<>
+			<Helmet>
+				<title>{titles[location.pathname] || 'YourTree'}</title>
+			</Helmet>
 			<AnalyticsTracker />
 			{!hideHeader && <Header />}
 			<Routes>
