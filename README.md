@@ -1,5 +1,5 @@
 <h1 align="center">Proyecto FP</h1>
-<img src="./frontend/public/YourTree.svg" alt="Logo" width="200" style="display: block; margin: 0 auto;"/>
+<img src="./frontend/public/YourTree.svg" align="center" alt="Logo" width="200" style="display: block; margin: 0 auto; "/>
 
 
 <h2 align="center">Proyecto FP - <a href='https://demo.treedlink.com'>demo.treedlink.com</a></h2>
