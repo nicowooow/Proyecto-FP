@@ -49,7 +49,7 @@ El bloque de construcción e ingeniería de la UI. Aquí residen elementos que n
 *(Ej: Barras de navegación superior, menús desplegables, modales interactivos flotantes (`Dialogs`), o tarjetas individuales de previsualización).*
 
 #### 📖 `src/pages/`
-Son las pantallas gigantes o "Vistas Completas". Representan los dominios que el enrutador te muestra cuando navegas a `/`, `/forums`, o `/tu-perfil`. Su labor principal es agrupar a docenas de componentes de la carpeta anterior y alimentar a dichos componentes con los Estados globales o respuestas `Fetch` del servidor.
+Son las pantallas gigantes o "Vistas Completas". Representan los dominios que el enrutador te muestra cuando navegas a `/`, `/forums`, o `/YourTree`. Su labor principal es agrupar a docenas de componentes de la carpeta anterior y alimentar a dichos componentes con los Estados globales o respuestas `Fetch` del servidor.
 
 #### 🚀 `src/main.jsx`
 Es la llave de ignición de React. Al abrir la app, Vite lo busca como el archivo sagrado. Su responsabilidad consiste en inyectar el código JavaScript directamente al documento HTML (`index.html`) por medio del `ReactDOM`. A su vez, inicializa los Proveedores (`Providers`) de Enrutamiento y protege las ventanas de visualización de los usuarios no autenticados.
