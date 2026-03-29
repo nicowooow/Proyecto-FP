@@ -17,6 +17,7 @@ import Log_out from "./pages/Log_out.jsx";
 import Recent_Pages from "./pages/Recent_Pages.jsx";
 import AnalyticsTracker from "./components/GA_4.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import BuyMeACoffee from "./components/BuyMeACoffee.jsx";
 
 function AppWithHeader() {
 	const location = useLocation();
@@ -52,6 +53,7 @@ function AppWithHeader() {
 				<Route path="*" element={<NotFound />} />
 				<Route path="/404" element={<NotFound />} />
 			</Routes>
+			<BuyMeACoffee />
 		</>
 	);
 }
