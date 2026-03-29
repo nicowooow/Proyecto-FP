@@ -40,7 +40,7 @@ export const authenticate = (req, res, next) => {
 		req.user = payload; // { id, username, role }
 		req.isLogged = true;
 
-		console.log("TOKEN OK:", payload);
+		// console.log("TOKEN OK:", payload);
 		next();
 	} catch (error) {
 		console.log(error);

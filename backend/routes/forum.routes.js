@@ -1,4 +1,4 @@
-import { Router } from "express";
+import {authenticate} from "./../middlewares/auth.middleware.js";
 import {
   get_forums,
   get_forum,
@@ -6,6 +6,7 @@ import {
   patch_forum,
   post_forum,
   put_forum,
+  search_forums,
 } from "../controllers/forum.controller.js";
 
 import {
@@ -16,9 +17,11 @@ import {
   post_forum_comment,
   put_forum_comment,
 } from "../controllers/forum_comment.controller.js";
+import { Router } from "express";
 const router = new Router();
 
 // rutas que no estaran protegidas por el token
+router.get("/forums/search", search_forums);
 router.get("/forums/", get_forums);
 router.get("/forums/:id", get_forum);
 router.get("/forum/:id/comments", get_forum_comments_by_forum_id);
@@ -26,13 +29,13 @@ router.get("/forum/comments/:id", get_forum_comment);
 
 // rutas que estaran protegidas por el token
 
-router.post("/forum/", post_forum);
-router.delete("/forum/:id", delete_forum);
-router.put("/forum/:id", put_forum);
-router.patch("/forum/:id", patch_forum);
+router.post("/forum/", authenticate,post_forum);
+router.delete("/forum/:id", authenticate,delete_forum);
+router.put("/forum/:id", authenticate,put_forum);
+router.patch("/forum/:id", authenticate,patch_forum);
 
-router.post("/forum/comment/", post_forum_comment);
-router.put("/forum/comment/:id", put_forum_comment);
-router.delete("/forum/comment/:id", delete_forum_comment);
-router.patch("/forum/comment/:id", patch_forum_comment);
+router.post("/forum/comment/", authenticate,post_forum_comment);
+router.put("/forum/comment/:id", authenticate,put_forum_comment);
+router.delete("/forum/comment/:id", authenticate,delete_forum_comment);
+router.patch("/forum/comment/:id", authenticate,patch_forum_comment);
 export default router;

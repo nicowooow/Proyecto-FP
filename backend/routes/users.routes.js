@@ -1,9 +1,10 @@
 import {authenticate,verifyAccount} from "./../middlewares/auth.middleware.js";
-import {get_users,get_user,get_user_public,post_user,delete_user,put_user,patch_user} from '../controllers/users.controller.js'
+import {get_users,get_user,get_user_public,post_user,delete_user,put_user,patch_user, search_users} from '../controllers/users.controller.js'
 import {hash_password} from '../middlewares/password.middleware.js'
 import { Router } from 'express';
 
 const router = new Router();
+router.get('/users/search', search_users);
 router.get('/users',get_users);
 router.get('/user/verify/:username',get_user_public);
 router.get('/user/:username',authenticate,get_user);

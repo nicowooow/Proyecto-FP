@@ -137,3 +137,22 @@ export const patch_user = (req, res) => {
 			res.status(500).send("Error en el servidor error"); // importante
 		});
 };
+
+export const search_users = (req, res) => {
+	const limit = parseInt(req.query.limit) || 5;
+	const searchQuery = req.query.q || '';
+	
+	if (!searchQuery) {
+		return res.status(200).json([]);
+	}
+
+	userRepository
+		.searchUsers(searchQuery, limit)
+		.then((users) => {
+			return res.status(200).json(users);
+		})
+		.catch((error) => {
+			console.log(error);
+			res.status(500).json({ error: "Internal server error" });
+		});
+};

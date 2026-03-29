@@ -11,6 +11,16 @@ class forumRepository {
     return pool.query(sql, [id]).then(({ rows }) => rows[0] || null);
   }
 
+    /**
+   * Obtener un foro por title.
+   * @param {title} title - titulo del foro a buscar
+   * @returns {Promise<Object|null>} retorna los datos del foro, si no existe retorna null
+   */
+  getForumTitle(title) {
+    const sql = "select * from forums where title ilike $1";
+    return pool.query(sql, [`&${title}&`]).then(({ rows }) => rows[0] || null);
+  }
+
   /**
    * Obtener todos los foros permitiendo paginacion con limit y offset
    */
@@ -98,6 +108,19 @@ class forumRepository {
     return pool
       .query(sql, [profileId, title, description, isSensitive, isPublic, status, likes, shares, id])
       .then(({ rowCount }) => rowCount);
+  }
+
+  /**
+   * Buscar foros por título o descripción
+   * @param {string} searchQuery - término de búsqueda
+   * @param {number} limit - límite de resultados
+   * @returns {Promise<Array>} lista de foros coincidentes
+   */
+  searchForums(searchQuery, limit = 5) {
+    const sql = "select id, title, description, profile_id from forums where title ILIKE $1 OR description ILIKE $1 limit $2";
+    return pool
+      .query(sql, [`%${searchQuery}%`, limit])
+      .then(({ rows }) => rows);
   }
 }
 

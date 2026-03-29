@@ -79,3 +79,20 @@ export const patch_forum = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const search_forums = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 5;
+    const searchQuery = req.query.q || '';
+    
+    if (!searchQuery) {
+      return res.status(200).json([]);
+    }
+
+    const forums = await ForumRepository.searchForums(searchQuery, limit);
+    return res.status(200).json(forums);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

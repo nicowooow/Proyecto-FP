@@ -390,3 +390,111 @@ header:hover .header_glass_background {
     transition: none;
   }
 }
+
+/* ============================================
+   SEARCH COMPONENT
+   ============================================ */
+
+.search_container {
+  position: relative;
+  margin-left: var(--space-md);
+  flex-grow: 1;
+  max-width: 300px;
+}
+
+.search_input_wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search_icon {
+  position: absolute;
+  left: 10px;
+  width: 16px;
+  height: 16px;
+  color: var(--color-texto-muted);
+}
+
+.search_input_wrapper input {
+  width: 100%;
+  padding: 8px 12px 8px 32px;
+  border-radius: 20px;
+  border: 1px solid var(--color-borde);
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.search_input_wrapper input:focus {
+  border-color: var(--color-principal);
+  box-shadow: 0 0 0 2px rgba(var(--color-principal-rgb), 0.2);
+}
+
+.search_dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  min-width: 280px;
+  background-color: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 1002;
+}
+
+.search_section {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.search_section:last-child {
+  border-bottom: none;
+}
+
+.search_section_title {
+  padding: 4px 12px;
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-texto-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.search_item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s;
+}
+
+.search_item:hover {
+  background-color: var(--color-borde);
+}
+
+.search_item_title {
+  font-size: 0.9rem;
+  color: var(--color-texto);
+  font-weight: 500;
+}
+
+.search_item_desc {
+  font-size: 0.8rem;
+  color: var(--color-texto-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search_item.no_results {
+  color: var(--color-principal);
+  font-weight: 500;
+  text-align: center;
+  padding: 12px;
+}

@@ -12,6 +12,7 @@ import {
 import ThemeToggle from "../assets/js/ThemeToggle.jsx";
 // import { verifyToken } from "./token.jsx";
 import { useAuth } from "../components/auth.jsx";
+import SearchComponent from "./SearchComponent.jsx";
 
 function Header() {
   // sacamos la funciones de autenticacion, para que el header obtenga la un estado
@@ -51,6 +52,7 @@ function Header() {
               <Link className="Links" to="/" id="my_logo">
                 <img src={Logo_yourtree} alt="logo YourTree" />
               </Link>
+              <SearchComponent />
             </section>
             {/*esta es la parte derecha de header */}
             <section className="right_header">
@@ -235,6 +237,7 @@ function Header() {
               <Link className="Links" to="/" id="my_logo">
                 <img src={Logo_yourtree} alt="logo YourTree" />
               </Link>
+              <SearchComponent />
               <Link className="Links" to="Home">
                 Home
               </Link>

@@ -159,6 +159,29 @@ class UserRepository {
 			.then(({ rowCount }) => rowCount)
 			.catch((e) => console.log(e));
 	};
+
+	/**
+	 * Buscar usuarios por nombre de usuario o nombre, coincidencia parcial.
+	 * Solo incluye a los usuarios que tengan al menos un enlace visible publicado.
+	 *
+	 * @param {string} searchQuery - término de búsqueda
+	 * @param {number} limit - límite de resultados
+	 * @returns {Promise<Array>} lista de usuarios coincidentes
+	 */
+	searchUsers = (searchQuery, limit = 5) => {
+		const sql = `
+			SELECT u.username, u.email 
+			FROM users u
+			INNER JOIN profiles p ON u.id = p.user_id
+			INNER JOIN links l ON p.id = l.profile_id
+			WHERE u.username ILIKE $1 AND l.is_visible = true
+			GROUP BY u.id, u.username, u.email
+			LIMIT $2
+		`;
+		return pool
+			.query(sql, [`%${searchQuery}%`, limit])
+			.then(({ rows }) => rows);
+	};
 }
 
 export default new UserRepository();
