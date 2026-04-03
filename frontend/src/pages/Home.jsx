@@ -9,10 +9,10 @@ function Home() {
 	// biome-ignore format: necesito los espacios
 	return (
 		<main id="main_home">
-<SEO 
-  title="YourTree - Share links and connect with creators"
-  description="Discover YourTree: create your custom link-in-bio page, join forums, and share with the community. Full-stack React+Node demo."
-/>
+			<SEO
+				title="YourTree - Share links and connect with creators"
+				description="Discover YourTree: create your custom link-in-bio page, join forums, and share with the community. Full-stack React+Node demo."
+			/>
 			{isLogged && <FormCodeVerification />}
 			<section id="introduction">
 				<section>
@@ -99,6 +99,7 @@ function Home() {
 					<p>Here you can do it, just need something to share with everyone</p>
 				</section>
 			</section>
+
 			<aside>
 				<h2>YourTree — “a place to share and connect”</h2>
 				<p>

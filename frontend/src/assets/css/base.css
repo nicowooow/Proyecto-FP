@@ -3,7 +3,6 @@
   /* Typography System */
   --font-heading: "Manrope", "Zalando Sans Expanded", sans-serif;
   --font-body: "Source Sans 3", "Roboto", sans-serif;
-  --font-accent: "Caveat", cursive;
 
   /* Font Weights */
   --fw-light: 300;
@@ -205,7 +204,7 @@ html {
 
 body {
   color: var(--color-texto);
-  font-family: var(--font-zalando);
+  font-family: var(--font-body),Arial,Serif;
   font-weight: var(--fw-regular);
   line-height: 1.6;
   transition:

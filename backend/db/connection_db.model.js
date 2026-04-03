@@ -1,7 +1,7 @@
 import {Pool} from 'pg';
 
 import {DB_PORT,DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE} from '../config/config.js'
-console.log(DB_PORT,DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE);
+// console.log(DB_PORT,DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE);
 const pool= new Pool({
     port:DB_PORT,
     host:DB_HOST,
