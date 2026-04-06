@@ -145,6 +145,17 @@ class UserRepository {
 	};
 
 	/**
+	 * Actualiza exclusivamente la contraseña de un usuario usando su ID.
+	 *
+	 * @param {int} id - id del usuario
+	 * @param {string} newPasswordHash - nueva contraseña hasheada
+	 */
+	updatePassword = (id, newPasswordHash) => {
+		const sql = `update users set password_hash = $1 where id = $2`;
+		return pool.query(sql, [newPasswordHash, id]).then(({ rowCount }) => rowCount);
+	};
+
+	/**
 	 * con esto actualizamos el codigo de verificación o de activacion de la cuenta que se registra, el valor despues de 5 minutos se reiniciara a null
 	 *
 	 * @param {string|null} verifyCode

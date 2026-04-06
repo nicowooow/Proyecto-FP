@@ -10,12 +10,26 @@ function Profile() {
     let [userData, setUserData] = useState(null);
     let [loading, setLoading] = useState(true);
 
+    // Form states
+    let [firstName, setFirstName] = useState("");
+    let [lastName, setLastName] = useState("");
+    let [birthDate, setBirthDate] = useState("");
+    let [recoveryEmail, setRecoveryEmail] = useState("");
+    let [bio, setBio] = useState("");
+    let [theme, setTheme] = useState("light");
+    
+    let [imageFile, setImageFile] = useState(null);
+    let [imagePreview, setImagePreview] = useState(null);
+    let [deleteImage, setDeleteImage] = useState(false);
+
     useEffect(() => {
         if (user && user.username) {
             const token = getToken();
 
             Promise.all([
-                fetch(`/yourtree/api/profile/${user.username}`).then(res => res.json()),
+                fetch(`/yourtree/api/profile/private/${user.username}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                }).then(res => res.json()),
                 fetch(`/yourtree/api/user/${user.username}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 }).then(res => res.json())
@@ -23,6 +37,18 @@ function Profile() {
                 .then(([profileRes, userRes]) => {
                     setProfileData(profileRes);
                     setUserData(userRes);
+
+                    // Initialize form
+                    setFirstName(profileRes.firstName || "");
+                    setLastName(profileRes.lastName || "");
+                    if (profileRes.birthDate) {
+                        const date = new Date(profileRes.birthDate);
+                        setBirthDate(date.toISOString().split('T')[0]);
+                    }
+                    setRecoveryEmail(profileRes.recoveryEmail || "");
+                    setBio(profileRes.bio || "");
+                    setTheme(profileRes.theme || "light");
+
                     setLoading(false);
                 })
                 .catch((err) => {
@@ -33,6 +59,74 @@ function Profile() {
             setLoading(false);
         }
     }, [user]);
+
+    const handleImageChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setImageFile(file);
+            setImagePreview(URL.createObjectURL(file));
+            setDeleteImage(false);
+        }
+    };
+
+    const handleDeleteImage = () => {
+        setImageFile(null);
+        setImagePreview(profileDefaultUrl);
+        setDeleteImage(true);
+    };
+
+    const handleSave = async (e) => {
+        e.preventDefault();
+        const token = getToken();
+
+        const formData = new FormData();
+        formData.append("firstName", firstName);
+        formData.append("lastName", lastName);
+        formData.append("birthDate", birthDate);
+        formData.append("recoveryEmail", recoveryEmail);
+        formData.append("description", bio);
+        formData.append("theme", theme);
+
+        if (imageFile) {
+            formData.append("profile_photo", imageFile);
+        } else if (deleteImage) {
+            formData.append("delete_image", "true");
+        }
+
+        try {
+            const res = await fetch(`/yourtree/api/profile/${user.username}`, {
+                method: "PATCH",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                alert("Profile updated successfully!");
+                
+                // Update theme in local storage and apply immediately
+                localStorage.setItem('theme', theme);
+                document.documentElement.setAttribute('data-theme', theme);
+                // Dispatch event so ThemeToggle might pick it up if it listens (optional, but good practice)
+                window.dispatchEvent(new Event('storage'));
+
+                // Optionally update local state
+                if (data.imageUrl !== undefined) {
+                     setProfileData(prev => ({...prev, imageUrl: data.imageUrl}));
+                     if(data.imageUrl !== "") {
+                        setImagePreview(data.imageUrl);
+                     }
+                }
+            } else {
+                alert("Failed to update profile.");
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("Error updating profile.");
+        }
+    };
 
     if (loading) {
         return (
@@ -54,26 +148,24 @@ function Profile() {
         );
     }
 
-    // console.log(userData, profileData);
-
-
-    const { firstName, lastName, bio, imageUrl } = profileData;
     const { username, email, status } = userData;
 
     // Formatear nombre completo
     const fullName = [firstName, lastName].filter(Boolean).join(" ");
 
-    // Lógica limpiar imagen: usar imageUrl válida, sino usar el archivo default
+    // Lógica limpiar imagen
     let displayImageUrl = profileDefaultUrl;
-    if (imageUrl && !imageUrl.includes("profile_default.svg") && !imageUrl.includes("profile?default.svg")) {
-        displayImageUrl = imageUrl;
+    if (imagePreview) {
+        displayImageUrl = imagePreview;
+    } else if (profileData.imageUrl && !profileData.imageUrl.includes("profile_default.svg") && !profileData.imageUrl.includes("profile?default.svg")) {
+        displayImageUrl = profileData.imageUrl;
     }
 
     return (
         <main>
             <div className="profile-page-container">
                 <div className="profile-layout">
-                    {/* Sidebar similar to GitHub */}
+                    {/* Sidebar */}
                     <aside className="profile-sidebar">
                         <div className="profile-avatar-container">
                             <img
@@ -86,11 +178,7 @@ function Profile() {
 
                         <div className="profile-names">
                             {fullName && <h1 className="profile-name">{fullName}</h1>}
-                            <h2 className="profile-username">{username}</h2>
-                        </div>
-
-                        <div className="profile-actions">
-                            <button className="btn-edit-profile">Edit profile</button>
+                            <h2 className="profile-username">@{username}</h2>
                         </div>
 
                         {bio && (
@@ -101,48 +189,68 @@ function Profile() {
 
                         <div className="profile-details">
                             <div className="profile-detail-item">
-                                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" fill="#656d76">
-                                    <path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.25c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.441Zm13-8.181v-.319a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.319l6.5 3.626Z"></path>
-                                </svg>
-                                <span>{email}</span>
+                                <span>✉️ {email}</span>
                             </div>
-                            {/* More details could go here, e.g., company, location */}
                         </div>
                     </aside>
 
                     {/* Main Content Area */}
                     <main className="profile-main">
                         <div className="profile-form-container">
-                            <div className="form-group">
-                                <label>Name</label>
-                                <input type="text" value={firstName || ""} readOnly className="form-input" />
-                            </div>
+                            <h2>Edit Profile</h2>
+                            <form onSubmit={handleSave}>
+                                <div className="form-group">
+                                    <label>Profile Image</label>
+                                    <input type="file" accept="image/*" onChange={handleImageChange} className="form-input" />
+                                    <button type="button" onClick={handleDeleteImage} className="btn-edit-profile" style={{marginTop: '10px'}}>Remove Image</button>
+                                </div>
 
-                            <div className="form-group">
-                                <label>Last name</label>
-                                <input type="text" value={lastName || ""} readOnly className="form-input" />
-                            </div>
+                                <div className="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="form-input" required />
+                                </div>
 
-                            <div className="form-group">
-                                <label>Email</label>
-                                <input type="email" value={email || ""} readOnly className="form-input" />
-                            </div>
+                                <div className="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="form-input" />
+                                </div>
 
-                            <div className="form-group">
-                                <label>Bio</label>
-                                <textarea
-                                    value={bio || ""}
-                                    readOnly
-                                    className="form-textarea"
-                                    placeholder="There is no bio"
-                                />
-                            </div>
+                                <div className="form-group">
+                                    <label>Birth Date</label>
+                                    <input type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} className="form-input" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Recovery Email</label>
+                                    <input type="email" value={recoveryEmail} onChange={e => setRecoveryEmail(e.target.value)} className="form-input" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Bio</label>
+                                    <textarea
+                                        value={bio}
+                                        onChange={e => setBio(e.target.value)}
+                                        className="form-textarea"
+                                        placeholder="Tell us a little bit about yourself"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Theme</label>
+                                    <select value={theme} onChange={e => setTheme(e.target.value)} className="form-input">
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" className="btn-edit-profile">Save Changes</button>
+                            </form>
                         </div>
                     </main>
                 </div>
             </div>
         </main>
-
     );
 }
-export default Profile;
+
+export default Profile;

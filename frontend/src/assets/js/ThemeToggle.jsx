@@ -11,6 +11,16 @@ function ThemeToggle() {
     // Apply theme to document
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+
+    // Listen for theme changes from other components (like Profile save)
+    const handleStorageChange = () => {
+      const newTheme = localStorage.getItem('theme');
+      if (newTheme && newTheme !== theme) {
+        setTheme(newTheme);
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, [theme]);
 
   const toggleTheme = () => {

@@ -88,13 +88,10 @@ export const sign_up_user = async (req, res) => {
 			username, // firstName
 			null, // lastName
 			"2000-01-01", // birthDate
-			null, // phone
-			null, // recoveryEmail
+			email, // recoveryEmail using registered email
 			"", // bio
 			null, // imageUrl
 			"light", // theme
-			null, // monthly plan
-			true, // isPublic
 		);
 
 		// enviar email con el codigo de verificacion
@@ -191,5 +188,65 @@ export const resendCode = async (req, res) => {
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const forgot_password = async (req, res) => {
+	try {
+		const { username_or_email } = req.body;
+		if (!username_or_email) return res.status(400).json({ message: "Username or email is required" });
+
+		const user = await userRepository.checkUserSign(username_or_email);
+		if (!user) {
+			// We return 200 to prevent user enumeration
+			return res.status(200).json({ message: "If the user exists, an email has been sent." });
+		}
+
+		const resetCode = crearClaveAuth();
+
+		await userRepository.updateVerifyCode(resetCode, user.id);
+
+		// Clear code after 10 minutes for security
+		setTimeout(() => {
+			userRepository.updateVerifyCode(null, user.id).catch((e) => console.log(e));
+		}, 10 * 60 * 1000);
+
+		// Envía al correo normal del usuario
+		const emailSent = await sendEmail(user.email, resetCode);
+		if (!emailSent) {
+			console.log("Password reset email failed to send");
+			return res.status(500).json({ message: "Failed to send email" });
+		}
+
+		return res.status(200).json({ message: "If the user exists, an email has been sent." });
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const reset_password = async (req, res) => {
+	try {
+		const { username_or_email, verify_code, password } = req.body;
+		
+		if (!username_or_email || !verify_code || !password) {
+			return res.status(400).json({ message: "Missing required fields" });
+		}
+
+		const user = await userRepository.checkUserSign(username_or_email);
+		if (!user || user.verify_code === null) {
+			return res.status(400).json({ message: "Invalid or expired verify code" });
+		}
+
+		if (verify_code === user.verify_code.split("-").join("")) {
+			await userRepository.updatePassword(user.id, password);
+			await userRepository.updateVerifyCode(null, user.id); // clear out code
+			return res.status(200).json({ message: "Password updated successfully" });
+		}
+
+		return res.status(400).json({ message: "Invalid verify code" });
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ error: "Internal server error" });
 	}
 };

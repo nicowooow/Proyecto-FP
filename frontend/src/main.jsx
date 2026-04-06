@@ -18,6 +18,9 @@ import Recent_Pages from "./pages/Recent_Pages.jsx";
 import AnalyticsTracker from "./components/GA_4.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import BuyMeACoffee from "./components/BuyMeACoffee.jsx";
+import Profile from "./pages/Profile.jsx";
+import Forgot_Password from "./pages/Forgot_Password.jsx";
+import Reset_Password from "./pages/Reset_Password.jsx";
 
 function AppWithHeader() {
 	const location = useLocation();
@@ -25,11 +28,11 @@ function AppWithHeader() {
 	// true si la ruta es /YourTree/:username (empieza por /YourTree/ y tiene algo más)
 	const hideHeader = /^\/[yY]our[tT]ree\/[^/]+$/.test(location.pathname);
 	const titles = {
-	'/': 'YourTree - Link in Bio & Community',
-	'/forums': 'YourTree Forums',
-	'/signin': 'Sign In - YourTree',
-	'/signup': 'Sign Up - YourTree',
-	'/profile/:username': 'Profile - YourTree'
+		'/': 'YourTree - Link in Bio & Community',
+		'/forums': 'YourTree Forums',
+		'/signin': 'Sign In - YourTree',
+		'/signup': 'Sign Up - YourTree',
+		'/profile/:username': 'Profile - YourTree'
 	};
 	return (
 		<>
@@ -46,11 +49,13 @@ function AppWithHeader() {
 				<Route path="/Forums" element={<Forums />} />
 				<Route path="/Forums/:forumId" element={<Forums />} />
 				<Route path="/Recent_Pages" element={<Recent_Pages />} />
-
+				<Route path="/Profile" element={<Profile />} />
 				<Route path="/Log_out" element={<Log_out />} />
 				<Route path="/Sign_in" element={<Sign_in />} />
 				<Route path="/Sign_up" element={<Sign_up />} />
-				<Route path="*" element={<NotFound />} />
+				<Route path="/Forgot_Password" element={<Forgot_Password />} />
+				<Route path="/Reset_Password" element={<Reset_Password />} />
+				<Route path="/*" element={<NotFound />} />
 				<Route path="/404" element={<NotFound />} />
 			</Routes>
 			<BuyMeACoffee />

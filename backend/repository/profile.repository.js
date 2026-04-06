@@ -30,13 +30,10 @@ class profileRepository {
    * @param {string} firstName - nombre del perfil
    * @param {string} lastName - apellido del perfil
    * @param {date} birthDate - fecha de nacimiento del perfil
-   * @param {string} phone - teléfono del perfil
    * @param {string} recoveryEmail - email de recuperación del perfil
    * @param {string} bio - biografía del perfil
    * @param {string} imageUrl - url de la imagen del perfil
    * @param {string} theme - tema del perfil claro u oscuro
-   * @param {boolean} isMonthlyPlan - si el plan es mensual o anual
-   * @param {boolean} isPublic - si el perfil es público o privado
    * @returns {Promise<number>} filas afectadas
    */
   createProfile(
@@ -44,15 +41,12 @@ class profileRepository {
     firstName,
     lastName,
     birthDate,
-    phone,
     recoveryEmail,
     bio,
     imageUrl,
-    theme,
-    isMonthlyPlan,
-    isPublic,
+    theme
   ) {
-    const sql = `insert into profiles (user_id,  first_name, last_name, birth_date, phone, recovery_email, bio, image_url, theme, is_monthly_plan, is_public, created_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`;
+    const sql = `insert into profiles (user_id, first_name, last_name, birth_date, recovery_email, bio, image_url, theme, created_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9)`;
     const createdAt = new Date();
     return pool
       .query(sql, [
@@ -60,13 +54,10 @@ class profileRepository {
         firstName,
         lastName,
         birthDate,
-        phone,
         recoveryEmail,
         bio,
         imageUrl,
         theme,
-        isMonthlyPlan,
-        isPublic,
         createdAt,
       ])
       .then(({ rowCount }) => rowCount);
@@ -90,13 +81,10 @@ class profileRepository {
    * @param {string} firstName - nombre del perfil
    * @param {string} lastName - apellido del perfil
    * @param {date} birthDate - fecha de nacimiento del perfil
-   * @param {string} phone - teléfono del perfil
    * @param {string} recoveryEmail  - email de recuperación del perfil
    * @param {string} bio - biografía del perfil
    * @param {string} imageUrl - url de la imagen del perfil
    * @param {string} theme - tema del perfil claro u oscuro
-   * @param {boolean} isMonthlyPlan - si el plan es mensual o anual
-   * @param {boolean} isPublic - si el perfil es público o privado
    * @returns {Promise<number>} filas afectadas
    */
   patchProfile(
@@ -104,29 +92,21 @@ class profileRepository {
     firstName,
     lastName,
     birthDate,
-    phone,
     recoveryEmail,
     bio,
     imageUrl,
-    theme,
-    isMonthlyPlan,
-    isPublic,
+    theme
   ) {
-    const sql = `update profiles set first_name = COALESCE($1,first_name), last_name = COALESCE($2,last_name), birth_date = COALESCE($3,birth_date), phone = COALESCE($4,phone), recovery_email = COALESCE($5,recovery_email), bio = COALESCE($6,bio), image_url = COALESCE($7,image_url), theme = COALESCE($8,theme), is_monthly_plan = COALESCE($9,is_monthly_plan), is_public = COALESCE($10,is_public), updated_at = $11 where id = $12`;
-    const updatedAt = new Date();
+    const sql = `update profiles set first_name = COALESCE($1,first_name), last_name = COALESCE($2,last_name), birth_date = COALESCE($3,birth_date), recovery_email = COALESCE($4,recovery_email), bio = COALESCE($5,bio), image_url = COALESCE($6,image_url), theme = COALESCE($7,theme) where id = $8`;
     return pool
       .query(sql, [
         firstName,
         lastName,
         birthDate,
-        phone,
         recoveryEmail,
         bio,
         imageUrl,
         theme,
-        isMonthlyPlan,
-        isPublic,
-        updatedAt,
         id,
       ])
       .then(({ rowCount }) => rowCount);

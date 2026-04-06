@@ -50,15 +50,11 @@ create table
             birth_date >= '1900-01-01'
             AND birth_date <= CURRENT_DATE
         ),
-        phone VARCHAR(25),
         recovery_email VARCHAR(255),
         bio TEXT,
         image_url VARCHAR(1024),
         theme VARCHAR(10) default 'light' check (theme in ('dark', 'light')),
-        is_monthly_plan BOOLEAN,
-        is_public BOOLEAN default true,
         created_at TIMESTAMP default CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP,
         primary key (id),
         unique (user_id),
         constraint fk_profiles_user_id foreign key (user_id) references users (id) on delete cascade

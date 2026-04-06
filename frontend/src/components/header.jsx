@@ -150,9 +150,13 @@ function Header() {
                     {isLogged ? (
                       <>
                         {user && (
-                          <span className="mobile-link profile-name">
+                          <Link
+                            className="mobile-link profile-name"
+                            to="Profile"
+                            onClick={handleLinkClick}
+                          >
                             @{user.username || user.name || user.email}
-                          </span>
+                          </Link>
                         )}
                         <Link
                           className="mobile-link"
@@ -259,9 +263,9 @@ function Header() {
               {isLogged ? (
                 <>
                   {user && (
-                    <span className="Links profile-name">
+                    <Link className="Links profile-name" to="Profile">
                       @{user.username || user.name || user.email}
-                    </span>
+                    </Link>
                   )}
                   <Link className="Links" to="Log_out">
                     Logout

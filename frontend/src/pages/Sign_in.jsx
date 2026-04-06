@@ -1,6 +1,6 @@
 import "../assets/css/Sign.css";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { PasswordField } from "../components/UsePassword.jsx";
 import { useAuth } from "../components/auth.jsx";
@@ -76,6 +76,9 @@ function Sign_in() {
 								setPassword(e.target.value);
 							}}
 						/>
+						<Link to="/Forgot_Password" style={{display: 'block', marginTop: '10px', fontSize: '0.9rem', color: 'var(--text_2)', textDecoration: 'underline'}}>
+							I've forgotten my password
+						</Link>
 						{message && <p className="error">{message}</p>}
 						<input type="submit" value="sing_in" />
 					</form>
