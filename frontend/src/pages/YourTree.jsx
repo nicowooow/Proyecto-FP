@@ -1,4 +1,5 @@
 // import "./../assets/css/links_base.css";
+import "./../assets/css/forms.css";
 import "./../assets/css/YourTree.css";
 import { useState, useRef, useEffect } from "react"; // el useMemo es para el uso que tiene en memoria
 import { General_tree, PutLinks } from "../components/linksBase";
@@ -25,6 +26,9 @@ function YourTree() {
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [imageUrl, setImageUrl] = useState("");
 	const [deleteImage, setDeleteImage] = useState(false);
+	
+	// Evitar que la imagen se guarde en cache y se muestre la nueva
+	const [cacheBuster, setCacheBuster] = useState(Date.now());
 
 	const cookieUser = cookies.get("user") ? JSON.parse(cookies.get("user")) : null;
 	const currentUsername = cookieUser ? cookieUser.username : "";
@@ -75,7 +79,15 @@ function YourTree() {
 
 			if (response.ok) {
 				const data = await response.json();
-				// console.log("Profile updated successfully:", data);
+				// Actualizar el cache para mostrar la nueva foto al instante
+				setCacheBuster(Date.now());
+
+				if (deleteImage) {
+					setImageUrl("");
+				} else if (data.imageUrl) {
+					setImageUrl(data.imageUrl);
+				}
+
 				alert("Profile saved successfully");
 			} else {
 				console.error("Failed to update profile");
@@ -86,6 +98,11 @@ function YourTree() {
 			alert("Error trying to save profile");
 		}
 	};
+
+	let displayImageUrl = imageUrl;
+	if (imageUrl && !imageUrl.includes("profile_default.svg") && !imageUrl.includes("profile?default.svg")) {
+		displayImageUrl = `${imageUrl}?t=${cacheBuster}`;
+	}
 
 	return (
 		<main id="main_yourtree">
@@ -145,7 +162,7 @@ function YourTree() {
 						username={currentUsername}
 						option={layout}
 						descrition={description}
-						imageUrl={imageUrl}
+						imageUrl={displayImageUrl}
 					/>
 				</section>
 			</section>

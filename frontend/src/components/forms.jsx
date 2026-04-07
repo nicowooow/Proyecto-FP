@@ -5,6 +5,8 @@ import "./../assets/css/forms.css";
 import { useAuth } from "./auth";
 import { getUser, getToken } from "./token.jsx";
 import cookie from 'js-cookie'
+import Cropper from "react-easy-crop";
+import getCroppedImg from "../utils/cropUtils.js";
 
 const getLink = async (linkId) => {
 	try {
@@ -356,54 +358,116 @@ export const FormDeleteLink = React.memo(function FormDeleteLink({ linkId }) {
 export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelect, onDeleteImage }) {
 	const dialogRef = useRef(null); // referencia que usamos para dialogo que se mostrara
 	const [isOpen, setIsOpen] = useState(false);
-	const fileInputRef = useRef(null);
 	const baseId = useId();
 
-	const openDialog = () => setIsOpen(true);
-	const closeDialog = () => setIsOpen(false);
+	// Estados para el Modal de Recortar Imagen
+	const [cropImageSrc, setCropImageSrc] = useState(null);
+	const [crop, setCrop] = useState({ x: 0, y: 0 });
+	const [zoom, setZoom] = useState(1);
+	const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+	const [showCropper, setShowCropper] = useState(false);
 
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
 		if (file) {
-			// Preview o upload
-			// console.log("File selected:", file.name);
-			if (onFileSelect) onFileSelect(file);
+			const reader = new FileReader();
+			reader.addEventListener("load", () => {
+				setCropImageSrc(reader.result);
+				setShowCropper(true);
+			});
+			reader.readAsDataURL(file);
+			e.target.value = null; // reset input
 		}
-		closeDialog();
+	};
+
+	const onCropComplete = (croppedArea, croppedAreaPixels) => {
+		setCroppedAreaPixels(croppedAreaPixels);
+	};
+
+	const confirmCrop = async () => {
+		try {
+			const croppedImageBlob = await getCroppedImg(
+				cropImageSrc,
+				croppedAreaPixels
+			);
+			const croppedFile = new File([croppedImageBlob], "profile_photo.png", { type: "image/png" });
+
+			if (onFileSelect) onFileSelect(croppedFile);
+			setShowCropper(false);
+		} catch (e) {
+			console.error(e);
+		}
+	};
+
+	const cancelCrop = () => {
+		setShowCropper(false);
+		setCropImageSrc(null);
 	};
 
 	const handleDeleteClick = () => {
 		if (onDeleteImage) onDeleteImage();
 	};
 
-	useEffect(() => {
-		if (isOpen && dialogRef.current) dialogRef.current.showModal();
-		else if (!isOpen && dialogRef.current) dialogRef.current.close();
-	}, [isOpen]);
-
 	return (
 		<>
-			<strong>profile image : </strong>
-			<button type="button" className="btn-constrast" onClick={handleDeleteClick}>
-				delete
-			</button>
-			<button type="button" className="btn-constrast" onClick={openDialog}>
-				upload
-			</button>
-			<dialog className="upload_photo" ref={dialogRef}>
-				<label htmlFor={`${baseId}-profile_photo`}>profile photo</label>
-				<input
-					type="file"
-					name="profile_photo"
-					id={`${baseId}-profile_photo`}
-					onChange={handleFileChange}
-					accept=".webp, .jpg, .jpeg, .png"
-				/>
+			<div className="picture-group" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '15px' }}>
+				<strong style={{ fontSize: '14px', color: 'var(--text)' }}>Profile picture : </strong>
+				<div className="picture-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+					<label htmlFor={`${baseId}-profile_photo`} className="custom-file-upload">
+						<span>Upload</span>
+					</label>
+					<input
+						type="file"
+						name="profile_photo"
+						id={`${baseId}-profile_photo`}
+						onChange={handleFileChange}
+						accept=".webp, .jpg, .jpeg, .png"
+						style={{ display: 'none' }}
+					/>
 
-				<button type="button" onClick={closeDialog}>
-					Cancel
-				</button>
-			</dialog>
+					<button type="button" className="btn-edit-profile btn-delete" onClick={handleDeleteClick}>
+						Remove
+					</button>
+				</div>
+			</div>
+
+			{/* Fondo oscuro y ventana del recortador */}
+			{showCropper && (
+				<div className="cropper-modal" style={{ zIndex: 9999 }}>
+					<div className="cropper-modal-content">
+						<h3>Crop Profile Picture</h3>
+						<div className="cropper-container">
+							<Cropper
+								image={cropImageSrc}
+								crop={crop}
+								zoom={zoom}
+								aspect={1}
+								cropShape="round"
+								showGrid={false}
+								onCropChange={setCrop}
+								onCropComplete={onCropComplete}
+								onZoomChange={setZoom}
+							/>
+						</div>
+						<div className="cropper-controls">
+							<input
+								type="range"
+								value={zoom}
+								min={1}
+								max={3}
+								step={0.1}
+								aria-labelledby="Zoom"
+								onChange={(e) => setZoom(e.target.value)}
+								className="zoom-range"
+							/>
+						</div>
+						<div className="cropper-buttons">
+							<button type="button" onClick={cancelCrop} className="btn-edit-profile cancel-crop">cancel</button>
+							<button type="button" onClick={confirmCrop} className="btn-edit-profile confirm-crop">confitm</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</>
 	);
 });

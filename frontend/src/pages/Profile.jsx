@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "./../components/auth.jsx";
 import { getUser, getToken } from "./../components/token.jsx";
+import { FormUploadImage } from "../components/forms.jsx";
 import profileDefaultUrl from "../assets/images/profile_default.svg";
+import "../assets/css/forms.css";
 import "../assets/css/Profile.css";
 
 function Profile() {
@@ -17,10 +19,13 @@ function Profile() {
     let [recoveryEmail, setRecoveryEmail] = useState("");
     let [bio, setBio] = useState("");
     let [theme, setTheme] = useState("light");
-    
+
     let [imageFile, setImageFile] = useState(null);
     let [imagePreview, setImagePreview] = useState(null);
     let [deleteImage, setDeleteImage] = useState(false);
+
+    // Evitar que el navegador use una version vieja de la imagen (cache)
+    const [cacheBuster, setCacheBuster] = useState(Date.now());
 
     useEffect(() => {
         if (user && user.username) {
@@ -60,13 +65,10 @@ function Profile() {
         }
     }, [user]);
 
-    const handleImageChange = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            setImageFile(file);
-            setImagePreview(URL.createObjectURL(file));
-            setDeleteImage(false);
-        }
+    const handleFileSelect = (file) => {
+        setImageFile(file);
+        setImagePreview(URL.createObjectURL(file));
+        setDeleteImage(false);
     };
 
     const handleDeleteImage = () => {
@@ -105,19 +107,22 @@ function Profile() {
             if (res.ok) {
                 const data = await res.json();
                 alert("Profile updated successfully!");
-                
-                // Update theme in local storage and apply immediately
+
+                // Actualizar local storage y aplicar colores de inmediato
                 localStorage.setItem('theme', theme);
                 document.documentElement.setAttribute('data-theme', theme);
-                // Dispatch event so ThemeToggle might pick it up if it listens (optional, but good practice)
                 window.dispatchEvent(new Event('storage'));
 
-                // Optionally update local state
+                // Refrescar el valor para obligar a descargar la nueva foto
+                const freshTimestamp = Date.now();
+                setCacheBuster(freshTimestamp);
+
+                // Opcionalmente actualizar estado interno
                 if (data.imageUrl !== undefined) {
-                     setProfileData(prev => ({...prev, imageUrl: data.imageUrl}));
-                     if(data.imageUrl !== "") {
-                        setImagePreview(data.imageUrl);
-                     }
+                    setProfileData(prev => ({ ...prev, imageUrl: data.imageUrl }));
+                    if (data.imageUrl !== "") {
+                        setImagePreview(""); // Reiniciamos preview local para forzar carga externa
+                    }
                 }
             } else {
                 alert("Failed to update profile.");
@@ -153,12 +158,13 @@ function Profile() {
     // Formatear nombre completo
     const fullName = [firstName, lastName].filter(Boolean).join(" ");
 
-    // Lógica limpiar imagen
+    // Lógica limpiar imagen y bust cache
     let displayImageUrl = profileDefaultUrl;
     if (imagePreview) {
         displayImageUrl = imagePreview;
     } else if (profileData.imageUrl && !profileData.imageUrl.includes("profile_default.svg") && !profileData.imageUrl.includes("profile?default.svg")) {
-        displayImageUrl = profileData.imageUrl;
+        // Agregamos cacheBuster al final para impedir cache del navegador
+        displayImageUrl = `${profileData.imageUrl}?t=${cacheBuster}`;
     }
 
     return (
@@ -199,10 +205,8 @@ function Profile() {
                         <div className="profile-form-container">
                             <h2>Edit Profile</h2>
                             <form onSubmit={handleSave}>
-                                <div className="form-group">
-                                    <label>Profile Image</label>
-                                    <input type="file" accept="image/*" onChange={handleImageChange} className="form-input" />
-                                    <button type="button" onClick={handleDeleteImage} className="btn-edit-profile" style={{marginTop: '10px'}}>Remove Image</button>
+                                <div style={{width: 'max-content'}}>
+                                    <FormUploadImage onFileSelect={handleFileSelect} onDeleteImage={handleDeleteImage} />
                                 </div>
 
                                 <div className="form-group">
@@ -249,8 +253,9 @@ function Profile() {
                     </main>
                 </div>
             </div>
+
         </main>
     );
 }
 
-export default Profile;
+export default Profile;

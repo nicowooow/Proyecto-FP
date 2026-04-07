@@ -204,7 +204,7 @@ html {
 
 body {
   color: var(--color-texto);
-  font-family: var(--font-body),Arial,Serif;
+  font-family: var(--font-body),Arial, sans-serif;
   font-weight: var(--fw-regular);
   line-height: 1.6;
   transition:

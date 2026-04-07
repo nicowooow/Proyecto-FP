@@ -283,3 +283,9 @@
     background-color: var(--color-superficie-hover);
     cursor: default;
 }
+
+/* 
+ * Image upload component styles are now centralized in forms.css
+ * to maintain consistency across Profile and YourTree pages.
+ * Remove this comment once verified the imports are in place.
+ */
