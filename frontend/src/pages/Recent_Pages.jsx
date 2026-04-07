@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../assets/css/recent_pages.css';
 import LogoUrl from '../assets/YourTree.svg';
 import { Links_base } from '../components/linksBase.jsx';
+import AdsComponent from '../components/ads.jsx';
 import SEO from './../components/seo.jsx';
 
 export default function Recent_Pages() {
@@ -35,6 +36,39 @@ export default function Recent_Pages() {
     navigate(`/YourTree/${username}`);
   };
 
+  const renderProfilesWithAds = () => {
+    const items = [];
+    profiles.forEach((profile, index) => {
+      items.push(
+        <article
+          key={profile.profile_id}
+          onClick={() => handleCardClick(profile.username)}
+          className="profile_card_mini"
+          style={{ position: 'relative', cursor: 'pointer' }}
+        >
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10 }}></div>
+          <Links_base
+            optionCheck={profile.theme === 'dark' ? 1 : 0}
+            usernameUser={profile.username}
+            descriptionInput={profile.bio || "Hello, I'm new here"}
+            imageUrl={profile.image_url ? profile.image_url : LogoUrl}
+          />
+        </article>
+      );
+
+      if ((index + 1) % 5 === 0 && index !== profiles.length - 1) {
+        items.push(
+          <AdsComponent
+            key={`recent-ad-${index}`}
+            inline
+            styleType="profile"
+          />
+        );
+      }
+    });
+    return items;
+  };
+
   if (loading) {
     return <main className="recent_pages_container"><p className="loading_text">Loading recent pages...</p></main>;
   }
@@ -51,27 +85,19 @@ export default function Recent_Pages() {
 />
       <h2 className="recent_pages_title">Recent Pages</h2>
       {profiles.length === 0 ? (
-        <p className="empty_text">No recent pages found.</p>
+        <>
+          <p className="empty_text">No recent pages found.</p>
+          <AdsComponent centered styleType="profile" />
+        </>
       ) : (
-        <div className="profiles_grid">
-          {profiles.map((profile) => (
-            <article
-              key={profile.profile_id}
-              onClick={() => handleCardClick(profile.username)}
-              className="profile_card_mini"
-              style={{ position: 'relative', cursor: 'pointer' }}
-            >
-              {/* Invisible overlay to catch clicks and prevent clicking the inner links */}
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10 }}></div>
-              <Links_base
-                optionCheck={profile.theme === 'dark' ? 1 : 0}
-                usernameUser={profile.username}
-                descriptionInput={profile.bio || "Hello, I'm new here"}
-                imageUrl={profile.image_url ? profile.image_url : LogoUrl}
-              />
-            </article>
-          ))}
-        </div>
+        <>
+          <div className="profiles_grid">
+            {renderProfilesWithAds()}
+          </div>
+          {profiles.length > 0 && profiles.length < 5 && (
+            <AdsComponent centered styleType="profile" />
+          )}
+        </>
       )}
     </main>
   );

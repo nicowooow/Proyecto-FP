@@ -1,7 +1,7 @@
 .buy-me-a-coffee-btn {
     position: fixed;
-    bottom: 24px;
     right: 24px;
+    bottom: 24px;
     background-color: #FFDD00;
     color: #000000;
     display: flex;

@@ -1,5 +1,6 @@
 import Forum from '../models/forum.model.js';
 import ForumRepository from '../repository/forum.repository.js';
+import pool from '../db/connection_db.model.js';
 
 export const get_forums = async (req, res) => {
   try {
@@ -41,11 +42,32 @@ export const post_forum = async (req, res) => {
 export const delete_forum = async (req, res) => {
   try {
     const { id } = req.params;
+    const forum = await ForumRepository.getForum(id);
+    if (!forum) {
+      return res.status(404).json({ error: 'Forum not found' });
+    }
+
+    const profileResult = await pool.query(
+      'select user_id from profiles where id = $1 limit 1',
+      [forum.profile_id]
+    );
+
+    if (!profileResult.rows.length) {
+      return res.status(404).json({ error: 'Creator profile not found' });
+    }
+
+    const creatorUserId = profileResult.rows[0].user_id;
+    const requestUserId = Number(req.user?.id);
+
+    if (Number(creatorUserId) !== requestUserId) {
+      return res.status(403).json({ error: 'Only the creator can delete this forum' });
+    }
+
     const result = await ForumRepository.deleteForum(id);
     if (result !== 1) {
       return res.status(400).json({ error: 'Failed to delete the forum' });
     }
-    return res.status(201).json({ message: 'Forum deleted successfully' });
+    return res.status(200).json({ message: 'Forum deleted successfully' });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal server error' });

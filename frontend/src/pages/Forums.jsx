@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef, useId, useMemo, useCallback } from 'react';
 import { useAuth } from '../components/auth.jsx';
 import cookies from "js-cookie";
+import { getToken } from '../components/token.jsx';
 import { useParams, useNavigate } from 'react-router-dom';
 import './../assets/css/forums.css';
 import SEO from './../components/seo.jsx';
+import AdsComponent from '../components/ads.jsx';
 
 const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -52,6 +54,37 @@ export default function Forums() {
             setLoading(false);
         }
     }, [loading]);
+
+    const renderForumsWithAds = () => {
+        const items = [];
+        forums.forEach((forum, index) => {
+            const forumCard = (
+                <article
+                    key={forum.id}
+                    ref={forums.length === index + 1 ? lastForumElementRef : undefined}
+                    className="forum_card"
+                    onClick={() => handleCardClick(forum.id)}
+                >
+                    <h2 className="forum_title_card">{forum.title}</h2>
+                    <p className="forum_description_card">{forum.description}</p>
+                    <span className="forum_date">{formatDate(forum.created_at)}</span>
+                </article>
+            );
+
+            items.push(forumCard);
+
+            if ((index + 1) % 5 === 0 && index !== forums.length - 1) {
+                items.push(
+                    <AdsComponent
+                        key={`forum-ad-${index}`}
+                        inline
+                        styleType="forum"
+                    />
+                );
+            }
+        });
+        return items;
+    };
 
     // Initial load
     useEffect(() => {
@@ -130,26 +163,14 @@ export default function Forums() {
                 <FormCreateForum isLogged={isLogged} username={currentUsername} onCreated={() => { setOffset(0); fetchForums(0, true); }} />
             </header>
             <section className="forums_list">
-                {forums.length > 0 ? forums.map((forum, index) => {
-                    if (forums.length === index + 1) {
-                        return (
-                            <article ref={lastForumElementRef} key={forum.id} className="forum_card" onClick={() => handleCardClick(forum.id)}>
-                                <h2 className="forum_title_card">{forum.title}</h2>
-                                <p className="forum_description_card">{forum.description}</p>
-                                <span className="forum_date">{formatDate(forum.created_at)}</span>
-                            </article>
-                        );
-                    } else {
-                        return (
-                            <article key={forum.id} className="forum_card" onClick={() => handleCardClick(forum.id)}>
-                                <h2 className="forum_title_card">{forum.title}</h2>
-                                <p className="forum_description_card">{forum.description}</p>
-                                <span className="forum_date">{formatDate(forum.created_at)}</span>
-                            </article>
-                        );
-                    }
-                }) : (
-                    <p className="no_forums">No forums available yet. Be the first to create one!</p>
+                {forums.length > 0 ? renderForumsWithAds() : (
+                    <>
+                        <p className="no_forums">No forums available yet. Be the first to create one!</p>
+                        <AdsComponent centered styleType="forum" />
+                    </>
+                )}
+                {forums.length > 0 && forums.length < 5 && (
+                    <AdsComponent centered styleType="forum" />
                 )}
                 {loading && <p>Loading more forums...</p>}
             </section>
@@ -160,6 +181,7 @@ export default function Forums() {
                     onClose={handleClosePopup}
                     isLogged={isLogged}
                     currentUsername={currentUsername}
+                    refreshForums={fetchForums}
                 />
             )}
         </main>
@@ -167,7 +189,7 @@ export default function Forums() {
 }
 
 // Dialog to show detailed forum post, with like, share and comment
-function ForumDetailDialog({ forum, onClose, isLogged, currentUsername }) {
+function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshForums }) {
     const dialogRef = useRef(null);
     const [commentsList, setCommentsList] = useState([]);
     const [newCommentText, setNewCommentText] = useState("");
@@ -234,6 +256,33 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername }) {
                 <div className="forum_card_actions detail_actions">
                     <button className="btn_action_small">💬 Comentarios</button>
                     <button className="btn_action_small" onClick={handleShare}>➦ Compartir</button>
+                    {isLogged && myProfileId && forum.profile_id === myProfileId && (
+                        <button className="btn_action_small btn_delete_forum" onClick={async () => {
+                            const token = getToken();
+                            if (!token) {
+                                alert('Por favor inicia sesión de nuevo para borrar este foro.');
+                                navigate('/Sign_in');
+                                return;
+                            }
+                            const res = await fetch(`/yourtree/api/forum/${forum.id}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            });
+                            if (res.ok) {
+                                if (typeof refreshForums === 'function') {
+                                    refreshForums(0, true);
+                                }
+                                handleClose();
+                                return;
+                            }
+                            const errorData = await res.json().catch(() => ({}));
+                            alert(errorData.error || 'Failed to delete forum');
+                        }}>
+                            🗑️ Borrar foro
+                        </button>
+                    )}
                 </div>
 
                 <div className="comments_section_detail">
@@ -265,7 +314,12 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername }) {
                                     return;
                                 }
 
-                                const token = localStorage.getItem('accessToken') || cookies.get('token');
+                                const token = getToken();
+                                if (!token) {
+                                    alert('Please sign in again to comment.');
+                                    navigate('/Sign_in');
+                                    return;
+                                }
                                 try {
                                     const res = await fetch('/yourtree/api/forum/comment/', {
                                         method: 'POST',
@@ -344,11 +398,16 @@ const FormCreateForum = React.memo(function FormCreateForum({ isLogged, username
             let profile = await profileRes.json();
             if (!profile.id) return;
 
+            const token = getToken();
+            if (!token) {
+                console.error('No auth token available for creating forum');
+                return;
+            }
             const res = await fetch(`/yourtree/api/forum/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     profileId: profile.id,

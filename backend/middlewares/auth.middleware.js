@@ -8,30 +8,27 @@ import { sendEmail } from "../utils/nodemailer.utils.js";
 export const authenticate = (req, res, next) => {
 	try {
 		// el frontend nos manda por el req, el header y dicho header contiene el JWT
-		//de autenticacion
-		const authHeader = req.headers.authorization;
-		if (!authHeader) {
+		// de autenticacion
+		const authHeader = req.headers.authorization || req.headers.Authorization;
+		if (!authHeader || typeof authHeader !== "string") {
 			return res.status(401).json({
-				message: "we can not find your access key",
+				message: "missing authorization header",
 				isLogged: false,
 			});
 		}
 
-		const token = authHeader.split(" ")[1];
-		if (!token) {
+		const [scheme, token] = authHeader.split(" ");
+		if (
+			scheme !== "Bearer" ||
+			!token ||
+			token === "undefined" ||
+			token === "null"
+		) {
 			return res.status(401).json({
-				message: "we can not found your access key",
+				message: "invalid authorization format",
 				isLogged: false,
 			});
 		}
-
-		/* 		puede ser repetitivo
-		if (!jwt.verify(token, JWT_ACCESS_SECRET)) {
-		  return res.status(401).json({
-		    message: "we can not found your access key",
-		    isLogged : false
-		  });
-		} */
 
 		// verify lanza error si el token es inválido o expiró
 		const payload = jwt.verify(token, JWT_ACCESS_SECRET);
