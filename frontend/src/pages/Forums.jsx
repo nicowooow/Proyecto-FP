@@ -151,10 +151,10 @@ export default function Forums() {
 
     return (
         <main id="forums_page">
-<SEO 
-  title="YourTree Forums - Creator Community"
-  description="Join conversations in YourTree forums. Discuss ideas, share links, and connect with fellow creators."
-/>
+            <SEO
+                title="YourTree Forums - Creator Community"
+                description="Join conversations in YourTree forums. Discuss ideas, share links, and connect with fellow creators."
+            />
             <header className="forums_header">
                 <div className="forums_header_content">
                     <h1>Community Forums</h1>
@@ -301,7 +301,7 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                             }}
                         />
                         <button
-                        type='button'
+                            type='button'
                             className="btn_submit_comment"
                             onClick={async () => {
                                 if (!isLogged) {

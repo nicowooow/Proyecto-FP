@@ -79,10 +79,10 @@ export default function Recent_Pages() {
 
   return (
     <main className="recent_pages_container">
-<SEO 
-  title="Recent Pages - YourTree"
-  description="Discover recently created pages on YourTree. Explore other users' profiles."
-/>
+      <SEO
+        title="Recent Pages - YourTree"
+        description="Discover recently created pages on YourTree. Explore other users' profiles."
+      />
       <h2 className="recent_pages_title">Recent Pages</h2>
       {profiles.length === 0 ? (
         <>
