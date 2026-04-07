@@ -210,28 +210,28 @@ function Profile() {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>First Name</label>
-                                    <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="form-input" required />
+                                    <label htmlFor="firstName">First Name</label>
+                                    <input id="firstName" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="form-input" required />
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Last Name</label>
-                                    <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="form-input" />
+                                    <label htmlFor="lastName">Last Name</label>
+                                    <input id="lastName" type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="form-input" />
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Birth Date</label>
-                                    <input type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} className="form-input" />
+                                    <label htmlFor="date">Birth Date</label>
+                                    <input id="date" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} className="form-input" />
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Recovery Email</label>
-                                    <input type="email" value={recoveryEmail} onChange={e => setRecoveryEmail(e.target.value)} className="form-input" />
+                                    <label htmlFor="email">Recovery Email</label>
+                                    <input id="email" type="email" value={recoveryEmail} onChange={e => setRecoveryEmail(e.target.value)} className="form-input" />
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Bio</label>
-                                    <textarea
+                                    <label htmlFor="bio">Bio</label>
+                                    <textarea id="bio"
                                         value={bio}
                                         onChange={e => setBio(e.target.value)}
                                         className="form-textarea"
@@ -240,8 +240,8 @@ function Profile() {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Theme</label>
-                                    <select value={theme} onChange={e => setTheme(e.target.value)} className="form-input">
+                                    <label htmlFor="theme">Theme</label>
+                                    <select id="theme" value={theme} onChange={e => setTheme(e.target.value)} className="form-input">
                                         <option value="light">Light</option>
                                         <option value="dark">Dark</option>
                                     </select>
