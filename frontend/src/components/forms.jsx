@@ -436,7 +436,7 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 				<div className="cropper-modal" style={{ zIndex: 9999 }}>
 					<div className="cropper-modal-content">
 						<h3>Crop Profile Picture</h3>
-						<div className="cropper-container">
+						<div className="cropper-container" style={{ maxWidth: '350px', margin: '0 auto' }}>
 							<Cropper
 								image={cropImageSrc}
 								crop={crop}
