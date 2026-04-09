@@ -22,6 +22,10 @@ import Profile from "./pages/Profile.jsx";
 import Forgot_Password from "./pages/Forgot_Password.jsx";
 import Reset_Password from "./pages/Reset_Password.jsx";
 
+import './assets/css/base.css';
+import './assets/css/background_dark.css';
+import './assets/css/background_light.css';
+
 function AppWithHeader() {
 	const location = useLocation();
 
