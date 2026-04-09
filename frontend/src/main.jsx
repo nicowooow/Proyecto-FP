@@ -1,26 +1,30 @@
-import { StrictMode } from "react";
+import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "./components/auth.jsx";
 import { Helmet } from "react-helmet-async";
 
 //import "./assets/css/index.css";
-
 import Header from "./components/header";
-import YourTree from "./pages/YourTree.jsx";
-import YourTreeUser from "./pages/YourTreeUser.jsx";
+
+// paginas pesadas, se cargan solo cuando se necesitan
+const YourTree = lazy(() => (import("./pages/YourTree.jsx")));
+const YourTreeUser = lazy(() => (import("./pages/YourTreeUser.jsx")));
+const Forums = lazy(() => (import("./pages/Forums.jsx")));
+const Recent_Pages = lazy(() => (import("./pages/Recent_Pages.jsx")));
+const Profile = lazy(() => (import("./pages/Profile.jsx")));
+const Forgot_Password = lazy(() => (import("./pages/Forgot_Password.jsx")));
+const Reset_Password = lazy(() => (import("./pages/Reset_Password.jsx")));
+
+
+// paginas no pesadas, se cargan al inicio
 import Home from "./pages/Home.jsx";
-import Forums from "./pages/Forums.jsx";
 import Sign_in from "./pages/Sign_in.jsx";
 import Sign_up from "./pages/Sign_up.jsx";
 import Log_out from "./pages/Log_out.jsx";
-import Recent_Pages from "./pages/Recent_Pages.jsx";
 import AnalyticsTracker from "./components/GA_4.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import BuyMeACoffee from "./components/BuyMeACoffee.jsx";
-import Profile from "./pages/Profile.jsx";
-import Forgot_Password from "./pages/Forgot_Password.jsx";
-import Reset_Password from "./pages/Reset_Password.jsx";
 
 import './assets/css/base.css';
 import './assets/css/background_dark.css';
@@ -45,6 +49,15 @@ function AppWithHeader() {
 			</Helmet>
 			<AnalyticsTracker />
 			{!hideHeader && <Header />}
+
+			<Suspense fallback={
+				<div style={{
+					minHeight: 200,
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+				}}>Cargando...</div >
+			}></Suspense >
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/YourTree" element={<YourTree />} />
