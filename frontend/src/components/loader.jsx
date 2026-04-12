@@ -35,11 +35,11 @@ function Loader() {
     return (
         <section id="loader" className="fixed top-0 left-0 right-0 bottom-0 flex flex-col items-center justify-center gap-2.5 z-[9999]">
             <div className="text_load" id="spinner_js">
-                {letters.map((l,i)=> <span key={i} className={i===idx ? 'jump':''}>{l}</span>)
-                //con el map intineramos el array
+                {letters.map((l, i) => <span key={i} className={i === idx ? 'jump' : ''}>{l}</span>)
+                    //con el map intineramos el array
                 }
             </div>
-            <div id="loading-bar" className="h-2.5 bg-blue-500 transition-all duration-300" style={{ width:`${width}%` }}>
+            <div id="loading-bar" className="h-2.5 bg-blue-500 transition-all duration-300" style={{ width: `${width}%` }}>
             </div>
         </section>
     )
