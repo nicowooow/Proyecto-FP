@@ -11,6 +11,7 @@
 }
 
 .forums_header {
+  top: -48vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,14 +24,14 @@
 }
 
 .forums_header_content h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin: 0 0 10px 0;
   color: var(--color-texto);
   font-weight: 700;
 }
 
 .forums_header_content p {
-  font-size: 1.1rem;
+  font-size: .9rem;
   color: var(--color-texto-muted);
   margin: 0;
 }
