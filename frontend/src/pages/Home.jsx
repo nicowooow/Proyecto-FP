@@ -8,14 +8,14 @@ function Home() {
 
 	// biome-ignore format: necesito los espacios
 	return (
-		<main id="main_home">
+		<main id="main_home" className="flex flex-col items-center w-full max-w-full max-w-[1200px] mx-auto px-5 py-14 md:py-10 font-[var(--font-body)]">
 			<SEO
 				title="YourTree - Share links and connect with creators"
 				description="Discover YourTree: create your custom link-in-bio page, join forums, and share with the community. Full-stack React+Node demo."
 			/>
 			{isLogged && <FormCodeVerification />}
-			<section id="introduction">
-				<section>
+			<section id="introduction" className=" flex flex-col items-center md:gap-20 mb-20 w-full ">
+				<section className="flex flex-col items-center text-center w-full">
 					<svg id="YourTree" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.96 211.34">
 						<g id="_underline_group_" data-name="&lt;underline_group&gt;">
 							<path id="_underline1_" data-name="&lt;underline&gt;" d="M1.24,188c2.23,3,4.39,6,6.69,8.9a66.73,66.73,0,0,0,5.79,6.74c3.43,3.31,5.14,3.24,8.06-.46,3.58-4.54,6.77-9.39,10.32-13.94A54.78,54.78,0,0,1,39,181.64c7.31-6.43,16.11-6.75,24.12-1.26,6.2,4.24,10.48,10.21,14.88,16.1a60.54,60.54,0,0,0,6,7.13c3.41,3.32,5.13,3.24,8.06-.46,3.58-4.54,6.76-9.39,10.32-14a55.85,55.85,0,0,1,6.93-7.56c7.31-6.43,16.12-6.75,24.12-1.26,6.2,4.25,10.48,10.21,14.88,16.1a60.54,60.54,0,0,0,6,7.13c3.42,3.32,5.14,3.24,8.06-.47,3.58-4.53,6.76-9.38,10.32-13.94a55.28,55.28,0,0,1,6.94-7.56c7.31-6.43,16.11-6.75,24.12-1.26,6.19,4.25,10.47,10.21,14.87,16.1a58.9,58.9,0,0,0,6,7.13c3.41,3.32,5.13,3.24,8.05-.47,3.58-4.53,6.77-9.38,10.32-13.94a55.36,55.36,0,0,1,6.94-7.57c7.31-6.42,16.11-6.73,24.12-1.25,6.2,4.25,10.48,10.21,14.87,16.1a60,60,0,0,0,6.05,7.13c3.41,3.32,5.13,3.24,8.06-.47,3.58-4.54,6.76-9.38,10.31-13.94a56,56,0,0,1,6.94-7.57c7.31-6.42,16.12-6.73,24.12-1.25,6.2,4.25,10.48,10.21,14.88,16.11a59.64,59.64,0,0,0,6,7.12c3.41,3.32,5.13,3.24,8.06-.47,3.58-4.54,6.76-9.39,10.32-13.94a54.78,54.78,0,0,1,6.94-7.57c7.31-6.43,16.11-6.73,24.12-1.24,6.19,4.24,10.47,10.2,14.87,16.1a58.8,58.8,0,0,0,6.05,7.12c3.41,3.32,5.12,3.24,8-.47,3.58-4.54,6.77-9.39,10.32-13.94a54.78,54.78,0,0,1,6.94-7.57c7.31-6.43,16.11-6.73,24.12-1.24,6.2,4.24,10.47,10.21,14.87,16.1a60.62,60.62,0,0,0,6.05,7.13c3.41,3.31,5.13,3.23,8.06-.48,3.57-4.54,6.76-9.39,10.31-13.95a55.93,55.93,0,0,1,6.94-7.56c7.32-6.43,16.11-6.74,24.13-1.24,6.19,4.25,10.47,10.21,14.87,16.1a59.74,59.74,0,0,0,6,7.13c3.41,3.31,5.14,3.24,8.06-.49,3.76-4.79,7-10,10.88-14.68a47,47,0,0,1,9.42-9c5.71-3.89,12-3.73,18.36-.65V200c-1.91-1.66-3.31-2.93-4.76-4.14-3.54-3-4.91-3-7.74.58-3.59,4.52-6.77,9.38-10.34,13.92a52.43,52.43,0,0,1-7.27,7.9c-7.58,6.39-16,6.53-24.1.89-6.16-4.28-10.42-10.26-14.8-16.17a50.86,50.86,0,0,0-5.75-6.75c-3.74-3.53-5.25-3.45-8.38.53-3.47,4.42-6.54,9.16-10,13.57a53.41,53.41,0,0,1-7.63,8.19c-7.39,6.14-15.76,6.17-23.73.66-6-4.19-10.24-10-14.54-15.78a54.79,54.79,0,0,0-5.33-6.51c-4.43-4.39-5.9-4.3-9.66.56-3.34,4.33-6.32,8.94-9.72,13.22a52,52,0,0,1-7.7,8.12c-7.05,5.74-15.4,5.79-23,.68C422.44,215.14,418.1,209,413.59,203a54,54,0,0,0-6.83-7.65c-2.83-2.56-4.21-2.44-6.64.6-3.71,4.62-7,9.61-10.68,14.25a54.93,54.93,0,0,1-8,8.5c-7,5.77-15.41,5.83-23,.73-6.37-4.28-10.72-10.39-15.23-16.4a54.6,54.6,0,0,0-6.82-7.66c-2.85-2.58-4.22-2.48-6.65.55-3.71,4.62-7,9.61-10.67,14.25a56.43,56.43,0,0,1-8,8.51c-7,5.78-15.41,5.86-23,.78-6.37-4.28-10.72-10.39-15.24-16.39a54.61,54.61,0,0,0-6.81-7.67c-2.87-2.61-4.23-2.52-6.65.49-3.72,4.62-7,9.61-10.68,14.25a56.88,56.88,0,0,1-8,8.51c-7.05,5.8-15.41,5.9-23,.83-6.38-4.27-10.75-10.37-15.24-16.38a53.41,53.41,0,0,0-6.43-7.39c-3.23-3-4.62-2.87-7.36.49-3,3.62-5.49,7.6-8.43,11.25s-5.93,7.73-9.54,10.86c-7.29,6.32-15.78,6.35-23.7.92C141,215,136.68,209,132.29,203.14a54.72,54.72,0,0,0-5.71-6.79c-3.92-3.76-5.41-3.67-8.7.54-3.47,4.43-6.54,9.17-10,13.58a52.93,52.93,0,0,1-7.66,8.16c-7.22,5.93-15.59,6-23.36.65C70.63,215,66.34,209.08,62,203.17a53.93,53.93,0,0,0-5.36-6.48c-4.28-4.18-5.75-4.1-9.35.53-3.35,4.32-6.32,8.95-9.73,13.21a54,54,0,0,1-8,8.46c-9.81,7.87-20.77,4-28.31-4.15a4.18,4.18,0,0,1-1.1-2.51c-.08-7.93,0-15.86,0-23.78Z" transform="translate(-639.92 -11.86)" />
@@ -32,8 +32,8 @@ function Home() {
 						</g>
 					</svg>
 				</section>
-				<section>
-					<h3>
+				<section className="flex flex-col items-center text-center w-full">
+					<h3 className="text-2xl md:text-3xl font-semibold text-[var(--color-texto)] tracking-tight max-w-2xl">
 						Do you know how share your social media, links or somethig that you
 						like??
 					</h3>
@@ -96,39 +96,40 @@ function Home() {
 							</g>
 						</g>
 					</svg>
-					<p>Here you can do it, you just need something to share with everyone.</p>
+					<p className="text-[var(--color-texto-secundario)] leading-relaxed">Here you can do it, you just need something to share with everyone.</p>
 				</section>
 			</section>
-
-			<aside>
-				<h2>YourTree, “a place to share and connect”</h2>
-				<p>
-					YourTree started as a small project to explore ideas in web development and build a space for sharing.
-				</p>
-				<p>
-					Here, you can post links, start discussions, and join forums to exchange knowledge and discover new perspectives.
-				</p>
-			</aside>
-			<aside>
-				<h2>What can you do here?</h2>
-				<p>
-					Share useful links, participate in community forums, and connect with people who enjoy exploring ideas just like you.
-				</p>
-			</aside>
-			<aside>
-				<h2>
-					This page is a demo. The full version will be available at{" "}
-					<a href="https://treedlink.com" title="link to treedlink.com">
-						{" "}
-						treedlink
-					</a>
-					.
-				</h2>
-				<p>
-					You’ll be able to create posts and view statistics related to your
-					profile. All the progress you make on this demo will be transferred to <a href="https://treedlink.com" title="Link to treedlink.com"> Treedlink</a>.
-				</p>
-			</aside>
+			<div className="w-full max-w-[800px] space-y-8 ">
+				<aside className="bg-[var(--color-superficie)] border border-[var(--color-superficie)] rounded-2xl mb-6 p-10 md:p-12 shadow-lg hover:-translate-y-2 hover:shadow-2xl hover:border-[var(--color-texto-muted)] transition-all duration-300 ">
+					<h2 className="text-3xl font-bold text-[var(--color-texto)] mb-6 text-left">YourTree, “a place to share and connect”</h2>
+					<p className="text-[var(--color-texto-secundario)] leading-relaxed">
+						YourTree started as a small project to explore ideas in web development and build a space for sharing.
+					</p>
+					<p className="text-[var(--color-texto-secundario)] leading-relaxed mt-4">
+						Here, you can post links, start discussions, and join forums to exchange knowledge and discover new perspectives.
+					</p>
+				</aside>
+				<aside className="bg-[var(--color-superficie)] border border-[var(--color-superficie)] rounded-2xl mb-6 p-12 md:p-12 shadow-lg hover:-translate-y-2 hover:shadow-2xl hover:border-[var(--color-texto-muted)] transition-all duration-300 ">
+					<h2 className="text-3xl font-bold text-[var(--color-texto)] mb-6 text-left">What can you do here?</h2>
+					<p className="text-[var(--color-texto-secundario)] leading-relaxed">
+						Share useful links, participate in community forums, and connect with people who enjoy exploring ideas just like you.
+					</p>
+				</aside>
+				<aside className="bg-[var(--color-superficie)] border border-[var(--color-superficie)] rounded-2xl mb-6 p-12 md:p-14 shadow-lg hover:-translate-y-2 hover:shadow-2xl hover:border-[var(--color-texto-muted)] transition-all duration-300 ">
+					<h2 className="text-3xl font-bold text-[var(--color-texto)] mb-6 text-left">
+						This page is a demo. The full version will be available at{" "}
+						<a href="https://treedlink.com" title="link to treedlink.com" className="text-[var(--color-link)] hover:text-[var(--color-link-hover)] underline">
+							{" "}
+							treedlink
+						</a>
+						.
+					</h2>
+					<p className="text-[var(--color-texto-secundario)] leading-relaxed">
+						You’ll be able to create posts and view statistics related to your
+						profile. All the progress you make on this demo will be transferred to <a href="https://treedlink.com" title="Link to treedlink.com" className="text-[var(--color-link)] hover:text-[var(--color-link-hover)] underline"> Treedlink</a>.
+					</p>
+				</aside>
+			</div>
 		</main>
 	);
 }

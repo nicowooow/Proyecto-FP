@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* estilos base*/
 :root {
   /* Typography System */
@@ -204,7 +206,7 @@ html {
 
 body {
   color: var(--color-texto);
-  font-family: var(--font-body),Arial, sans-serif;
+  font-family: var(--font-body), Arial, sans-serif;
   font-weight: var(--fw-regular);
   line-height: 1.6;
   transition:
@@ -216,8 +218,8 @@ body {
 
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  /* margin: 0;
+  padding: 0; */
 }
 
 :root {
@@ -232,7 +234,7 @@ main>* {
   margin: 30px;
 }
 
-a{
+a {
   color: var(--color-link);
 }
 
