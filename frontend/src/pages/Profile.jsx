@@ -137,17 +137,17 @@ function Profile() {
         return (
             <div className="profile-loading">
                 <div className="loader"></div>
-                <p>Cargando información...</p>
+                <p className="text-lg font-semibold">Cargando información...</p>
             </div>
         );
     }
 
     if (!userData || !profileData) {
         return (
-            <div className="profile-page-container">
-                <div className="profile-card">
-                    <h2>Usuario no encontrado</h2>
-                    <p>No se pudo obtener la información de este perfil.</p>
+            <div className="profile-main-container">
+                <div className="profile-form-container max-w-sm mx-auto">
+                    <h2 className="text-center text-2xl font-bold text-[var(--color-texto)]">Usuario no encontrado</h2>
+                    <p className="text-center text-sm text-[var(--color-texto-muted)]">No se pudo obtener la información de este perfil.</p>
                 </div>
             </div>
         );
@@ -169,8 +169,8 @@ function Profile() {
 
     return (
         <main>
-            <div className="profile-page-container">
-                <div className="profile-layout">
+            <div className="profile-main-container">
+                <div className="profile-layout-wrapper">
                     {/* Sidebar */}
                     <aside className="profile-sidebar">
                         <div className="profile-avatar-container">
@@ -182,78 +182,75 @@ function Profile() {
                             <div className={`status-badge ${status}`} title={`Status: ${status}`}></div>
                         </div>
 
-                        <div className="profile-names">
-                            {fullName && <h1 className="profile-name">{fullName}</h1>}
-                            <h2 className="profile-username">@{username}</h2>
+                        <div className="profile-names flex flex-col gap-1">
+                            {fullName && <h1 className="profile-name text-2xl lg:text-3xl font-bold text-[var(--color-texto)] font-heading m-0">{fullName}</h1>}
+                            <h2 className="profile-username text-base lg:text-lg font-light text-[var(--color-texto-muted)] m-0">@{username}</h2>
                         </div>
 
                         {bio && (
-                            <div className="profile-bio">
-                                <p>{bio}</p>
+                            <div className="profile-bio text-sm lg:text-base text-[var(--color-texto)] leading-relaxed py-3 px-2 border-t border-b border-[var(--color-borde)]">
+                                {bio}
                             </div>
                         )}
 
-                        <div className="profile-details">
-                            <div className="profile-detail-item">
+                        <div className="profile-details flex flex-col gap-2 w-full">
+                            <div className="profile-detail-item flex items-center gap-2 text-xs lg:text-sm text-[var(--color-texto-muted)]">
                                 <span>✉️ {email}</span>
                             </div>
                         </div>
                     </aside>
 
                     {/* Main Content Area */}
-                    <main className="profile-main">
-                        <div className="profile-form-container">
-                            <h2>Edit Profile</h2>
-                            <form onSubmit={handleSave}>
-                                <div style={{width: 'max-content'}}>
-                                    <FormUploadImage onFileSelect={handleFileSelect} onDeleteImage={handleDeleteImage} />
-                                </div>
+                    <div className="profile-form-container">
+                        <h2 className="text-2xl font-bold text-[var(--color-texto)] m-0 mb-4 font-heading">Edit Profile</h2>
+                        <form onSubmit={handleSave} className="flex flex-col gap-4">
+                            <div style={{ width: 'max-content' }}>
+                                <FormUploadImage onFileSelect={handleFileSelect} onDeleteImage={handleDeleteImage} />
+                            </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="firstName">First Name</label>
-                                    <input id="firstName" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="form-input" required />
-                                </div>
+                            <div className="form-group flex flex-col gap-1">
+                                <label htmlFor="firstName" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">First Name</label>
+                                <input id="firstName" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="form-input" required />
+                            </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="lastName">Last Name</label>
-                                    <input id="lastName" type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="form-input" />
-                                </div>
+                            <div className="form-group flex flex-col gap-1">
+                                <label htmlFor="lastName" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Last Name</label>
+                                <input id="lastName" type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="form-input" />
+                            </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="date">Birth Date</label>
-                                    <input id="date" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} className="form-input" />
-                                </div>
+                            <div className="form-group flex flex-col gap-1">
+                                <label htmlFor="date" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Birth Date</label>
+                                <input id="date" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} className="form-input" />
+                            </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="email">Recovery Email</label>
-                                    <input id="email" type="email" value={recoveryEmail} onChange={e => setRecoveryEmail(e.target.value)} className="form-input" />
-                                </div>
+                            <div className="form-group flex flex-col gap-1">
+                                <label htmlFor="email" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Recovery Email</label>
+                                <input id="email" type="email" value={recoveryEmail} onChange={e => setRecoveryEmail(e.target.value)} className="form-input" />
+                            </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="bio">Bio</label>
-                                    <textarea id="bio"
-                                        value={bio}
-                                        onChange={e => setBio(e.target.value)}
-                                        className="form-textarea"
-                                        placeholder="Tell us a little bit about yourself"
-                                    />
-                                </div>
+                            <div className="form-group flex flex-col gap-1">
+                                <label htmlFor="bio" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Bio</label>
+                                <textarea id="bio"
+                                    value={bio}
+                                    onChange={e => setBio(e.target.value)}
+                                    className="form-textarea"
+                                    placeholder="Tell us a little bit about yourself"
+                                />
+                            </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="theme">Theme</label>
-                                    <select id="theme" value={theme} onChange={e => setTheme(e.target.value)} className="form-input">
-                                        <option value="light">Light</option>
-                                        <option value="dark">Dark</option>
-                                    </select>
-                                </div>
+                            <div className="form-group flex flex-col gap-1">
+                                <label htmlFor="theme" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Theme</label>
+                                <select id="theme" value={theme} onChange={e => setTheme(e.target.value)} className="form-input">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                </select>
+                            </div>
 
-                                <button type="submit" className="btn-edit-profile">Save Changes</button>
-                            </form>
-                        </div>
-                    </main>
+                            <button type="submit" className="btn-save-profile mt-2">Save Changes</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-
         </main>
     );
 }

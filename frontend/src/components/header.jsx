@@ -46,10 +46,10 @@ function Header() {
     return (
       <header>
         {/*esta es la parte izquierda de header */}
-        <div className="header_glass_background">
+        <div className="bg-[var(--color-fondo)] border border-[var(--color-borde)] rounded-lg">
           <nav id="header">
             <section className="left_header">
-              <Link className="Links" to="/" id="my_logo">
+              <Link className="Links text-slate-900" to="/" id="my_logo">
                 <img src={Logo_yourtree} alt="logo YourTree" />
               </Link>
               <SearchComponent />
@@ -235,25 +235,25 @@ function Header() {
   } else {
     return (
       <header>
-        <div className="header_glass_background">
+        <div className="bg-[var(--color-fondo)] border border-[var(--color-borde)] rounded-lg">
           <nav id="header">
             <section className="left_header">
-              <Link className="Links" to="/" id="my_logo">
+              <Link className="Links text-[var(--color-texto)]" to="/" id="my_logo">
                 <img src={Logo_yourtree} alt="logo YourTree" />
               </Link>
               <SearchComponent />
-              <Link className="Links" to="Home">
+              <Link className="Links text-[var(--color-texto)]" to="Home">
                 Home
               </Link>
-              <Link className="Links" to="Recent_Pages">
+              <Link className="Links text-[var(--color-texto)]" to="Recent_Pages">
                 Recent Pages
               </Link>
               {isLogged && (
-                <Link className="Links" to="YourTree">
+                <Link className="Links text-[var(--color-texto)]" to="YourTree">
                   YourTree
                 </Link>
               )}
-              <Link className="Links" to="Forums">
+              <Link className="Links text-[var(--color-texto)]" to="Forums">
                 Forums
               </Link>
 
@@ -263,20 +263,20 @@ function Header() {
               {isLogged ? (
                 <>
                   {user && (
-                    <Link className="Links profile-name" to="Profile">
+                    <Link className="Links profile-name text-[var(--color-texto)]" to="Profile">
                       @{user.username || user.name || user.email}
                     </Link>
                   )}
-                  <Link className="Links" to="Log_out">
+                  <Link className="Links text-[var(--color-texto)]" to="Log_out">
                     Logout
                   </Link>
                 </>
               ) : (
                 <>
-                  <Link className="Links" to="Sign_in">
+                  <Link className="Links text-[var(--color-texto)]" to="Sign_in">
                     Sign in
                   </Link>
-                  <Link className="Links" to="Sign_up">
+                  <Link className="Links text-[var(--color-texto)]" to="Sign_up">
                     Sign up
                   </Link>
                 </>

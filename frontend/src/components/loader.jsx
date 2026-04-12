@@ -33,13 +33,13 @@ function Loader() {
     });
     if (!loading) return null; // cuando termine de realizar el loading ya no se muestra
     return (
-        <section id="loader" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', zIndex: 9999, }}>
+        <section id="loader" className="fixed top-0 left-0 right-0 bottom-0 flex flex-col items-center justify-center gap-2.5 z-[9999]">
             <div className="text_load" id="spinner_js">
                 {letters.map((l,i)=> <span key={i} className={i===idx ? 'jump':''}>{l}</span>)
                 //con el map intineramos el array
                 }
             </div>
-            <div id="loading-bar" style={{ height: '10px', width:`${width}%`, background: 'var(--color-acento)', transition: 'width 0.3s' }}>
+            <div id="loading-bar" className="h-2.5 bg-blue-500 transition-all duration-300" style={{ width:`${width}%` }}>
             </div>
         </section>
     )
