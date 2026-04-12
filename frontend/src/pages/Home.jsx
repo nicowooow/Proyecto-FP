@@ -96,12 +96,12 @@ function Home() {
 							</g>
 						</g>
 					</svg>
-					<p>Here you can do it, just need something to share with everyone</p>
+					<p>Here you can do it, you just need something to share with everyone.</p>
 				</section>
 			</section>
 
 			<aside>
-				<h2>YourTree — “a place to share and connect”</h2>
+				<h2>YourTree, “a place to share and connect”</h2>
 				<p>
 					YourTree started as a small project to explore ideas in web development and build a space for sharing.
 				</p>

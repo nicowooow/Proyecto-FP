@@ -116,7 +116,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 			</button>
 			<dialog className="form_update" data-link-id={linkId} ref={dialogRef}>
 				<form data-link-id={linkId} onSubmit={handleSubmit}>
-					<label htmlFor={`${baseId}-img-url`}>image url : </label>
+					<label htmlFor={`${baseId}-img-url`}>Image URL:</label>
 					<input
 						type="text"
 						name="url_image_form_link"
@@ -124,7 +124,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 						defaultValue={urlImage}
 					/>
 
-					<label htmlFor={`${baseId}-title`}>title : </label>
+					<label htmlFor={`${baseId}-title`}>Title:</label>
 					<input
 						type="text"
 						name="title_form_link"
@@ -132,7 +132,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 						defaultValue={title}
 					/>
 
-					<label htmlFor={`${baseId}-url`}>url : </label>
+					<label htmlFor={`${baseId}-url`}>URL:</label>
 					<input
 						type="text"
 						name="url_form_link"
@@ -140,7 +140,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 						defaultValue={url}
 					/>
 
-					<label htmlFor={`${baseId}-position`}>position : </label>
+					<label htmlFor={`${baseId}-position`}>Position:</label>
 					<input
 						type="number"
 						min={0}
@@ -152,10 +152,10 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 					<input
 						className="btn-constrast"
 						type="button"
-						value="cancel"
+						value="Cancel"
 						onClick={closeDialog}
 					/>
-					<input className="btn-constrast" type="submit" value="update" />
+					<input className="btn-constrast" type="submit" value="Update" />
 				</form>
 			</dialog>
 		</>
@@ -239,7 +239,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 			</button>
 			<dialog className="form_create" ref={dialogRef}>
 				<form onSubmit={handleSubmit}>
-					<label htmlFor={`${baseId}-img-url`}>image url : </label>
+					<label htmlFor={`${baseId}-img-url`}>Image URL:</label>
 					<input
 						type="text"
 						name="url_image_form_link"
@@ -247,7 +247,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 						placeholder="URL of the image for this link"
 					/>
 
-					<label htmlFor={`${baseId}-title`}>title : </label>
+					<label htmlFor={`${baseId}-title`}>Title:</label>
 					<input
 						type="text"
 						name="title_form_link"
@@ -255,7 +255,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 						placeholder="Title of the link"
 					/>
 
-					<label htmlFor={`${baseId}-url`}>url : </label>
+					<label htmlFor={`${baseId}-url`}>URL:</label>
 					<input
 						type="text"
 						name="url_form_link"
@@ -263,7 +263,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 						placeholder="Link you want to share"
 					/>
 
-					<label htmlFor={`${baseId}-position`}>position : </label>
+					<label htmlFor={`${baseId}-position`}>Position:</label>
 					<input
 						type="number"
 						min={0}
@@ -275,10 +275,10 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 					<input
 						className="btn-constrast"
 						type="button"
-						value="cancel"
+						value="Cancel"
 						onClick={closeDialog}
 					/>
-					<input className="btn-constrast" type="submit" value="create" />
+					<input className="btn-constrast" type="submit" value="Create" />
 				</form>
 			</dialog>
 		</>
@@ -411,7 +411,7 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 	return (
 		<>
 			<div className="picture-group" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '15px' }}>
-				<strong style={{ fontSize: '14px', color: 'var(--text)' }}>Profile picture : </strong>
+				<strong style={{ fontSize: '14px', color: 'var(--text)' }}>Profile picture:</strong>
 				<div className="picture-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
 					<label htmlFor={`${baseId}-profile_photo`} className="custom-file-upload">
 						<span>Upload</span>
@@ -462,8 +462,8 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 							/>
 						</div>
 						<div className="cropper-buttons">
-							<button type="button" onClick={cancelCrop} className="btn-edit-profile cancel-crop">cancel</button>
-							<button type="button" onClick={confirmCrop} className="btn-edit-profile confirm-crop">confitm</button>
+							<button type="button" onClick={cancelCrop} className="btn-edit-profile cancel-crop">Cancel</button>
+							<button type="button" onClick={confirmCrop} className="btn-edit-profile confirm-crop">Confirm</button>
 						</div>
 					</div>
 				</div>
