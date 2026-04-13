@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 3000
 
 # 8. Comando por defecto para producción
-CMD ["node", "backend/index.js"]
+CMD ["node", "index.js"]
