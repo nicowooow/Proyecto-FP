@@ -139,7 +139,7 @@ function YourTree() {
 
 							{/* Image Preview */}
 							{displayImageUrl && !displayImageUrl.includes("profile_default.svg") && (
-								<div style={{ marginTop: '20px', textAlign: 'center' }}>
+								<div style={{ marginTop: '20px', textAlign: 'center', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column' }}>
 									<p style={{ fontSize: '12px', color: 'var(--color-texto-muted)', marginBottom: '10px' }}>Preview:</p>
 									<img
 										src={displayImageUrl}
