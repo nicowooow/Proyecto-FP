@@ -399,6 +399,11 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 	const dialogRef = useRef(null); // referencia que usamos para dialogo que se mostrara
 	const [isOpen, setIsOpen] = useState(false);
 	const baseId = useId();
+	const [uploadAlert, setUploadAlert] = useState(null);
+	const showUploadAlert = (severity, message) => {
+		setUploadAlert({ severity, message });
+		setTimeout(() => setUploadAlert(null), 5000);
+	};
 
 	// Estados para el Modal de Recortar Imagen
 	const [cropImageSrc, setCropImageSrc] = useState(null);
@@ -410,6 +415,14 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
 		if (file) {
+			// Check file size limit (5MB)
+			const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+			if (file.size > maxSize) {
+				showUploadAlert('error', 'La imagen es demasiado grande. El tamaño máximo permitido es 5MB.');
+				e.target.value = null; // reset input
+				return;
+			}
+
 			const reader = new FileReader();
 			reader.addEventListener("load", () => {
 				setCropImageSrc(reader.result);
@@ -451,6 +464,11 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 	return (
 		<>
 			<div className="picture-group" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '15px' }}>
+				{uploadAlert && (
+					<Alert severity={uploadAlert.severity} variant="filled" onClose={() => setUploadAlert(null)} sx={{ mb: 2 }}>
+						{uploadAlert.message}
+					</Alert>
+				)}
 				<strong style={{ fontSize: '14px', color: 'var(--text)' }}>Profile picture:</strong>
 				<div className="picture-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
 					<label htmlFor={`${baseId}-profile_photo`} className="custom-file-upload">
