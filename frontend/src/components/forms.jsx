@@ -99,8 +99,8 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 		() => (
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
+				width="40"
+				height="40"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -235,8 +235,8 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 		() => (
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
+				width="40"
+				height="40"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -352,8 +352,8 @@ export const FormDeleteLink = React.memo(function FormDeleteLink({ linkId }) {
 		() => (
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
+				width="40"
+				height="40"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -446,17 +446,17 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 
 			// Convert to JPEG for better compression and check size
 			const maxSize = 3 * 1024 * 1024; // 3MB
-			
+
 			// Create a canvas to convert and compress to JPEG
 			const canvas = document.createElement('canvas');
 			const ctx = canvas.getContext('2d');
 			const img = new Image();
-			
+
 			img.onload = async () => {
 				canvas.width = img.width;
 				canvas.height = img.height;
 				ctx.drawImage(img, 0, 0);
-				
+
 				// Convert canvas to JPEG blob with compression
 				canvas.toBlob(
 					(jpegBlob) => {
@@ -464,7 +464,7 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 							showUploadAlert('error', 'The image is too large even after compression. Maximum size allowed is 3MB. Try with a smaller image.');
 							return;
 						}
-						
+
 						const croppedFile = new File([jpegBlob], "profile_photo.jpg", { type: "image/jpeg" });
 						if (onFileSelect) onFileSelect(croppedFile);
 						setShowCropper(false);
@@ -473,7 +473,7 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 					0.85 // 85% quality for good compression
 				);
 			};
-			
+
 			img.src = URL.createObjectURL(croppedImageBlob);
 		} catch (e) {
 			console.error(e);

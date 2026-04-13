@@ -128,7 +128,42 @@
   font-weight: 700;
   background: var(--color-texto);
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.collapsible_body_style_link .btn-constrast {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 14px;
+  min-width: auto;
+  min-height: auto;
+  border-radius: 8px;
+  /* border: 1px solid var(--color-texto); */
+  background: var(--color-fondo);
+  color: var(--color-fondo);
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-constrast:hover {
+  opacity: 0.85;
+  transform: scale(1.15) translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-constrast:active {
+  transform: scale(0.98) translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-constrast svg {
+  width: 28px;
+  height: 28px;
+  stroke: currentColor;
+  /* Remove fill to keep original SVG appearance */
 }
 
 .settings input[type="reset"] {
@@ -634,11 +669,13 @@
   margin-bottom: 0.8rem;
   border: 1px solid var(--color-borde);
   border-radius: 12px;
-  display: flex; /* cambiado de inline-flex para mejor control */
+  display: flex;
+  /* cambiado de inline-flex para mejor control */
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  min-width: 0; /* Permite que el contenido se encoja */
+  min-width: 0;
+  /* Permite que el contenido se encoja */
   box-sizing: border-box;
 }
 

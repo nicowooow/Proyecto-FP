@@ -108,41 +108,17 @@ export const Links_base = React.memo(function Links_base({
 	else headOption = "layout3";
 
 	const linkHeadOption = useMemo(() => {
-		if (option === 1) {
-			return (
-				<>
-					<img src={urlImage} alt="user image" />
-					<h2>@{username}</h2>
-					<p>{description}</p>
-				</>
-			);
-		} else if (option === 2) {
-			return (
-				<>
-					<h2>@{username}</h2>
-					<img src={urlImage} alt="user image" />
-					<p>{description}</p>
-				</>
-			);
-		} else if (option === 3) {
-			return (
-				<>
-					<h2>@{username}</h2>
-					<img src={urlImage} alt="user image" />
-					<p>{description}</p>
-				</>
-			);
-		}
+
 		return (
-			<>
-				<div>
-					<img src={urlImage} alt="user image" />
+			<div className="link_head_content">
+				<div className="link_head_avatar">
+					<img src={urlImage} alt={`${username} profile`} />
 				</div>
-				<div>
+				<div className="link_head_info">
 					<h2>@{username}</h2>
 					<p>{description}</p>
 				</div>
-			</>
+			</div>
 		);
 	}, [option, username, description, urlImage]);
 
