@@ -149,6 +149,11 @@ function Profile() {
                 setImageFile(null);
                 setDeleteImage(false);
                 showAlert('success', 'Perfil actualizado correctamente.');
+            } else if (res.status === 413) {
+                console.error("Image too large");
+                showAlert('error', 'The image is too large. Maximum size allowed is 3MB.');
+                setImageFile(null);
+                setImagePreview(null);
             } else {
                 console.error("Failed to update profile");
                 showAlert('error', 'No se pudo actualizar el perfil.');

@@ -415,10 +415,10 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
 		if (file) {
-			// Check file size limit (5MB)
-			const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+			// Check file size limit (3MB)
+			const maxSize = 3 * 1024 * 1024; // 3MB in bytes
 			if (file.size > maxSize) {
-				showUploadAlert('error', 'La imagen es demasiado grande. El tamaño máximo permitido es 5MB.');
+				showUploadAlert('error', 'The image is too large. Maximum size allowed is 3MB.');
 				e.target.value = null; // reset input
 				return;
 			}
@@ -443,19 +443,41 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 				cropImageSrc,
 				croppedAreaPixels
 			);
-			const croppedFile = new File([croppedImageBlob], "profile_photo.png", { type: "image/png" });
 
-			// Check size after cropping
-			const maxSize = 5 * 1024 * 1024; // 5MB
-			if (croppedFile.size > maxSize) {
-				showUploadAlert('error', 'The cropped image is too large. Max size is 5MB. Crop less or use a smaller image.');
-				return;
-			}
-
-			if (onFileSelect) onFileSelect(croppedFile);
-			setShowCropper(false);
+			// Convert to JPEG for better compression and check size
+			const maxSize = 3 * 1024 * 1024; // 3MB
+			
+			// Create a canvas to convert and compress to JPEG
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
+			const img = new Image();
+			
+			img.onload = async () => {
+				canvas.width = img.width;
+				canvas.height = img.height;
+				ctx.drawImage(img, 0, 0);
+				
+				// Convert canvas to JPEG blob with compression
+				canvas.toBlob(
+					(jpegBlob) => {
+						if (jpegBlob.size > maxSize) {
+							showUploadAlert('error', 'The image is too large even after compression. Maximum size allowed is 3MB. Try with a smaller image.');
+							return;
+						}
+						
+						const croppedFile = new File([jpegBlob], "profile_photo.jpg", { type: "image/jpeg" });
+						if (onFileSelect) onFileSelect(croppedFile);
+						setShowCropper(false);
+					},
+					'image/jpeg',
+					0.85 // 85% quality for good compression
+				);
+			};
+			
+			img.src = URL.createObjectURL(croppedImageBlob);
 		} catch (e) {
 			console.error(e);
+			showUploadAlert('error', 'Error processing the image.');
 		}
 	};
 
