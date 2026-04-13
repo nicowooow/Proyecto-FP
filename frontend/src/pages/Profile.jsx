@@ -206,15 +206,6 @@ function Profile() {
                     <div className="profile-form-container">
                         <h2 className="text-2xl font-bold text-[var(--color-texto)] m-0 mb-4 font-heading">Edit Profile</h2>
 
-                        {/* Image Preview Section */}
-                        <div className="profile-preview-container mb-6">
-                            <img
-                                src={displayImageUrl}
-                                alt="Profile Preview"
-                                className="profile-avatar"
-                                style={{ width: '150px', height: '150px' }}
-                            />
-                        </div>
 
                         <form onSubmit={handleSave} className="flex flex-col gap-4">
                             <div style={{ width: 'max-content' }}>

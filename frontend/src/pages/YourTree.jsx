@@ -136,24 +136,6 @@ function YourTree() {
 									}}
 								/>
 							</div>
-
-							{/* Image Preview */}
-							{displayImageUrl && !displayImageUrl.includes("profile_default.svg") && (
-								<div style={{ marginTop: '20px', textAlign: 'center', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column' }}>
-									<p style={{ fontSize: '12px', color: 'var(--color-texto-muted)', marginBottom: '10px' }}>Preview:</p>
-									<img
-										src={displayImageUrl}
-										alt="Preview"
-										style={{
-											width: '120px',
-											height: '120px',
-											borderRadius: '50%',
-											objectFit: 'cover',
-											border: '2px solid var(--color-acento)'
-										}}
-									/>
-								</div>
-							)}
 							<div>
 								<label htmlFor="description">
 									<strong>bio : </strong>
