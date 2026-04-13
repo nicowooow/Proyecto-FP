@@ -25,8 +25,9 @@ function YourTree() {
 	const [description, setDescription] = useState("");
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [imageUrl, setImageUrl] = useState("");
+	const [imagePreview, setImagePreview] = useState(null);
 	const [deleteImage, setDeleteImage] = useState(false);
-	
+
 	// Evitar que la imagen se guarde en cache y se muestre la nueva
 	const [cacheBuster, setCacheBuster] = useState(Date.now());
 
@@ -88,7 +89,10 @@ function YourTree() {
 					setImageUrl(data.imageUrl);
 				}
 
-				alert("Profile saved successfully");
+				// Reset file states
+				setSelectedFile(null);
+				setImagePreview(null);
+				setDeleteImage(false);
 			} else {
 				console.error("Failed to update profile");
 				alert("Failed to save profile");
@@ -100,16 +104,18 @@ function YourTree() {
 	};
 
 	let displayImageUrl = imageUrl;
-	if (imageUrl && !imageUrl.includes("profile_default.svg") && !imageUrl.includes("profile?default.svg")) {
+	if (imagePreview) {
+		displayImageUrl = imagePreview;
+	} else if (imageUrl && !imageUrl.includes("profile_default.svg") && !imageUrl.includes("profile?default.svg")) {
 		displayImageUrl = `${imageUrl}?t=${cacheBuster}`;
 	}
 
 	return (
 		<main id="main_yourtree">
-<SEO 
-  title="YourTree Editor - Create Custom Link Page"
-  description="Customize your link-in-bio on YourTree: add links, change colors, upload photo, and share your unique profile."
-/>
+			<SEO
+				title="YourTree Editor - Create Custom Link Page"
+				description="Customize your link-in-bio on YourTree: add links, change colors, upload photo, and share your unique profile."
+			/>
 			<section id="general_area">
 				<section id="general_settings">
 					<form className="settings" onSubmit={handleSaveProfile}>
@@ -119,15 +125,35 @@ function YourTree() {
 								<FormUploadImage
 									onFileSelect={(file) => {
 										setSelectedFile(file);
+										setImagePreview(URL.createObjectURL(file));
 										setDeleteImage(false);
 									}}
 									onDeleteImage={() => {
 										setSelectedFile(null);
+										setImagePreview(null);
 										setDeleteImage(true);
 										setImageUrl("");
 									}}
 								/>
 							</div>
+
+							{/* Image Preview */}
+							{displayImageUrl && !displayImageUrl.includes("profile_default.svg") && (
+								<div style={{ marginTop: '20px', textAlign: 'center' }}>
+									<p style={{ fontSize: '12px', color: 'var(--color-texto-muted)', marginBottom: '10px' }}>Preview:</p>
+									<img
+										src={displayImageUrl}
+										alt="Preview"
+										style={{
+											width: '120px',
+											height: '120px',
+											borderRadius: '50%',
+											objectFit: 'cover',
+											border: '2px solid var(--color-acento)'
+										}}
+									/>
+								</div>
+							)}
 							<div>
 								<label htmlFor="description">
 									<strong>bio : </strong>

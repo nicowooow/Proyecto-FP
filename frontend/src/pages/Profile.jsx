@@ -205,7 +205,7 @@ function Profile() {
                     {/* Main Content Area */}
                     <div className="profile-form-container">
                         <h2 className="text-2xl font-bold text-[var(--color-texto)] m-0 mb-4 font-heading">Edit Profile</h2>
-                        
+
                         {/* Image Preview Section */}
                         <div className="profile-preview-container mb-6">
                             <img

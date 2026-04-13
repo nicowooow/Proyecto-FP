@@ -2,7 +2,7 @@ import React, { useMemo, useEffect } from "react";
 import "./../assets/css/links_base.css";
 import profile_default from "./../assets/images/profile_default.svg";
 import logo from "./../assets/YourTree.svg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ShareIcon } from "./../components/icons.jsx";
 
 export const PutLinks = React.memo(({ username, children, ...rest }) => {
@@ -52,7 +52,7 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 						try {
 							const hostname = new URL(link.url).hostname;
 							iconUrl = `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
-						} catch (_) {}
+						} catch (_) { }
 					}
 				}
 
@@ -189,9 +189,9 @@ export const General_tree = React.memo(function General_tree({
 				</button>
 				<h1>YourTree{usernameSuffix}</h1>
 				<div className="img_logo">
-					<a href="/">
+					<Link href="/">
 						<img src={logo} alt="logo YourTree" />
-					</a>
+					</Link>
 				</div>
 			</section>
 			<Links_base
