@@ -161,7 +161,7 @@ export const put_profile = (req, res) => {
 
 		let imageUrl = undefined;
 		if (req.file) {
-			imageUrl = `/yourtree/api/upload/${req.file.filename}`;
+			imageUrl = req.file.filename;
 		} else if (delete_image === "true") {
 			imageUrl = "";
 		}
@@ -194,7 +194,7 @@ export const put_profile = (req, res) => {
 			pTheme
 		);
 
-		return res.status(200).json({ message: "Profile updated successfully", imageUrl });
+		return res.status(200).json({ message: "Profile updated successfully", imageUrl: imageUrl ? `/yourtree/api/upload/${imageUrl}` : null });
 	} catch (error) {
 		console.log("Error in patch_profile:", error);
 		res.status(500).json({ message: "Error en el servidor" });
