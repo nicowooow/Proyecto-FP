@@ -2,7 +2,7 @@ import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "./components/auth.jsx";
-import { Helmet } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 //import "./assets/css/index.css";
 import Header from "./components/header";
@@ -42,10 +42,33 @@ function AppWithHeader() {
 		'/signup': 'Sign Up - YourTree',
 		'/profile/:username': 'Profile - YourTree'
 	};
+
+	const descriptions = {
+		'/': 'YourTree is a link in bio & community platform. Share your profile, connect with others, and build your online presence.',
+		'/forums': 'Join YourTree forums to discuss and engage with our community members.',
+		'/signin': 'Sign in to your YourTree account to access your profile and community features.',
+		'/signup': 'Create your YourTree account and start sharing your profile with the world.',
+		'/profile/:username': 'Check out this user profile on YourTree.'
+	};
+
 	return (
 		<>
 			<Helmet>
+				<html lang="en" />
 				<title>{titles[location.pathname] || 'YourTree'}</title>
+				<meta name="description" content={descriptions[location.pathname] || 'YourTree - Your link in bio & community platform'} />
+				<meta name="theme-color" content="#ffffff" />
+				<meta property="og:title" content={titles[location.pathname] || 'YourTree'} />
+				<meta property="og:description" content={descriptions[location.pathname] || 'YourTree - Your link in bio & community platform'} />
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content={`https://demo.treedlink.com${location.pathname}`} />
+				<meta property="og:image" content="https://demo.treedlink.com/web-app-manifest-512x512.png" />
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta name="twitter:title" content={titles[location.pathname] || 'YourTree'} />
+				<meta name="twitter:description" content={descriptions[location.pathname] || 'YourTree - Your link in bio & community platform'} />
+				<meta name="twitter:image" content="https://demo.treedlink.com/web-app-manifest-512x512.png" />
+				<link rel="canonical" href={`https://demo.treedlink.com${location.pathname}`} />
+				<meta name="robots" content="index, follow" />
 			</Helmet>
 			<AnalyticsTracker />
 			{!hideHeader && <Header />}
@@ -82,10 +105,12 @@ function AppWithHeader() {
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
-		<AuthProvider>
-			<BrowserRouter>
-				<AppWithHeader />
-			</BrowserRouter>
-		</AuthProvider>
+		<HelmetProvider>
+			<AuthProvider>
+				<BrowserRouter>
+					<AppWithHeader />
+				</BrowserRouter>
+			</AuthProvider>
+		</HelmetProvider>
 	</StrictMode>,
 );
