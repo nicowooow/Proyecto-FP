@@ -164,7 +164,7 @@ function Profile() {
         displayImageUrl = imagePreview;
     } else if (profileData.imageUrl && !profileData.imageUrl.includes("profile_default.svg") && !profileData.imageUrl.includes("profile?default.svg")) {
         // Agregamos cacheBuster al final para impedir cache del navegador
-        displayImageUrl = `${profileData.imageUrl}?t=${cacheBuster}`;
+        displayImageUrl = `/yourtree/api/upload/${profileData.imageUrl}?t=${cacheBuster}`;
     }
 
     return (
