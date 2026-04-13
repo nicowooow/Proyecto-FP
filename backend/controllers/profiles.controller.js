@@ -164,7 +164,7 @@ export const put_profile = (req, res) => {
 
 		let imageUrl = undefined;
 		if (req.file) {
-			imageUrl = req.file.filename;
+			imageUrl = `/yourtree/api/upload/${req.file.filename}`;
 		} else if (delete_image === "true") {
 			imageUrl = "";
 		}
