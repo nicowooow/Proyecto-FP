@@ -74,7 +74,10 @@ export const get_profile = async (req, res, next) => {
 			row.created_at
 		);
 
+		// console.log(profile.toPublic());
+		
 		return res.status(200).send(profile.toPublic());
+
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ message: "Error en el servidor" });

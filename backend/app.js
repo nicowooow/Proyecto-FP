@@ -19,11 +19,11 @@ import linkRoutes from "./routes/links.routes.js";
 const app = express();
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:5173", // Permite el origen definido en entorno, o localhost por defecto
+  origin: process.env.FRONTEND_URL || "http://backend:3000", // Permite el origen definido en entorno, o localhost por defecto
   optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions)); // permitir peticiones desde el frontend de forma segura
+app.use(cors()); // permitir peticiones desde el frontend de forma segura
 app.use(express.json()); // esto nos permite usar el formato JSON
 
 // Servir la carpeta de uploads estáticamente
