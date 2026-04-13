@@ -106,7 +106,6 @@ function Profile() {
 
             if (res.ok) {
                 const data = await res.json();
-                alert("Profile updated successfully!");
 
                 // Actualizar local storage y aplicar colores de inmediato
                 localStorage.setItem('theme', theme);
@@ -117,15 +116,19 @@ function Profile() {
                 const freshTimestamp = Date.now();
                 setCacheBuster(freshTimestamp);
 
-                // Opcionalmente actualizar estado interno
+                // Actualizar estado interno
                 if (data.imageUrl !== undefined) {
                     setProfileData(prev => ({ ...prev, imageUrl: data.imageUrl }));
                     if (data.imageUrl !== "") {
                         setImagePreview(""); // Reiniciamos preview local para forzar carga externa
                     }
                 }
+                
+                // Reset file states
+                setImageFile(null);
+                setDeleteImage(false);
             } else {
-                alert("Failed to update profile.");
+                console.error("Failed to update profile");
             }
         } catch (error) {
             console.error("Error updating profile:", error);

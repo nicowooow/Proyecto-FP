@@ -226,10 +226,9 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
 
     const handleShare = () => {
         navigator.clipboard.writeText(window.location.href);
-        alert("Link copied to clipboard!");
     };
     const handleComment = () => {
-        if (!isLogged) return alert("You must be logged in to comment.");
+        if (!isLogged) return;
         // Mock comment action
         // console.log("Commented on", forum.id);
     };
@@ -260,7 +259,6 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                         <button className="btn_action_small btn_delete_forum" onClick={async () => {
                             const token = getToken();
                             if (!token) {
-                                alert('Por favor inicia sesión de nuevo para borrar este foro.');
                                 navigate('/Sign_in');
                                 return;
                             }
@@ -278,7 +276,7 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                                 return;
                             }
                             const errorData = await res.json().catch(() => ({}));
-                            alert(errorData.error || 'Failed to delete forum');
+                            console.error(errorData.error || 'Failed to delete forum');
                         }}>
                             🗑️ Borrar foro
                         </button>
@@ -310,13 +308,11 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                                 }
                                 if (newCommentText.trim() === "") return;
                                 if (!myProfileId) {
-                                    alert("No public profile found for your user. Please complete your profile to comment.");
                                     return;
                                 }
 
                                 const token = getToken();
                                 if (!token) {
-                                    alert('Please sign in again to comment.');
                                     navigate('/Sign_in');
                                     return;
                                 }
@@ -339,7 +335,7 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                                         setCommentsList([{ id: Date.now(), username: currentUsername || "You", content: newCommentText, created_at: new Date().toISOString() }, ...commentsList]);
                                         setNewCommentText("");
                                     } else {
-                                        alert("Failed to submit comment");
+                                        console.error("Failed to submit comment");
                                     }
                                 } catch (error) {
                                     console.error(error);
@@ -380,7 +376,6 @@ const FormCreateForum = React.memo(function FormCreateForum({ isLogged, username
 
     function openDialog() {
         if (!isLogged) {
-            alert("You must be logged in to create a forum.");
             return;
         }
         dialogRef.current?.showModal();
