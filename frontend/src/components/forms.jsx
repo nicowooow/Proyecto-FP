@@ -7,6 +7,7 @@ import { getUser, getToken } from "./token.jsx";
 import cookie from 'js-cookie'
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../utils/cropUtils.js";
+import Alert from '@mui/material/Alert';
 
 const getLink = async (linkId) => {
 	try {
@@ -37,7 +38,12 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 	const [url, setUrl] = useState("");
 	const [urlImage, setUrlImage] = useState("");
 	const [position, setPosition] = useState("");
-	const [isOpen, setIsOpen] = useState(false); // estado para cuando este abierto el dialog
+	const [isOpen, setIsOpen] = useState(false);
+	const [linkAlert, setLinkAlert] = useState(null);
+	const showLinkAlert = (severity, message) => {
+		setLinkAlert({ severity, message });
+		setTimeout(() => setLinkAlert(null), 3000);
+	};
 	const openDialog = () => setIsOpen(true);
 	const closeDialog = () => setIsOpen(false);
 
@@ -77,12 +83,15 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 				}),
 			});
 			if (res.ok) {
-				window.location.reload();
+				showLinkAlert('success', 'Link actualizado correctamente.');
+				setTimeout(() => window.location.reload(), 1000);
 			} else {
 				console.error("Failed to update link");
+				showLinkAlert('error', 'No se pudo actualizar el link.');
 			}
 		} catch (error) {
 			console.error(error);
+			showLinkAlert('error', 'Error al actualizar el link.');
 		}
 	};
 
@@ -115,6 +124,11 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 				{editIcon}
 			</button>
 			<dialog className="form_update" data-link-id={linkId} ref={dialogRef}>
+				{linkAlert && (
+					<Alert severity={linkAlert.severity} variant="filled" onClose={() => setLinkAlert(null)} sx={{ mb: 2 }}>
+						{linkAlert.message}
+					</Alert>
+				)}
 				<form data-link-id={linkId} onSubmit={handleSubmit}>
 					<label htmlFor={`${baseId}-img-url`}>Image URL:</label>
 					<input
@@ -165,6 +179,11 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 	const dialogRef = useRef(null);
 	const baseId = useId();
+	const [createAlert, setCreateAlert] = useState(null);
+	const showCreateAlert = (severity, message) => {
+		setCreateAlert({ severity, message });
+		setTimeout(() => setCreateAlert(null), 3000);
+	};
 	function openDialog() {
 		dialogRef.current?.showModal();
 	}
@@ -200,12 +219,15 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 				}),
 			});
 			if (res.ok) {
-				window.location.reload();
+				showCreateAlert('success', 'Link creado correctamente.');
+				setTimeout(() => window.location.reload(), 1000);
 			} else {
 				console.error("Failed to create link");
+				showCreateAlert('error', 'No se pudo crear el link.');
 			}
 		} catch (error) {
 			console.error(error);
+			showCreateAlert('error', 'Error al crear el link.');
 		}
 	};
 
@@ -238,6 +260,11 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 				{plusIcon}
 			</button>
 			<dialog className="form_create" ref={dialogRef}>
+				{createAlert && (
+					<Alert severity={createAlert.severity} variant="filled" onClose={() => setCreateAlert(null)} sx={{ mb: 2 }}>
+						{createAlert.message}
+					</Alert>
+				)}
 				<form onSubmit={handleSubmit}>
 					<label htmlFor={`${baseId}-img-url`}>Image URL:</label>
 					<input
@@ -288,6 +315,11 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 export const FormDeleteLink = React.memo(function FormDeleteLink({ linkId }) {
 	let dialogRef = useRef(null);
 	const baseId = useId();
+	const [deleteAlert, setDeleteAlert] = useState(null);
+	const showDeleteAlert = (severity, message) => {
+		setDeleteAlert({ severity, message });
+		setTimeout(() => setDeleteAlert(null), 3000);
+	};
 	function openDialog() {
 		dialogRef.current?.showModal();
 	}
@@ -304,12 +336,15 @@ export const FormDeleteLink = React.memo(function FormDeleteLink({ linkId }) {
 				},
 			});
 			if (res.ok) {
-				window.location.reload();
+				showDeleteAlert('success', 'Link eliminado.');
+				setTimeout(() => window.location.reload(), 1000);
 			} else {
 				console.error("Failed to delete link");
+				showDeleteAlert('error', 'No se pudo eliminar el link.');
 			}
 		} catch (e) {
 			console.error(e);
+			showDeleteAlert('error', 'Error al eliminar el link.');
 		}
 	};
 
@@ -344,6 +379,11 @@ export const FormDeleteLink = React.memo(function FormDeleteLink({ linkId }) {
 				{trashIcon}
 			</button>
 			<dialog className="form_delete" data-link-id={linkId} ref={dialogRef}>
+				{deleteAlert && (
+					<Alert severity={deleteAlert.severity} variant="filled" onClose={() => setDeleteAlert(null)} sx={{ mb: 2 }}>
+						{deleteAlert.message}
+					</Alert>
+				)}
 				<button className="btn-constrast" type="button" onClick={closeDialog}>
 					cancel
 				</button>

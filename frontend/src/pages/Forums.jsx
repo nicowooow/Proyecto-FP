@@ -6,6 +6,29 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './../assets/css/forums.css';
 import SEO from './../components/seo.jsx';
 import AdsComponent from '../components/ads.jsx';
+import Alert from '@mui/material/Alert';
+
+// Helper hook for timed alerts
+function useAlert() {
+    const [alert, setAlert] = useState(null);
+    const show = (severity, message) => {
+        setAlert({ severity, message });
+        setTimeout(() => setAlert(null), 3500);
+    };
+    const clear = () => setAlert(null);
+    return [alert, show, clear];
+}
+
+function AlertBanner({ alert, onClose }) {
+    if (!alert) return null;
+    return (
+        <div style={{ position: 'fixed', top: '1.2rem', left: '50%', transform: 'translateX(-50%)', zIndex: 9999, minWidth: '280px', maxWidth: '90vw' }}>
+            <Alert severity={alert.severity} variant="filled" onClose={onClose}>
+                {alert.message}
+            </Alert>
+        </div>
+    );
+}
 
 const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -224,8 +247,11 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
         onClose();
     };
 
+    const [muiAlert, showAlert, clearAlert] = useAlert();
+
     const handleShare = () => {
         navigator.clipboard.writeText(window.location.href);
+        showAlert('info', 'Enlace copiado al portapapeles.');
     };
     const handleComment = () => {
         if (!isLogged) return;
@@ -235,6 +261,7 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
 
     return (
         <dialog className="forum_detail_dialog" ref={dialogRef} onCancel={handleClose}>
+            <AlertBanner alert={muiAlert} onClose={clearAlert} />
             <div className="dialog_content">
                 <div className="dialog_top_bar">
                     <button className="btn_back_icon" onClick={handleClose}>
@@ -277,6 +304,7 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                             }
                             const errorData = await res.json().catch(() => ({}));
                             console.error(errorData.error || 'Failed to delete forum');
+                            showAlert('error', 'No se pudo borrar el foro.');
                         }}>
                             🗑️ Borrar foro
                         </button>
@@ -334,11 +362,14 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                                         // Fake pushing the comment to UI immediately for responsivness, wait for refresh on reopen
                                         setCommentsList([{ id: Date.now(), username: currentUsername || "You", content: newCommentText, created_at: new Date().toISOString() }, ...commentsList]);
                                         setNewCommentText("");
+                                        showAlert('success', 'Comentario publicado.');
                                     } else {
                                         console.error("Failed to submit comment");
+                                        showAlert('error', 'No se pudo publicar el comentario.');
                                     }
                                 } catch (error) {
                                     console.error(error);
+                                    showAlert('error', 'Error al publicar el comentario.');
                                 }
                             }}
                         >
@@ -373,6 +404,7 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
 const FormCreateForum = React.memo(function FormCreateForum({ isLogged, username, onCreated }) {
     let dialogRef = useRef(null);
     const baseId = useId();
+    const [formAlert, setFormAlert] = useState(null);
 
     function openDialog() {
         if (!isLogged) {
@@ -417,11 +449,17 @@ const FormCreateForum = React.memo(function FormCreateForum({ isLogged, username
             if (res.ok) {
                 closeDialog();
                 if (onCreated) onCreated();
+                setFormAlert({ severity: 'success', message: 'Foro creado correctamente.' });
+                setTimeout(() => setFormAlert(null), 3500);
             } else {
                 console.error("Failed to create forum");
+                setFormAlert({ severity: 'error', message: 'No se pudo crear el foro.' });
+                setTimeout(() => setFormAlert(null), 3500);
             }
         } catch (error) {
             console.error(error);
+            setFormAlert({ severity: 'error', message: 'Error al crear el foro.' });
+            setTimeout(() => setFormAlert(null), 3500);
         }
     };
 
@@ -439,6 +477,11 @@ const FormCreateForum = React.memo(function FormCreateForum({ isLogged, username
                 {plusIcon} Create Forum
             </button>
             <dialog className="dialog_form_create" ref={dialogRef}>
+                {formAlert && (
+                    <Alert severity={formAlert.severity} variant="filled" onClose={() => setFormAlert(null)} sx={{ mb: 2 }}>
+                        {formAlert.message}
+                    </Alert>
+                )}
                 <h2>Create a new Forum</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form_group">

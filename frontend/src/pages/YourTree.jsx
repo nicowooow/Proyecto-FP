@@ -1,11 +1,11 @@
 // import "./../assets/css/links_base.css";
 import "./../assets/css/forms.css";
 import "./../assets/css/YourTree.css";
+import Alert from '@mui/material/Alert';
 import { useState, useRef, useEffect } from "react"; // el useMemo es para el uso que tiene en memoria
 import { General_tree, PutLinks } from "../components/linksBase";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Collapsible } from "../components/collapsible.jsx";
-import { HAPC, HPC } from "../components/colorPicker.jsx";
 import cookies from "js-cookie";
 import {
 	FormCreateLink,
@@ -30,6 +30,13 @@ function YourTree() {
 
 	// Evitar que la imagen se guarde en cache y se muestre la nueva
 	const [cacheBuster, setCacheBuster] = useState(Date.now());
+
+	// Alert state
+	const [muiAlert, setMuiAlert] = useState(null);
+	const showAlert = (severity, message) => {
+		setMuiAlert({ severity, message });
+		setTimeout(() => setMuiAlert(null), 3500);
+	};
 
 	const cookieUser = cookies.get("user") ? JSON.parse(cookies.get("user")) : null;
 	const currentUsername = cookieUser ? cookieUser.username : "";
@@ -93,13 +100,14 @@ function YourTree() {
 				setSelectedFile(null);
 				setImagePreview(null);
 				setDeleteImage(false);
+				showAlert('success', 'Perfil guardado correctamente.');
 			} else {
 				console.error("Failed to update profile");
-				alert("Failed to save profile");
+				showAlert('error', 'No se pudo guardar el perfil.');
 			}
 		} catch (error) {
 			console.error(error);
-			alert("Error trying to save profile");
+			showAlert('error', 'Error al guardar el perfil.');
 		}
 	};
 
@@ -112,6 +120,13 @@ function YourTree() {
 
 	return (
 		<main id="main_yourtree">
+			{muiAlert && (
+				<div style={{ position: 'fixed', top: '1.2rem', left: '50%', transform: 'translateX(-50%)', zIndex: 9999, minWidth: '280px', maxWidth: '90vw' }}>
+					<Alert severity={muiAlert.severity} variant="filled" onClose={() => setMuiAlert(null)}>
+						{muiAlert.message}
+					</Alert>
+				</div>
+			)}
 			<SEO
 				title="YourTree Editor - Create Custom Link Page"
 				description="Customize your link-in-bio on YourTree: add links, change colors, upload photo, and share your unique profile."
