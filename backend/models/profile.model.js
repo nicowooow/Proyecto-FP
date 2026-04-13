@@ -98,7 +98,7 @@ class Profile {
       firstName: this.firstName,
       lastName: this.lastName,
       bio: this.bio,
-      imageUrl: this.imageUrl ? `/yourtree/api/upload/${this.imageUrl}` : null,
+      imageUrl: this.imageUrl ? this.imageUrl : null,
       theme: this.#theme
     };
   }

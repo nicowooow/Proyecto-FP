@@ -194,7 +194,7 @@ export const put_profile = (req, res) => {
 			pTheme
 		);
 
-		return res.status(200).json({ message: "Profile updated successfully", imageUrl: imageUrl ? `/yourtree/api/upload/${imageUrl}` : null });
+		return res.status(200).json({ message: "Profile updated successfully", imageUrl });
 	} catch (error) {
 		console.log("Error in patch_profile:", error);
 		res.status(500).json({ message: "Error en el servidor" });
