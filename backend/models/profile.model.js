@@ -86,7 +86,7 @@ class Profile {
       birthDate: this.#birthDate,
       recoveryEmail: this.#recoveryEmail,
       bio: this.bio,
-      imageUrl: this.imageUrl,
+      imageUrl: this.imageUrl ? `/yourtree/api/upload/${this.imageUrl}` : null,
       theme: this.#theme,
       createdAt: this.#createdAt
     };
@@ -98,7 +98,7 @@ class Profile {
       firstName: this.firstName,
       lastName: this.lastName,
       bio: this.bio,
-      imageUrl: this.imageUrl,
+      imageUrl: this.imageUrl ? `/yourtree/api/upload/${this.imageUrl}` : null,
       theme: this.#theme
     };
   }
