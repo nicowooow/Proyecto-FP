@@ -445,6 +445,13 @@ export const FormUploadImage = React.memo(function FormUploadImage({ onFileSelec
 			);
 			const croppedFile = new File([croppedImageBlob], "profile_photo.png", { type: "image/png" });
 
+			// Check size after cropping
+			const maxSize = 5 * 1024 * 1024; // 5MB
+			if (croppedFile.size > maxSize) {
+				showUploadAlert('error', 'The cropped image is too large. Max size is 5MB. Crop less or use a smaller image.');
+				return;
+			}
+
 			if (onFileSelect) onFileSelect(croppedFile);
 			setShowCropper(false);
 		} catch (e) {
