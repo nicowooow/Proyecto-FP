@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useAuth } from "./../components/auth.jsx";
 import { getUser, getToken } from "./../components/token.jsx";
 import { FormUploadImage } from "../components/forms.jsx";
 import profileDefaultUrl from "../assets/images/profile_default.svg";
 import "../assets/css/forms.css";
 import "../assets/css/Profile.css";
+import Alert from '@mui/material/Alert';
 
 function Profile() {
+    const { username: paramUsername } = useParams();
     let [user, setUser] = useState(getUser());
     let [profileData, setProfileData] = useState(null);
     let [userData, setUserData] = useState(null);
     let [loading, setLoading] = useState(true);
+
+    // Determine the username to display
+    const displayUsername = paramUsername || user?.username;
+    const isOwnProfile = user && displayUsername === user.username;
 
     // Form states
     let [firstName, setFirstName] = useState("");
@@ -27,32 +34,44 @@ function Profile() {
     // Evitar que el navegador use una version vieja de la imagen (cache)
     const [cacheBuster, setCacheBuster] = useState(Date.now());
 
+    // Alert state
+    const [alert, setAlert] = useState(null); // { severity: 'success'|'error', message: string }
+
+    const showAlert = (severity, message) => {
+        setAlert({ severity, message });
+        setTimeout(() => setAlert(null), 3500);
+    };
+
     useEffect(() => {
-        if (user && user.username) {
+        if (displayUsername) {
             const token = getToken();
 
+            const profileUrl = isOwnProfile
+                ? `/yourtree/api/profile/private/${displayUsername}`
+                : `/yourtree/api/profile/${displayUsername}`;
+
+            const headers = isOwnProfile ? { Authorization: `Bearer ${token}` } : {};
+
             Promise.all([
-                fetch(`/yourtree/api/profile/private/${user.username}`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                }).then(res => res.json()),
-                fetch(`/yourtree/api/user/${user.username}`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                }).then(res => res.json())
+                fetch(profileUrl, { headers }).then(res => res.json()),
+                fetch(`/yourtree/api/user/${displayUsername}`, { headers }).then(res => res.json())
             ])
                 .then(([profileRes, userRes]) => {
                     setProfileData(profileRes);
                     setUserData(userRes);
 
-                    // Initialize form
-                    setFirstName(profileRes.firstName || "");
-                    setLastName(profileRes.lastName || "");
-                    if (profileRes.birthDate) {
-                        const date = new Date(profileRes.birthDate);
-                        setBirthDate(date.toISOString().split('T')[0]);
+                    if (isOwnProfile) {
+                        // Initialize form only for own profile
+                        setFirstName(profileRes.firstName || "");
+                        setLastName(profileRes.lastName || "");
+                        if (profileRes.birthDate) {
+                            const date = new Date(profileRes.birthDate);
+                            setBirthDate(date.toISOString().split('T')[0]);
+                        }
+                        setRecoveryEmail(profileRes.recoveryEmail || "");
+                        setBio(profileRes.bio || "");
+                        setTheme(profileRes.theme || "light");
                     }
-                    setRecoveryEmail(profileRes.recoveryEmail || "");
-                    setBio(profileRes.bio || "");
-                    setTheme(profileRes.theme || "light");
 
                     setLoading(false);
                 })
@@ -63,7 +82,7 @@ function Profile() {
         } else {
             setLoading(false);
         }
-    }, [user]);
+    }, [displayUsername, isOwnProfile]);
 
     const handleFileSelect = (file) => {
         setImageFile(file);
@@ -79,6 +98,8 @@ function Profile() {
 
     const handleSave = async (e) => {
         e.preventDefault();
+        if (!isOwnProfile) return; // Should not happen, but safety check
+
         const token = getToken();
 
         const formData = new FormData();
@@ -127,11 +148,14 @@ function Profile() {
                 // Reset file states
                 setImageFile(null);
                 setDeleteImage(false);
+                showAlert('success', 'Perfil actualizado correctamente.');
             } else {
                 console.error("Failed to update profile");
+                showAlert('error', 'No se pudo actualizar el perfil.');
             }
         } catch (error) {
             console.error("Error updating profile:", error);
+            showAlert('error', 'Error al guardar el perfil.');
         }
     };
 
@@ -171,6 +195,13 @@ function Profile() {
 
     return (
         <main>
+            {alert && (
+                <div style={{ position: 'fixed', top: '1.2rem', left: '50%', transform: 'translateX(-50%)', zIndex: 9999, minWidth: '280px', maxWidth: '90vw' }}>
+                    <Alert severity={alert.severity} variant="filled" onClose={() => setAlert(null)}>
+                        {alert.message}
+                    </Alert>
+                </div>
+            )}
             <div className="profile-main-container">
                 <div className="profile-layout-wrapper">
                     {/* Sidebar */}
@@ -204,54 +235,59 @@ function Profile() {
 
                     {/* Main Content Area */}
                     <div className="profile-form-container">
-                        <h2 className="text-2xl font-bold text-[var(--color-texto)] m-0 mb-4 font-heading">Edit Profile</h2>
+                        {isOwnProfile ? (
+                            <>
+                                <h2 className="text-2xl font-bold text-[var(--color-texto)] m-0 mb-4 font-heading">Edit Profile</h2>
 
+                                <form onSubmit={handleSave} className="flex flex-col gap-4">
+                                    <div style={{ width: 'max-content' }}>
+                                        <FormUploadImage onFileSelect={handleFileSelect} onDeleteImage={handleDeleteImage} />
+                                    </div>
 
-                        <form onSubmit={handleSave} className="flex flex-col gap-4">
-                            <div style={{ width: 'max-content' }}>
-                                <FormUploadImage onFileSelect={handleFileSelect} onDeleteImage={handleDeleteImage} />
-                            </div>
+                                    <div className="form-group flex flex-col gap-1">
+                                        <label htmlFor="firstName" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">First Name</label>
+                                        <input id="firstName" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="form-input" required />
+                                    </div>
 
-                            <div className="form-group flex flex-col gap-1">
-                                <label htmlFor="firstName" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">First Name</label>
-                                <input id="firstName" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="form-input" required />
-                            </div>
+                                    <div className="form-group flex flex-col gap-1">
+                                        <label htmlFor="lastName" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Last Name</label>
+                                        <input id="lastName" type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="form-input" />
+                                    </div>
 
-                            <div className="form-group flex flex-col gap-1">
-                                <label htmlFor="lastName" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Last Name</label>
-                                <input id="lastName" type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="form-input" />
-                            </div>
+                                    <div className="form-group flex flex-col gap-1">
+                                        <label htmlFor="date" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Birth Date</label>
+                                        <input id="date" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} className="form-input" />
+                                    </div>
 
-                            <div className="form-group flex flex-col gap-1">
-                                <label htmlFor="date" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Birth Date</label>
-                                <input id="date" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} className="form-input" />
-                            </div>
+                                    <div className="form-group flex flex-col gap-1">
+                                        <label htmlFor="email" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Recovery Email</label>
+                                        <input id="email" type="email" value={recoveryEmail} onChange={e => setRecoveryEmail(e.target.value)} className="form-input" />
+                                    </div>
 
-                            <div className="form-group flex flex-col gap-1">
-                                <label htmlFor="email" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Recovery Email</label>
-                                <input id="email" type="email" value={recoveryEmail} onChange={e => setRecoveryEmail(e.target.value)} className="form-input" />
-                            </div>
+                                    <div className="form-group flex flex-col gap-1">
+                                        <label htmlFor="bio" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Bio</label>
+                                        <textarea id="bio"
+                                            value={bio}
+                                            onChange={e => setBio(e.target.value)}
+                                            className="form-textarea"
+                                            placeholder="Tell us a little bit about yourself"
+                                        />
+                                    </div>
 
-                            <div className="form-group flex flex-col gap-1">
-                                <label htmlFor="bio" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Bio</label>
-                                <textarea id="bio"
-                                    value={bio}
-                                    onChange={e => setBio(e.target.value)}
-                                    className="form-textarea"
-                                    placeholder="Tell us a little bit about yourself"
-                                />
-                            </div>
+                                    <div className="form-group flex flex-col gap-1">
+                                        <label htmlFor="theme" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Theme</label>
+                                        <select id="theme" value={theme} onChange={e => setTheme(e.target.value)} className="form-input">
+                                            <option value="light">Light</option>
+                                            <option value="dark">Dark</option>
+                                        </select>
+                                    </div>
 
-                            <div className="form-group flex flex-col gap-1">
-                                <label htmlFor="theme" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Theme</label>
-                                <select id="theme" value={theme} onChange={e => setTheme(e.target.value)} className="form-input">
-                                    <option value="light">Light</option>
-                                    <option value="dark">Dark</option>
-                                </select>
-                            </div>
-
-                            <button type="submit" className="btn-save-profile mt-2">Save Changes</button>
-                        </form>
+                                    <button type="submit" className="btn-save-profile mt-2">Save Changes</button>
+                                </form>
+                            </>
+                        ) : (
+                            <h2 className="text-2xl font-bold text-[var(--color-texto)] m-0 mb-4 font-heading">Profile</h2>
+                        )}
                     </div>
                 </div>
             </div>

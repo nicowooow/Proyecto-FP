@@ -90,6 +90,7 @@ function AppWithHeader() {
 				<Route path="/Forums/:forumId" element={<Forums />} />
 				<Route path="/Recent_Pages" element={<Recent_Pages />} />
 				<Route path="/Profile" element={<Profile />} />
+				{/* <Route path="/profile/:username" element={<Profile />} /> */}
 				<Route path="/Log_out" element={<Log_out />} />
 				<Route path="/Sign_in" element={<Sign_in />} />
 				<Route path="/Sign_up" element={<Sign_up />} />

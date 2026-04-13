@@ -87,6 +87,12 @@ export const get_profile = async (req, res, next) => {
 export const get_private_profile = async (req, res, next) => {
 	try {
 		let { username } = req.params;
+
+		// Check if the authenticated user is the owner
+		if (req.user.username !== username) {
+			return res.status(403).json({ message: "Forbidden: You can only access your own private profile" });
+		}
+
 		let sql = `select p.* from profiles p join users u on p.user_id = u.id where u.username = $1`;
 		let { rows } = await pool.query(sql, [username]);
 
@@ -160,6 +166,12 @@ export const put_profile = (req, res) => {
 	export const patch_profile = async (req, res) => {
 	try {
 		const { username } = req.params;
+
+		// Check if the authenticated user is the owner
+		if (req.user.username !== username) {
+			return res.status(403).json({ message: "Forbidden: You can only update your own profile" });
+		}
+
 		const { firstName, lastName, birthDate, recoveryEmail, description, theme, delete_image } = req.body;
 
 		let imageUrl = undefined;
