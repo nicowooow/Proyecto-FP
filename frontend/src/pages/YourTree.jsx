@@ -166,8 +166,8 @@ function YourTree() {
 							</div>
 						</Collapsible>
 
-						<input type="button" value="cancel" className="btn-constrast" />
-						<input type="submit" value="save" className="btn-constrast" />
+						<input type="button" value="cancel" className="btn-constrast" title="cancel" />
+						<input type="submit" value="save" className="btn-constrast" title="save" />
 					</form>
 					<section className="settings">
 						<Collapsible title="list of links" section="style_link">

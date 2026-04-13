@@ -120,7 +120,7 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 
 	return (
 		<>
-			<button type="button" className="btn-constrast" onClick={openDialog}>
+			<button type="button" className="btn-constrast" onClick={openDialog} title="edit link">
 				{editIcon}
 			</button>
 			<dialog className="form_update" data-link-id={linkId} ref={dialogRef}>
@@ -168,8 +168,9 @@ export const FormUpdateLink = React.memo(function FormUpdateLink({ linkId }) {
 						type="button"
 						value="Cancel"
 						onClick={closeDialog}
+						title="cancel"
 					/>
-					<input className="btn-constrast" type="submit" value="Update" />
+					<input className="btn-constrast" type="submit" value="Update" title="update link" />
 				</form>
 			</dialog>
 		</>
@@ -256,7 +257,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 
 	return (
 		<>
-			<button type="button" className="btn-constrast" onClick={openDialog}>
+			<button type="button" className="btn-constrast" onClick={openDialog} title="create link">
 				{plusIcon}
 			</button>
 			<dialog className="form_create" ref={dialogRef}>
@@ -304,8 +305,9 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 						type="button"
 						value="Cancel"
 						onClick={closeDialog}
+						title="cancel"
 					/>
-					<input className="btn-constrast" type="submit" value="Create" />
+					<input className="btn-constrast" type="submit" value="Create" title="create link" />
 				</form>
 			</dialog>
 		</>
@@ -375,7 +377,7 @@ export const FormDeleteLink = React.memo(function FormDeleteLink({ linkId }) {
 
 	return (
 		<>
-			<button type="button" className="btn-constrast" onClick={openDialog}>
+			<button type="button" className="btn-constrast" onClick={openDialog} title="delete link">
 				{trashIcon}
 			</button>
 			<dialog className="form_delete" data-link-id={linkId} ref={dialogRef}>
@@ -384,10 +386,10 @@ export const FormDeleteLink = React.memo(function FormDeleteLink({ linkId }) {
 						{deleteAlert.message}
 					</Alert>
 				)}
-				<button className="btn-constrast" type="button" onClick={closeDialog}>
+				<button className="btn-constrast" type="button" onClick={closeDialog} title="cancel">
 					cancel
 				</button>
-				<button className="btn-constrast" type="button" onClick={handleDelete}>
+				<button className="btn-constrast" type="button" onClick={handleDelete} title="delete link">
 					delete
 				</button>
 			</dialog>
