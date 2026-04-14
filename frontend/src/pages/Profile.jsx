@@ -220,7 +220,7 @@ function Profile() {
                             <div className={`status-badge ${status}`} title={`Status: ${status}`}></div>
                         </div>
 
-                        <div className="profile-names flex flex-col gap-1">
+                        <div className="profile-names flex flex-col gap-2">
                             {fullName && <h1 className="profile-name text-2xl lg:text-3xl font-bold text-[var(--color-texto)] font-heading m-0">{fullName}</h1>}
                             <h2 className="profile-username text-base lg:text-lg font-light text-[var(--color-texto-muted)] m-0">@{username}</h2>
                         </div>
@@ -249,27 +249,27 @@ function Profile() {
                                         <FormUploadImage onFileSelect={handleFileSelect} onDeleteImage={handleDeleteImage} />
                                     </div>
 
-                                    <div className="form-group flex flex-col gap-1">
+                                    <div className="form-group flex flex-col gap-3">
                                         <label htmlFor="firstName" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">First Name</label>
                                         <input id="firstName" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="form-input" required />
                                     </div>
 
-                                    <div className="form-group flex flex-col gap-1">
+                                    <div className="form-group flex flex-col gap-3">
                                         <label htmlFor="lastName" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Last Name</label>
                                         <input id="lastName" type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="form-input" />
                                     </div>
 
-                                    <div className="form-group flex flex-col gap-1">
+                                    <div className="form-group flex flex-col gap-3">
                                         <label htmlFor="date" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Birth Date</label>
                                         <input id="date" type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} className="form-input" />
                                     </div>
 
-                                    <div className="form-group flex flex-col gap-1">
+                                    <div className="form-group flex flex-col gap-3">
                                         <label htmlFor="email" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Recovery Email</label>
                                         <input id="email" type="email" value={recoveryEmail} onChange={e => setRecoveryEmail(e.target.value)} className="form-input" />
                                     </div>
 
-                                    <div className="form-group flex flex-col gap-1">
+                                    <div className="form-group flex flex-col gap-3">
                                         <label htmlFor="bio" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Bio</label>
                                         <textarea id="bio"
                                             value={bio}
@@ -279,7 +279,7 @@ function Profile() {
                                         />
                                     </div>
 
-                                    <div className="form-group flex flex-col gap-1">
+                                    <div className="form-group flex flex-col gap-3">
                                         <label htmlFor="theme" className="font-semibold text-[var(--color-texto)] text-xs uppercase tracking-wider">Theme</label>
                                         <select id="theme" value={theme} onChange={e => setTheme(e.target.value)} className="form-input">
                                             <option value="light">Light</option>
