@@ -13,8 +13,8 @@ import { useLocation } from 'react-router-dom';
  * @param {boolean} props.index - Si la página debe ser indexada
  * @param {string} props.canonical - URL canónica
  */
-const SEO = ({ 
-  title = "YourTree - Link in Bio & Community", 
+const SEO = ({
+  title = "YourTree - Link in Bio & Community",
   description = "YourTree is a link in bio & community platform. Share your profile, connect with others, and build your online presence.",
   image = "https://demo.treedlink.com/web-app-manifest-512x512.png",
   keywords = "link in bio, profile, community, social, bio link",
@@ -36,10 +36,10 @@ const SEO = ({
       <meta name="robots" content={index ? 'index, follow' : 'noindex, nofollow'} />
       <meta name="googlebot" content={index ? 'index, follow' : 'noindex, nofollow'} />
       <meta name="bingbot" content={index ? 'index, follow' : 'noindex, nofollow'} />
-      
+
       {/* Canonical URL - Muy importante para SEO */}
       <link rel="canonical" href={canonicalUrl} />
-      
+
       {/* Open Graph - Para compartir en redes sociales */}
       <meta property="og:type" content={type} />
       <meta property="og:title" content={fullTitle} />
@@ -51,7 +51,7 @@ const SEO = ({
       <meta property="og:image:type" content="image/png" />
       <meta property="og:site_name" content="YourTree" />
       <meta property="og:locale" content="en_US" />
-      
+
       {/* Twitter Card - Para compartir en Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@YourTree" />
@@ -59,7 +59,7 @@ const SEO = ({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
       <meta name="twitter:creator" content="@YourTree" />
-      
+
       {/* Adicionales */}
       <meta name="theme-color" content="#ffffff" />
       <meta name="language" content="en-US" />

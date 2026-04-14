@@ -165,9 +165,9 @@ export const General_tree = React.memo(function General_tree({
 				</button>
 				<h1>YourTree{usernameSuffix}</h1>
 				<div className="img_logo">
-					<Link href="/">
+					<link href="/Recent_Pages">
 						<img src={logo} alt="logo YourTree" />
-					</Link>
+					</link>
 				</div>
 			</section>
 			<Links_base
