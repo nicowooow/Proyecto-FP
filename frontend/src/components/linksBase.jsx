@@ -2,7 +2,7 @@ import React, { useMemo, useEffect } from "react";
 import "./../assets/css/links_base.css";
 import profile_default from "./../assets/images/profile_default.svg";
 import logo from "./../assets/YourTree.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ShareIcon } from "./../components/icons.jsx";
 
 export const PutLinks = React.memo(({ username, children, ...rest }) => {
@@ -165,9 +165,9 @@ export const General_tree = React.memo(function General_tree({
 				</button>
 				<h1>YourTree{usernameSuffix}</h1>
 				<div className="img_logo">
-					<link href="/Recent_Pages">
+					<NavLink href="/Recent_Pages">
 						<img src={logo} alt="logo YourTree" />
-					</link>
+					</NavLink>
 				</div>
 			</section>
 			<Links_base
