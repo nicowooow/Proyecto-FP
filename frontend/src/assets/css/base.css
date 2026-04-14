@@ -44,6 +44,7 @@
 
 /* Light Theme - Premium Soft B&W */
 :root[data-theme="light"] {
+  color-scheme: light;
   /* Primary Colors */
   --color-principal: #0f172a;
   --color-principal-light: #334155;
@@ -118,6 +119,7 @@
 
 /* Dark Theme - Premium Zinc/Graphite */
 :root[data-theme="dark"] {
+  color-scheme: dark;
   /* Primary Colors */
   --color-principal: #f4f4f5;
   --color-principal-light: #e4e4e7;
