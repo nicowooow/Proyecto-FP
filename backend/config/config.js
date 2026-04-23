@@ -6,6 +6,7 @@ export const DB_HOST = process.env.DB_HOST || "localhost";
 export const DB_USER = process.env.DB_USER || "root";
 export const DB_PASSWD = process.env.DB_PASSWD || "";
 export const DB_DATABASE = process.env.DB_DATABASE || "yourtree";
+export const DB_SSL = process.env.DB_SSL === "true";
 
 export const BACKBLAZE_KEY_ID = process.env.BACKBLAZE_KEY_ID;
 export const BACKBLAZE_KEY_NAME = process.env.BACKBLAZE_KEY_NAME;

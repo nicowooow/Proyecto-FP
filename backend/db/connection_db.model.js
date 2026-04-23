@@ -1,13 +1,14 @@
 import {Pool} from 'pg';
 
-import {DB_PORT,DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE} from '../config/config.js'
+import {DB_PORT,DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE, DB_SSL} from '../config/config.js'
 // console.log(DB_PORT,DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE);
 const pool= new Pool({
     port:DB_PORT,
     host:DB_HOST,
     user:DB_USER,
     password:DB_PASSWD,
-    database:DB_DATABASE
+    database:DB_DATABASE,
+    ssl: DB_SSL == true ? { rejectUnauthorized: false } : false, // Configuración SSL
 })
 
 pool.connect() //me da la conexion que busco a la BBFF 
