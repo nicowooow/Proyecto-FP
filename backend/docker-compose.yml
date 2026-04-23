@@ -1,8 +1,12 @@
-FROM node:18
-
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3000
-CMD ["node", "index.js"]
+services:
+  backend:
+    build:
+      context: .
+    container_name: yourtree_backend
+    env_file:
+      - .env
+    volumes:
+      - ./upload:/app/upload
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

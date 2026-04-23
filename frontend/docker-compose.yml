@@ -1,10 +1,11 @@
-FROM node:18
-
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-RUN npm install -g serve
-EXPOSE 80
-CMD ["serve", "-s", "dist", "-l", "80"]
+services:
+  frontend:
+    build:
+      context: .
+    container_name: yourtree_frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    restart: unless-stopped
