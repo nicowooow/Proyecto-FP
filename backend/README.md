@@ -35,7 +35,6 @@ backend/
 ├── config/
 ├── controllers/
 ├── db/
-├── logs/
 ├── middlewares/
 ├── models/
 ├── public/
