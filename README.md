@@ -26,8 +26,8 @@ Es mi **Proyecto Fin de Grado** del Ciclo Superior de Desarrollo de Aplicaciones
 
 *(Aquí vas a pegar 4-5 imágenes: homepage, crear árbol, Recent_Pages, foro, perfil de usuario. Súbelas a la carpeta /docs o directamente al repo y pon el enlace con markdown)*
 
-![Homepage](https://github.com/nicowooow/Proyecto-FP/blob/main/screenshots/home.png)
-![Recent Pages](https://github.com/nicowooow/Proyecto-FP/blob/main/screenshots/recent.png)
+![Homepage](https://raw.githubusercontent.com/nicowooow/Proyecto-FP/refs/heads/main/documentos/imagenes/Home.png)
+![Recent Pages](https://raw.githubusercontent.com/nicowooow/Proyecto-FP/refs/heads/main/documentos/imagenes/Recentpages.png)
 
 ## 🛠️ Tecnologías utilizadas
 
