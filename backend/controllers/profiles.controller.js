@@ -1,217 +1,98 @@
-import pool from "../db/connection_db.model.js";
-import Profile from "../models/profile.model.js";
-import profileRepository from "../repository/profile.repository.js";
+import * as profileService from "../services/profile.services.js";
 
 export const get_profiles = async (req, res) => {
-	try {
-		let sql = "select * from profiles";
-		let { rows } = await pool.query(sql);
-		res.send(rows);
-	} catch (error) {
-		console.log(error);
-	}
+    try {
+        const rows = await profileService.get_profiles();
+        res.send(rows);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
 };
+
 export const get_recent_profiles = async (req, res) => {
-	try {
-		const sql = `
-			SELECT 
-				p.id as profile_id, p.first_name, p.last_name, p.image_url, p.theme, p.bio,
-				u.username, u.created_at,
-				(
-					SELECT json_agg(json_build_object('id', l.id, 'title', l.title, 'url', l.url, 'url_image', l.url_image))
-					FROM (
-						SELECT * FROM links 
-						WHERE profile_id = p.id AND is_visible = true
-						ORDER BY position ASC 
-						LIMIT 3
-					) l
-				) as recent_links
-			FROM profiles p
-			JOIN users u ON p.user_id = u.id
-			WHERE p.is_public = true 
-			  AND EXISTS (
-				  SELECT 1 FROM links 
-				  WHERE profile_id = p.id AND is_visible = true
-			  )
-			ORDER BY u.created_at DESC
-			LIMIT 30
-		`;
-		let { rows } = await pool.query(sql);
-
-		// If recent_links is null, ensure it returns an empty array
-		const formattedRows = rows.map(row => ({
-			...row,
-			recent_links: row.recent_links || []
-		}));
-
-		res.send(formattedRows);
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Error en el servidor" });
-	}
+    try {
+        const formattedRows = await profileService.get_recent_profiles();
+        res.send(formattedRows);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
 };
 
-export const get_profile = async (req, res, next) => {
-	try {
-		let { username } = req.params;
-		let sql = `select p.* from profiles p join users u on p.user_id = u.id where u.username = $1`;
-		let { rows } = await pool.query(sql, [username]);
+export const get_profile = async (req, res) => {
+    try {
+        let { username } = req.params;
+        const profile = await profileService.get_profile(username);
 
-		if (rows.length === 0)
-			return res.status(404).json({ message: "Profile not found" });
+        if (!profile) return res.status(404).json({ message: "Profile not found" });
 
-		let row = rows[0];
-		let profile = new Profile(
-			row.id,
-			row.user_id,
-			row.first_name,
-			row.last_name,
-			row.birth_date,
-			row.recovery_email,
-			row.bio,
-			row.image_url,
-			row.theme,
-			row.created_at
-		);
-
-		// console.log(profile.toPublic());
-		
-		return res.status(200).send(profile.toPublic());
-
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Error en el servidor" });
-	}
+        return res.status(200).send(profile.toPublic());
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
 };
 
-export const get_private_profile = async (req, res, next) => {
-	try {
-		let { username } = req.params;
+export const get_private_profile = async (req, res) => {
+    try {
+        let { username } = req.params;
+        if (req.user.username !== username) {
+            return res.status(403).json({ message: "Forbidden: You can only access your own private profile" });
+        }
 
-		// Check if the authenticated user is the owner
-		if (req.user.username !== username) {
-			return res.status(403).json({ message: "Forbidden: You can only access your own private profile" });
-		}
+        const profile = await profileService.get_profile(username); // Reutilizamos el get del service
+        if (!profile) return res.status(404).json({ message: "Profile not found" });
 
-		let sql = `select p.* from profiles p join users u on p.user_id = u.id where u.username = $1`;
-		let { rows } = await pool.query(sql, [username]);
-
-		if (rows.length === 0)
-			return res.status(404).json({ message: "Profile not found" });
-
-		let row = rows[0];
-		let profile = new Profile(
-			row.id,
-			row.user_id,
-			row.first_name,
-			row.last_name,
-			row.birth_date,
-			row.recovery_email,
-			row.bio,
-			row.image_url,
-			row.theme,
-			row.created_at
-		);
-
-		return res.status(200).send(profile.toJSON());
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Error en el servidor" });
-	}
+        return res.status(200).send(profile.toJSON());
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
 };
 
-export const post_profile = (req, res) => {
-	try {
-		let {
-			user_id,
-			plan_id,
-			first_name,
-			last_name,
-			birth_day,
-			phone,
-			recovery_email,
-			bio,
-			image_url,
-			theme,
-			is_monthly_plan,
-			is_public,
-		} = req.body;
-		let created_at = new Date();
-		let updated_at;
-	} catch (error) {
-		console.log(error);
-		// res.status(404).send("usuario no encontrado");
-		res.status(500).json({ message: "Error en el servidor" }); // importante
-	}
+export const post_profile = async (req, res) => {
+    try {
+        await profileService.post_profile();
+        return res.status(201).json({ message: "Profile created" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
 };
 
-export const delete_profile = (req, res) => {
-	try {
-	} catch (error) {
-		console.log(error);
-		// res.status(404).send("usuario no encontrado");
-		res.status(500).json({ message: "Error en el servidor" }); // importante
-	}
+export const delete_profile = async (req, res) => {
+    try {
+        await profileService.delete_profile();
+        res.status(200).json({ message: "Profile deleted" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
 };
 
-export const put_profile = (req, res) => {
-	try {
-	} catch (error) {
-		console.log(error);
-		// res.status(404).send("usuario no encontrado");
-		res.status(500).json({ message: "Error en el servidor" }); // importante
-	}
+export const put_profile = async (req, res) => {
+    try {
+        await profileService.put_profile();
+        res.status(200).json({ message: "Profile updated" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
 };
 
-	export const patch_profile = async (req, res) => {
-	try {
-		const { username } = req.params;
+export const patch_profile = async (req, res) => {
+    try {
+        const { username } = req.params;
+        if (req.user.username !== username) {
+            return res.status(403).json({ message: "Forbidden: You can only update your own profile" });
+        }
 
-		// Check if the authenticated user is the owner
-		if (req.user.username !== username) {
-			return res.status(403).json({ message: "Forbidden: You can only update your own profile" });
-		}
-
-		const { firstName, lastName, birthDate, recoveryEmail, description, theme, delete_image } = req.body;
-
-		let imageUrl = undefined;
-		if (req.file) {
-			imageUrl = `/yourtree/api/upload/${req.file.filename}`;
-		} else if (delete_image === "true") {
-			imageUrl = "";
-		}
-
-		let sql = `select p.id from profiles p join users u on p.user_id = u.id where u.username = $1`;
-		let { rows } = await pool.query(sql, [username]);
-
-		if (rows.length === 0) {
-			return res.status(404).json({ message: "Profile not found" });
-		}
-
-		const profileId = rows[0].id;
-
-		// Prevent empty strings from failing Postgres type validation (like DATE) and allow COALESCE to work
-		const pFirstName = firstName || undefined;
-		const pLastName = lastName || undefined;
-		const pBirthDate = birthDate || undefined;
-		const pRecoveryEmail = recoveryEmail || undefined;
-		const pDescription = description || undefined;
-		const pTheme = theme || undefined;
-
-		await profileRepository.patchProfile(
-			profileId,
-			pFirstName,
-			pLastName,
-			pBirthDate,
-			pRecoveryEmail,
-			pDescription,
-			imageUrl,
-			pTheme
-		);
-
-		return res.status(200).json({ message: "Profile updated successfully", imageUrl });
-	} catch (error) {
-		console.log("Error in patch_profile:", error);
-		res.status(500).json({ message: "Error en el servidor" });
-	}
+        const imageUrl = await profileService.patch_profile(username, req.body, req.file);
+        return res.status(200).json({ message: "Profile updated successfully", imageUrl });
+    } catch (error) {
+        if (error.message === "PROFILE_NOT_FOUND") return res.status(404).json({ message: "Profile not found" });
+        console.log("Error in patch_profile:", error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
 };

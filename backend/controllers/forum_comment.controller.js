@@ -1,24 +1,23 @@
-import ForumComment from '../models/forum_comment.model.js';
-import forumCommentRepository from '../repository/forum_comment.reposiroty.js';
+import * as forumCommentService from "../services/forum_comment.services.js";
 
 export const get_forum_comment = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const rows = await forumCommentRepository.getForumComment(id);
-    if (rows && rows.length > 0) {
-      return res.status(200).json(rows[0]);
-    }
-    return res.status(404).json({ error: 'Forum comment not found' });
+    const comment = await forumCommentService.getCommentById(id);
+    return res.status(200).json(comment);
   } catch (error) {
+    if (error.message === "COMMENT_NOT_FOUND") {
+      return res.status(404).json({ error: 'Forum comment not found' });
+    }
     console.log(error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 export const get_forum_comments_by_forum_id = async (req, res) => {
   try {
     const { id } = req.params;
-    const rows = await forumCommentRepository.getForumCommentsByForum(id);
+    const rows = await forumCommentService.getCommentsByForumId(id);
     return res.status(200).json(rows);
   } catch (error) {
     console.log(error);
@@ -28,15 +27,12 @@ export const get_forum_comments_by_forum_id = async (req, res) => {
 
 export const post_forum_comment = async (req, res) => {
   try {
-    const { profileId, forumId, content, status } = req.body;
-    if (status) {
-    }
-    const countRows = await forumCommentRepository.postForumComments(forumId, profileId, content, status);
-    if (countRows > 0) {
-      return res.status(201).json({ message: 'Forum comment created successfully' });
-    }
-    return res.status(400).json({ error: 'Failed to create forum comment' });
+    await forumCommentService.createComment(req.body);
+    return res.status(201).json({ message: 'Forum comment created successfully' });
   } catch (error) {
+    if (error.message === "COMMENT_NOT_CREATED") {
+      return res.status(400).json({ error: 'Failed to create forum comment' });
+    }
     console.log(error);
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -45,12 +41,12 @@ export const post_forum_comment = async (req, res) => {
 export const delete_forum_comment = async (req, res) => {
   try {
     const { id } = req.params;
-    const countRows = await forumCommentRepository.deleteForumComment(id);
-    if (countRows > 0) {
-      return res.status(200).json({ message: 'Forum comment deleted successfully' });
-    }
-    return res.status(404).json({ error: 'Forum comment not found' });
+    await forumCommentService.deleteComment(id);
+    return res.status(200).json({ message: 'Forum comment deleted successfully' });
   } catch (error) {
+    if (error.message === "COMMENT_NOT_FOUND") {
+      return res.status(404).json({ error: 'Forum comment not found' });
+    }
     console.log(error);
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -59,21 +55,12 @@ export const delete_forum_comment = async (req, res) => {
 export const put_forum_comment = async (req, res) => {
   try {
     const { id } = req.params;
-    const { profileId, forumId, content, status, likes, shares } = req.body;
-    const countRows = await forumCommentRepository.putForumComment(
-      forumId,
-      profileId,
-      content,
-      status,
-      likes,
-      shares,
-      id,
-    );
-    if (countRows > 0) {
-      return res.status(200).json({ message: 'Forum comment updated successfully' });
-    }
-    return res.status(404).json({ error: 'Forum comment not found' });
+    await forumCommentService.updateComment(id, req.body);
+    return res.status(200).json({ message: 'Forum comment updated successfully' });
   } catch (error) {
+    if (error.message === "COMMENT_NOT_FOUND") {
+      return res.status(404).json({ error: 'Forum comment not found' });
+    }
     console.log(error);
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -82,21 +69,12 @@ export const put_forum_comment = async (req, res) => {
 export const patch_forum_comment = async (req, res) => {
   try {
     const { id } = req.params;
-    const { profileId, forumId, content, status, likes, shares } = req.body;
-    const countRows = await forumCommentRepository.patchForumComment(
-      forumId,
-      profileId,
-      content,
-      status,
-      likes,
-      shares,
-      id,
-    );
-    if (countRows > 0) {
-      return res.status(200).json({ message: 'Forum comment patched successfully' });
-    }
-    return res.status(404).json({ error: 'Forum comment not found' });
+    await forumCommentService.patchComment(id, req.body);
+    return res.status(200).json({ message: 'Forum comment patched successfully' });
   } catch (error) {
+    if (error.message === "COMMENT_NOT_FOUND") {
+      return res.status(404).json({ error: 'Forum comment not found' });
+    }
     console.log(error);
     res.status(500).json({ error: 'Internal server error' });
   }

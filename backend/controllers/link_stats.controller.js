@@ -1,123 +1,82 @@
-import linkStatsRepository from "./../repository/link_stats.repository.js";
+import * as linkStatsService from "../services/link_stats.services.js";
 
 export const get_links_stats = async (req, res) => {
   try {
-    let { profileId } = req.params;
-    let rows = await linkStatsRepository.getLinksStats(profileId);
-    if (rows.length > 0) {
-      res.status(200).json(rows);
-    } else {
-      res.status(404).json({ message: "No link stats found" });
-    }
+    const { profileId } = req.params;
+    const rows = await linkStatsService.getLinksStats(profileId);
+    return res.status(200).json(rows);
   } catch (error) {
-    return res.status(500).json({ message: "Server error : " + error });
+    if (error.message === "STATS_NOT_FOUND") {
+      return res.status(404).json({ message: "No link stats found" });
+    }
+    return res.status(500).json({ message: "Server error : " + error.message });
   }
 };
 
 export const get_link_stats = async (req, res) => {
   try {
-    let { id } = req.params;
-    let rows = await linkStatsRepository.getLinkStats(id);
-    if (rows.length > 0) {
-      res.status(200).json(rows);
-    } else {
-      res.status(404).json({ message: "No link stats found" });
-    }
+    const { id } = req.params;
+    const rows = await linkStatsService.getLinkStatsById(id);
+    return res.status(200).json(rows);
   } catch (error) {
-    return res.status(500).json({ message: "Server error : " + error });
+    if (error.message === "STATS_NOT_FOUND") {
+      return res.status(404).json({ message: "No link stats found" });
+    }
+    return res.status(500).json({ message: "Server error : " + error.message });
   }
 };
 
 export const post_link_stats = async (req, res) => {
   try {
-    let { LinkId, profileId, referrer } =
-      req.body;
-    let viewedAt = new Date();
-    let userAgent = req.get("User-Agent");
-    let ipAddress = req.headers["x-forwarded-for"] || req.connection.remoteAddress || "Unknown";
+    const userAgent = req.get("User-Agent");
+    const ipAddress = req.headers["x-forwarded-for"] || req.connection.remoteAddress || "Unknown";
 
-    console.log(ipAddress);
+    await linkStatsService.createLinkStats(req.body, userAgent, ipAddress);
     
-    return "";
-
-    let rowCount = await linkStatsRepository.postLinkStats(
-      LinkId,
-      profileId,
-      viewedAt,
-      userAgent,
-      ipAddress,
-      referrer
-    );
-    if (rowCount > 0) {
-      res.status(201).json({ message: "Link stats created successfully" });
-    } else {
-      res.status(400).json({ message: "Failed to create link stats" });
-    }
+    return res.status(201).json({ message: "Link stats created successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "Server error : " + error });
+    if (error.message === "STATS_NOT_CREATED") {
+      return res.status(400).json({ message: "Failed to create link stats" });
+    }
+    return res.status(500).json({ message: "Server error : " + error.message });
   }
 };
 
 export const delete_link_stats = async (req, res) => {
   try {
-    let { id } = req.params;
-    let rowCount = await linkStatsRepository.deleteLinkStats(id);
-    if (rowCount > 0) {
-      res.status(200).json({ message: "Link stats deleted successfully" });
-    } else {
-      res.status(404).json({ message: "Link stats not found" });
-    }
+    const { id } = req.params;
+    await linkStatsService.deleteLinkStats(id);
+    return res.status(200).json({ message: "Link stats deleted successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "Server error : " + error });
+    if (error.message === "STATS_NOT_FOUND") {
+      return res.status(404).json({ message: "Link stats not found" });
+    }
+    return res.status(500).json({ message: "Server error : " + error.message });
   }
 };
 
 export const put_link_stats = async (req, res) => {
   try {
-    let { id } = req.params;
-    let { LinkId, profileId, viewedAt, userAgent, ipAddress, referrer } =
-      req.body;
-    let rowCount = await linkStatsRepository.putLinkStats(
-      id,
-      LinkId,
-      profileId,
-      viewedAt,
-      userAgent,
-      ipAddress,
-      referrer
-    );
-    if (rowCount > 0) {
-      res.status(200).json({ message: "Link stats updated successfully" });
-    } else {
-      res.status(404).json({ message: "Link stats not found" });
-    }
+    const { id } = req.params;
+    await linkStatsService.updateLinkStats(id, req.body);
+    return res.status(200).json({ message: "Link stats updated successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "Server error : " + error });
+    if (error.message === "STATS_NOT_FOUND") {
+      return res.status(404).json({ message: "Link stats not found" });
+    }
+    return res.status(500).json({ message: "Server error : " + error.message });
   }
 };
 
 export const patch_link_stats = async (req, res) => {
   try {
-    let { id } = req.params;
-    let { LinkId, profileId, viewedAt, userAgent, ipAddress, referrer } =
-      req.body;
-    let rowCount = await linkStatsRepository.patchLinkStats(
-      id,
-      LinkId,
-      profileId,
-      viewedAt,
-      userAgent,
-      ipAddress,
-      referrer
-    );
-    if (rowCount > 0) {
-      res
-        .status(200)
-        .json({ message: "Link stats partially updated successfully" });
-    } else {
-      res.status(404).json({ message: "Link stats not found" });
-    }
+    const { id } = req.params;
+    await linkStatsService.patchLinkStats(id, req.body);
+    return res.status(200).json({ message: "Link stats partially updated successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "Server error : " + error });
+    if (error.message === "STATS_NOT_FOUND") {
+      return res.status(404).json({ message: "Link stats not found" });
+    }
+    return res.status(500).json({ message: "Server error : " + error.message });
   }
 };

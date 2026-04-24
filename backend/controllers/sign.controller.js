@@ -1,252 +1,115 @@
-// import pool from "../db/connection_db.model.js";
-import { verify_password } from "./../middlewares/password.middleware.js";
-import userRepository from "../repository/user.repository.js";
-import User from "./../models/user.model.js";
-import { createAccessToken, createRefreshToken } from "./../utils/jwt.utils.js";
-import profileRepository from "../repository/profile.repository.js";
-import { crearClaveAuth } from "../utils/crearclave.js";
-import { sendEmail } from '../utils/nodemailer.utils.js'
-export const sign_in_user = (req, res) => {
-	// console.log(req.body);
+import * as userService from "../services/sign.services.js";
 
-	let { username_or_email, password } = req.body;
-	// del body sacamos los datos que envia el front, en este caso la contraseñas y credenciales
+export const sign_in_user = async (req, res) => {
+  try {
+    const { username_or_email, password } = req.body;
+    const result = await userService.signIn(username_or_email, password);
 
-	let safeUser; // esta sera una varible para almacenar el objeto, el cual es el usuario
-	// en userRepository buscamos el usuario mediante su credencial
-	userRepository
-		.checkUserSign(username_or_email)
-		.then((user) => {
-			// si nos no devuelve un usuario mandamos el 404, el cual es que no fue encontrado con dicho mensaje
-			if (!user) {
-				return res.status(404).json({ message: "usuario no encontrado" });
-			}
-			// sino instanciamos el usuario
-			safeUser = new User(user);
-
-			// console.log(user);
-			// console.log("safeUser -> ", safeUser);
-
-			// verificamos que la contraseña es igual que la guardad en la BBDD
-			return verify_password(password, user.password_hash);
-		})
-		.then((result) => {
-			// si nos da TRUE
-			if (result) {
-				// console.log(safeUser);
-				// creasmos un token con el id, username y el rol que tiene
-				let accessToken = createAccessToken(
-					safeUser.getId(),
-					safeUser.username,
-					safeUser.getRole(),
-				);
-				// para volver a crear dicho token tenemos que solo mandarle el id para que sea mas sencillo
-				let refreshToken = createRefreshToken(
-					safeUser.getId(),
-					safeUser.getTokenVersion(),
-				);
-				// y regresamos al front un mensaje, usuario y sus tokens creados
-				return res.status(200).json({
-					message: "user logged in successfully",
-					user: safeUser.toPublic(),
-					accessToken,
-					refreshToken,
-				});
-			}
-			// sino en el 401, con su mensaje de que no encontramos el usuario
-			return res
-				.status(401)
-				.json({ message: "username/email or password incorrect, try again" });
-		})
-
-		.catch((error) => {
-			console.log(error);
-			return res.status(500).json({ message: "Error en el servidor" }); // importante
-		});
+    return res.status(200).json({
+      message: "user logged in successfully",
+      user: result.user,
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
+    });
+  } catch (error) {
+    if (error.message === "USER_NOT_FOUND") {
+      return res.status(404).json({ message: "usuario no encontrado" });
+    }
+    if (error.message === "INVALID_CREDENTIALS") {
+      return res.status(401).json({ message: "username/email or password incorrect, try again" });
+    }
+    console.log(error);
+    return res.status(500).json({ message: "Error en el servidor" });
+  }
 };
 
 export const sign_up_user = async (req, res) => {
-	// sacamos los datos que envio el front
-	let { username, email, password } = req.body;
-	// sacamos el rol que tomara el usuario, todo dependera del query que tenga en la URL del fetch del frontend
-	let role = req.query.role;
+  try {
+    const { username, email, password } = req.body;
+    const { role } = req.query;
 
-	// generamos el codigo de verificacion
-	const verifyCode = crearClaveAuth();
+    await userService.signUp({ username, email, password, role });
 
-	try {
-		const userId = await userRepository.createUser(username, email, password, "pending", role, verifyCode);
-
-		if (res.headersSent) return;
-
-		if (!userId) {
-			return res.status(400).json({ message: "User not created" });
-		}
-
-		await profileRepository.createProfile(
-			userId,
-			username, // firstName
-			null, // lastName
-			"2000-01-01", // birthDate
-			email, // recoveryEmail using registered email
-			"", // bio
-			null, // imageUrl
-			"light", // theme
-		);
-
-		// enviar email con el codigo de verificacion
-		const emailSent = await sendEmail(email, verifyCode);
-		if (!emailSent) {
-			console.log("Email failed to send properly");
-		}
-
-		return res.status(201).json({ message: "user created successfully" });
-
-	} catch (error) {
-		if (error.code === "23505") {
-			return res.status(409).json({ message: "Username or email already exists" });
-		}
-		if (!res.headersSent) {
-			console.log(error);
-			return res.status(500).json({ message: "Server error", detail: String(error) });
-		}
-	}
+    return res.status(201).json({ message: "user created successfully" });
+  } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({ message: "Username or email already exists" });
+    }
+    if (error.message === "USER_NOT_CREATED") {
+      return res.status(400).json({ message: "User not created" });
+    }
+    console.log(error);
+    return res.status(500).json({ message: "Server error", detail: String(error) });
+  }
 };
 
 export const log_out_user = (req, res) => {
-	try {
-		console.log(req.user);
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ error: "Internal server error" });
-	}
+  try {
+    console.log(req.user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 export const verifyAccount = async (req, res) => {
-	try {
-		const { code, username } = req.body;
-		const user = await userRepository.getUser(username);
-
-		if (!user || user.verify_code === null) {
-			return res.json({ verificated: false });
-		}
-
-		if (code === user.verify_code.split("-").join("")) {
-			await userRepository.patchUser(
-				user.id,
-				null,
-				null,
-				null,
-				"active",
-				null,
-				null
-			);
-			await userRepository.updateVerifyCode(null, user.id);
-			return res.json({ verificated: true });
-		}
-		return res.json({ verificated: false });
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ error: "Internal server error" });
-	}
+  try {
+    const { code, username } = req.body;
+    const isVerified = await userService.verifyAccount(username, code);
+    return res.json({ verificated: isVerified });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 export const resendCode = async (req, res) => {
-	try {
-		const { username } = req.body;
-		const user = await userRepository.getUser(username);
-
-		if (!user) return res.status(404).json({ message: "User not found" });
-		console.log(user);
-		console.log(username);
-
-		if (user.status === "active") {
-			return res
-				.status(400)
-				.json({ verify: true, message: "User is already verified" });
-		}
-
-		const newVerifyCode = crearClaveAuth();
-
-		// Actualizar el código en la base de datos
-		await userRepository.updateVerifyCode(newVerifyCode, user.id);
-
-		setTimeout(() => {
-			userRepository
-				.updateVerifyCode(null, user.id)
-				.catch((e) => console.log(e));
-		}, 5 * 60 * 1000);
-
-		// Enviar el nuevo código por correo
-		const emailSent = await sendEmail(user.email, newVerifyCode);
-		if (!emailSent) {
-			console.log("Email failed to send properly");
-			return res.status(500).json({ message: "Failed to send email" });
-		}
-
-		return res.status(200).json({ message: "Code resent successfully" });
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ error: "Internal server error" });
-	}
+  try {
+    const { username } = req.body;
+    await userService.resendCode(username);
+    return res.status(200).json({ message: "Code resent successfully" });
+  } catch (error) {
+    if (error.message === "USER_NOT_FOUND") {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (error.message === "ALREADY_ACTIVE") {
+      return res.status(400).json({ verify: true, message: "User is already verified" });
+    }
+    if (error.message === "EMAIL_FAILED") {
+      return res.status(500).json({ message: "Failed to send email" });
+    }
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 export const forgot_password = async (req, res) => {
-	try {
-		const { username_or_email } = req.body;
-		if (!username_or_email) return res.status(400).json({ message: "Username or email is required" });
+  try {
+    const { username_or_email } = req.body;
+    if (!username_or_email) return res.status(400).json({ message: "Username or email is required" });
 
-		const user = await userRepository.checkUserSign(username_or_email);
-		if (!user) {
-			// We return 200 to prevent user enumeration
-			return res.status(200).json({ message: "If the user exists, an email has been sent." });
-		}
-
-		const resetCode = crearClaveAuth();
-
-		await userRepository.updateVerifyCode(resetCode, user.id);
-
-		// Clear code after 10 minutes for security
-		setTimeout(() => {
-			userRepository.updateVerifyCode(null, user.id).catch((e) => console.log(e));
-		}, 10 * 60 * 1000);
-
-		// Envía al correo normal del usuario
-		const emailSent = await sendEmail(user.email, resetCode);
-		if (!emailSent) {
-			console.log("Password reset email failed to send");
-			return res.status(500).json({ message: "Failed to send email" });
-		}
-
-		return res.status(200).json({ message: "If the user exists, an email has been sent." });
-	} catch (error) {
-		console.log(error);
-		return res.status(500).json({ error: "Internal server error" });
-	}
+    await userService.forgotPassword(username_or_email);
+    return res.status(200).json({ message: "If the user exists, an email has been sent." });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 export const reset_password = async (req, res) => {
-	try {
-		const { username_or_email, verify_code, password } = req.body;
-		
-		if (!username_or_email || !verify_code || !password) {
-			return res.status(400).json({ message: "Missing required fields" });
-		}
+  try {
+    const { username_or_email, verify_code, password } = req.body;
+    if (!username_or_email || !verify_code || !password) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
 
-		const user = await userRepository.checkUserSign(username_or_email);
-		if (!user || user.verify_code === null) {
-			return res.status(400).json({ message: "Invalid or expired verify code" });
-		}
-
-		if (verify_code === user.verify_code.split("-").join("")) {
-			await userRepository.updatePassword(user.id, password);
-			await userRepository.updateVerifyCode(null, user.id); // clear out code
-			return res.status(200).json({ message: "Password updated successfully" });
-		}
-
-		return res.status(400).json({ message: "Invalid verify code" });
-	} catch (error) {
-		console.log(error);
-		return res.status(500).json({ error: "Internal server error" });
-	}
+    await userService.resetPassword(username_or_email, verify_code, password);
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    if (error.message === "INVALID_CODE") {
+      return res.status(400).json({ message: "Invalid or expired verify code" });
+    }
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 };
