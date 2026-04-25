@@ -42,7 +42,7 @@ function Sign_in() {
 
 				login(data.accessToken, data.refreshToken, data.user);
 
-				navigate("/home");
+				navigate("/");
 				return setMessage("");
 			}
 			return setMessage("something was wrong");
@@ -53,10 +53,10 @@ function Sign_in() {
 	}
 	return (
 		<main id="main_sign">
-<SEO 
-  title="Sign In - YourTree"
-  description="Access your YourTree account and manage your custom link pages."
-/>
+			<SEO
+				title="Sign In - YourTree"
+				description="Access your YourTree account and manage your custom link pages."
+			/>
 			<section id="sign">
 				<section>
 					<form id="form_sign" onSubmit={handleSubmit} method="POST">
@@ -76,7 +76,7 @@ function Sign_in() {
 								setPassword(e.target.value);
 							}}
 						/>
-						<Link to="/Forgot_Password" style={{display: 'block', marginTop: '10px', fontSize: '0.9rem', color: 'var(--text_2)', textDecoration: 'underline'}}>
+						<Link to="/Forgot_Password" style={{ display: 'block', marginTop: '10px', fontSize: '0.9rem', color: 'var(--text_2)', textDecoration: 'underline' }}>
 							I've forgotten my password
 						</Link>
 						{message && <p className="error">{message}</p>}

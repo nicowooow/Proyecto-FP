@@ -85,7 +85,7 @@ function AppWithHeader() {
 				<Route path="/" element={<Home />} />
 				<Route path="/YourTree" element={<YourTree />} />
 				<Route path="/YourTree/:username" element={<YourTreeUser />} />
-				<Route path="/Home" element={<Home />} />
+				<Route path="/" element={<Home />} />
 				<Route path="/Forums" element={<Forums />} />
 				<Route path="/Forums/:forumId" element={<Forums />} />
 				<Route path="/Recent_Pages" element={<Recent_Pages />} />
