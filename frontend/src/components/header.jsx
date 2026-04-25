@@ -76,7 +76,7 @@ function Header() {
                     <h3>Navigation</h3>
                     <Link
                       className="mobile-link"
-                      to="Home"
+                      to="/"
                       onClick={handleLinkClick}
                     >
                       <svg
@@ -242,7 +242,7 @@ function Header() {
                 <img src={Logo_yourtree} alt="logo YourTree" />
               </Link>
               <SearchComponent />
-              <Link className="Links text-[var(--color-texto)]" to="Home">
+              <Link className="Links text-[var(--color-texto)]" to="/">
                 Home
               </Link>
               <Link className="Links text-[var(--color-texto)]" to="Recent_Pages">
