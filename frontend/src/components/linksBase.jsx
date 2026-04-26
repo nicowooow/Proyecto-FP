@@ -67,7 +67,7 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 						style={liStyle}
 					>
 						<section className="links">
-							<a href={link.url ?? "#"}>
+							<a href={link.url ?? "#"} target="_blank" rel="noopener noreferrer">
 								{link.title ?? link.name ?? "name link"}
 							</a>
 						</section>
