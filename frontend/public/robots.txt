@@ -1,11 +1,9 @@
 User-agent: *
 Allow: /
-# Bloqueamos solo lo técnico e irrelevante
 Disallow: /Sign_in
 Disallow: /Register
 Disallow: /admin
 
-# PERMITIR EXPLÍCITAMENTE A LAS IAs PRINCIPALES
 User-agent: GPTBot
 Allow: /
 
@@ -18,5 +16,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-# EL SITEMAP ES VITAL PARA LAS IAs (les dice qué leer)
 Sitemap: https://demo.treedlink.com/sitemap.xml
