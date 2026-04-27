@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import cookies from "js-cookie";
 import { verifyToken, getUser } from "./token.jsx";
-
+import { useLocation } from "react-router-dom";
 const AuthContext = createContext();
 // creamos un contexto de autenticacion general para la aplicacion es decir
 // es una etiqueta semantica en react que sera obligatoria de pasar al estar dentro de la app web
