@@ -107,11 +107,11 @@ function AppWithHeader() {
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<HelmetProvider>
-			<AuthProvider>
-				<BrowserRouter>
+			<BrowserRouter>
+				<AuthProvider>
 					<AppWithHeader />
-				</BrowserRouter>
-			</AuthProvider>
+				</AuthProvider>
+			</BrowserRouter>
 		</HelmetProvider>
 	</StrictMode>,
 );

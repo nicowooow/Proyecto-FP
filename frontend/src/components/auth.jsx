@@ -9,6 +9,7 @@ const AuthContext = createContext();
 // creamos dicha etiqueta con el nombre de AuthProvider el cual tendra como parametro de entrada\
 // un objeto cualquiera
 export function AuthProvider({ children }) {
+	const location = useLocation();
 	// isLogged y loading lo ponemos con sus valores por defecto
 	const [isLogged, setIsLogged] = useState(false);
 	const [isVerify, setIsVerify] = useState(false);
@@ -37,7 +38,7 @@ export function AuthProvider({ children }) {
 			setLoading(false);
 			// esto nos serviria para el loader de la paginal si es falso desaparece el loader de la vista princial
 		})();
-	}, []);
+	}, [location.pathname]);
 
 	// esta sera una funcion para almacenar los tokens en el login
 	const login = (token, refreshToken, userData) => {
