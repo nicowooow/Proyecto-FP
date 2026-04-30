@@ -3,7 +3,6 @@ import "./../assets/css/links_base.css";
 import profile_default from "./../assets/images/profile_default.svg";
 import logo from "./../assets/YourTree.svg";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { ShareIcon } from "./../components/icons.jsx";
 
 export const PutLinks = React.memo(({ username, children, ...rest }) => {
 	let [links, setLinks] = React.useState([]);
@@ -176,7 +175,6 @@ export const General_tree = React.memo(function General_tree({
 				descriptionInput={descrition}
 				imageUrl={imageUrl}
 			/>
-			<ShareIcon username={username} />
 		</section>
 	);
 });

@@ -3,12 +3,22 @@
     display: flex;
     justify-self: flex-end;
     border: 2px solid var(--color-principal-dark);
-	border-radius: 50%;
+    border-radius: 50%;
     padding: .5rem;
     cursor: pointer;
+    position: fixed;
+    bottom: -10px;
+    left: 0;
 }
+
 .share_icon {
     align-self: center;
-	width: 30px;
-	height: 30px;
+    width: 30px;
+    height: 30px;
+}
+
+@media (max-width: 768px) {
+    .share {
+        right: 0;
+    }
 }

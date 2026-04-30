@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { General_tree } from "../components/linksBase";
+import { ShareIcon } from "./../components/icons.jsx";
 
 import "./../assets/css/YourTree.css";
 import SEO from './../components/seo.jsx';
@@ -52,15 +53,17 @@ function YourTreeUser() {
 	}, [navigate, username]);
 	return (
 		<main id="main_yourtree">
-<SEO 
-  title={`@${username} on YourTree - Link in Bio`}
-  description={`${username} shares their favorite links on YourTree. Visit their custom profile page.`}
-/>
+			<SEO
+				title={`@${username} on YourTree - Link in Bio`}
+				description={`${username} shares their favorite links on YourTree. Visit their custom profile page.`}
+			/>
 			<General_tree
 				username={username}
 				descrition={description}
 				imageUrl={imageUrl}
 			/>
+			<ShareIcon username={username} />
+
 		</main>
 	);
 }
