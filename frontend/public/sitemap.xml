@@ -33,26 +33,5 @@
     <changefreq>hourly</changefreq>
     <priority>0.7</priority>
   </url>
-
-  <url>
-    <loc>https://demo.treedlink.com/Sign_up</loc>
-    <lastmod>2026-04-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://demo.treedlink.com/Sign_in</loc>
-    <lastmod>2026-04-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://demo.treedlink.com/Forgot_Password</loc>
-    <lastmod>2026-04-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
+  
 </urlset>
