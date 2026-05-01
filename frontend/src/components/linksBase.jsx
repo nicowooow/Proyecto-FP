@@ -40,17 +40,25 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 				);
 				const isImage =
 					typeof link.url === "string" &&
-					link.url.startsWith("https://");
+					link.urlImage.startsWith("https://");
 
 				let iconUrl = "";
+				console.log(link);
+
 				if (isImage) {
-					const isImageFile = /\.(svg|png|jpe?g|webp|gif|ico)(\?.*)?$/i.test(link.url);
+					const url = link.urlImage.split('https://')[1].split('/', 2)[1];
+					// console.log(url);
+
+					// con esto hacemos que la imagen de url , si no tiene un .(imagen) en el primer corte de la url se descarte
+					const isImageFile = /\.(svg|png|jpe?g|webp|gif|ico)$/i.test(url);
+
 					if (isImageFile) {
-						iconUrl = link.url;
+						iconUrl = link.urlImage;
 					} else {
+						const hostname = new URL(link.urlImage).hostname;
 						try {
-							const hostname = new URL(link.url).hostname;
-							iconUrl = `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
+							iconUrl = `https://www.google.com/s2/favicons?domain=https://${hostname}&sz=64`;
+
 						} catch (_) { }
 					}
 				}
