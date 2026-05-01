@@ -281,8 +281,8 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                 <span className="forum_date detail_date">{formatDate(forum.created_at)}</span>
 
                 <div className="forum_card_actions detail_actions">
-                    <button className="btn_action_small">💬 Comentarios</button>
-                    <button className="btn_action_small" onClick={handleShare}>➦ Compartir</button>
+                    <button className="btn_action_small">💬 comments</button>
+                    <button className="btn_action_small" onClick={handleShare}>➦ Share</button>
                     {isLogged && myProfileId && forum.profile_id === myProfileId && (
                         <button className="btn_action_small btn_delete_forum" onClick={async () => {
                             const token = getToken();
@@ -317,7 +317,7 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                     <div className="add_comment_container">
                         <textarea
                             className="comment_input_box"
-                            placeholder="Añadir un comentario..."
+                            placeholder="add comment..."
                             value={newCommentText}
                             onChange={(e) => setNewCommentText(e.target.value)}
                             onClick={(e) => {
@@ -363,18 +363,18 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                                         // Fake pushing the comment to UI immediately for responsivness, wait for refresh on reopen
                                         setCommentsList([{ id: Date.now(), username: currentUsername || "You", content: newCommentText, created_at: new Date().toISOString() }, ...commentsList]);
                                         setNewCommentText("");
-                                        showAlert('success', 'Comentario publicado.');
+                                        showAlert('success', 'submit comment.');
                                     } else {
-                                        console.error("Failed to submit comment");
-                                        showAlert('error', 'No se pudo publicar el comentario.');
+                                        console.error("Failed to submit the comment");
+                                        showAlert('error', 'Failed to submit your comment.');
                                     }
                                 } catch (error) {
                                     console.error(error);
-                                    showAlert('error', 'Error al publicar el comentario.');
+                                    showAlert('error', 'There was an error to submitting your comment.');
                                 }
                             }}
                         >
-                            Comentar
+                            Post comment
                         </button>
                     </div>
 

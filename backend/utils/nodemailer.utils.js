@@ -32,7 +32,7 @@ export const sendEmail = async (email, code) => {
 		await transporter.sendMail({
 			from: '"Nicowooow" <suport@nicowooow.com>',
 			to: email,
-			subject: `Activation code`,
+			subject: `Verification code (${code})`,
 			html: `
 <!DOCTYPE html>
 <html lang="en">
@@ -65,9 +65,10 @@ export const sendEmail = async (email, code) => {
           <!-- BODY -->
           <tr>
             <td style="padding:40px 40px 20px;">
-              <h2 style="margin:0 0 12px;color:#1a1a2e;font-size:22px;">Welcome aboard! 👋</h2>
+              <h2 style="margin:0 0 12px;color:#1a1a2e;font-size:22px;">Verification code</h2>
+
               <p style="margin:0 0 28px;color:#4a5568;font-size:15px;line-height:1.6;">
-                Thanks for signing up. To activate your account, use the verification code below.
+                A verification code has been generated for an account action. If you initiated this request, use the code below.
               </p>
 
               <!-- CODE BOX -->
@@ -76,18 +77,18 @@ export const sendEmail = async (email, code) => {
                   <td align="center"
                     style="padding:28px 0;background:#f7f8fc;border-radius:12px;border:2px dashed #e2e8f0;">
                     <p style="margin:0 0 6px;color:#718096;font-size:12px;letter-spacing:2px;text-transform:uppercase;">
-                      Your verification code</p>
+                      Verification code
+                    </p>
                     <p style="margin:0;color:#1a1a2e;font-size:42px;font-weight:800;letter-spacing:8px;">${code}</p>
                   </td>
                 </tr>
               </table>
 
               <p style="margin:24px 0 0;color:#718096;font-size:13px;text-align:center;">
-                ⏱ This code expires in <strong style="color:#e53e3e;">5 minutes</strong>. Do not share it with anyone.
+                ⏱ This code expires in <strong style="color:#e53e3e;">5 minutes</strong>. If you did not request this, you can safely ignore this message.
               </p>
             </td>
           </tr>
-
           <!-- FOOTER -->
           <tr>
             <td style="padding:20px 40px 36px;">

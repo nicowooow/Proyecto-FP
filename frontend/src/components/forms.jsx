@@ -221,7 +221,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 			});
 			if (res.ok) {
 				showCreateAlert('success', 'Link creado correctamente.');
-				setTimeout(() => window.location.reload(), 1000);
+				setTimeout(() => window.location.reload(), 10);
 			} else {
 				console.error("Failed to create link");
 				showCreateAlert('error', 'No se pudo crear el link.');
