@@ -61,7 +61,7 @@ export default function Recent_Pages() {
         </article>
       );
 
-      if ((index + 1) % 3 === 0 && index !== profiles.length - 1) {
+      if ((index + 1) % 6 === 0 && index !== profiles.length - 1) {
         items.push(
           <AdsComponent
             key={`recent-ad-${index}`}

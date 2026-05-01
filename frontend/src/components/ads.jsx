@@ -39,7 +39,7 @@ const AdsComponent = ({ inline = false, centered = false, styleType = 'forum' })
         window.location.href = "https://github.com/nicowooow"
     }
     return (
-        <div className={wrapperClass} aria-label="Anuncio de Google" className="col-span-full">
+        <div className={`${wrapperClass} col-span-full`} aria-label="Anuncio de Google">
             <article className={cardClass}>
                 {showFallback ? (
                     <>
