@@ -102,6 +102,7 @@ export default function Forums() {
                         key={`forum-ad-${index}`}
                         inline
                         styleType="forum"
+                        className="w-full"
                     />
                 );
             }
