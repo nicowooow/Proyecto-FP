@@ -13,12 +13,19 @@ const AdsComponent = ({ inline = false, centered = false, styleType = 'forum' })
 
                 // Creamos un pequeño intervalo para revisar si Google nos dejó vacíos
                 const checkInterval = setInterval(() => {
-                    const adElement = document.querySelector(`ins[data-ad-client="${AD_CLIENT}"]`);
+                    // Usamos un selector más genérico por si acaso
+                    const adElement = document.querySelector('.adsbygoogle');
 
-                    // Si Google marca el anuncio como 'unfilled', activamos el fallback manualmente
-                    if (adElement && adElement.getAttribute('data-ad-status') === 'unfilled') {
-                        setShowFallback(true);
-                        clearInterval(checkInterval);
+                    if (adElement) {
+                        const status = adElement.getAttribute('data-ad-status');
+                        const googleStatus = adElement.getAttribute('data-adsbygoogle-status');
+
+                        // CRUCIAL: Si Google dice que terminó (done) pero el status es unfilled 
+                        // O si simplemente ves que el iframe interno está vacío
+                        if (status === 'unfilled' || (googleStatus === 'done' && !adElement.innerHTML.includes('iframe'))) {
+                            setShowFallback(true);
+                            clearInterval(checkInterval);
+                        }
                     }
                 }, 1000);
 
