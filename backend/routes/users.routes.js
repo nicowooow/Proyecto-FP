@@ -5,7 +5,7 @@ import { Router } from 'express';
 
 const router = new Router();
 router.get('/users/search', search_users);
-router.get('/users',get_users);
+// router.get('/users',get_users);
 router.get('/user/verify/:username',get_user_public);
 router.get('/user/:username',authenticate,get_user);
 router.post('/user',hash_password,verifyAccount,post_user);

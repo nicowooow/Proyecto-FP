@@ -9,43 +9,23 @@ export const get_profiles = async () => {
 };
 
 export const get_recent_profiles = async () => {
-    const sql = `
-        SELECT 
-            p.id as profile_id, p.first_name, p.last_name, p.image_url, p.theme, p.bio,
-            u.username, u.created_at,
-            (
-                SELECT json_agg(json_build_object('id', l.id, 'title', l.title, 'url', l.url, 'url_image', l.url_image))
-                FROM (
-                    SELECT * FROM links 
-                    WHERE profile_id = p.id AND is_visible = true
-                    ORDER BY position ASC 
-                    LIMIT 3
-                ) l
-            ) as recent_links
-        FROM profiles p
-        JOIN users u ON p.user_id = u.id
-        WHERE p.is_public = true 
-          AND EXISTS (
-              SELECT 1 FROM links 
-              WHERE profile_id = p.id AND is_visible = true
-          )
-        ORDER BY u.created_at DESC
-        LIMIT 30
-    `;
-    let { rows } = await pool.query(sql);
+let rows = await profileRepository.getRecentProfiles();
+   
     return rows.map(row => ({
-        ...row,
+        username : row.username,
+        imageUrl : row.image_url,
+        BIO : row.BIO,
         recent_links: row.recent_links || []
     }));
 };
 
 export const get_profile = async (username) => {
-    let sql = `select p.* from profiles p join users u on p.user_id = u.id where u.username = $1`;
-    let { rows } = await pool.query(sql, [username]);
+    let row = await profileRepository.getProfileUser(username)
 
-    if (rows.length === 0) return null;
+    if (row.length === 0) return null;
 
-    let row = rows[0];
+    // console.log(row);
+    
     return new Profile(
         row.id, row.user_id, row.first_name, row.last_name, row.birth_date,
         row.recovery_email, row.bio, row.image_url, row.theme, row.created_at

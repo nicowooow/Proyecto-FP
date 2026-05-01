@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/recent_pages.css';
-import LogoUrl from '../assets/YourTree.svg';
+import LogoUrl from '../assets/images/profile_default.svg';
 import { Links_base } from '../components/linksBase.jsx';
 import AdsComponent from '../components/ads.jsx';
 import SEO from './../components/seo.jsx';
@@ -16,10 +16,13 @@ export default function Recent_Pages() {
     const fetchRecentProfiles = async () => {
       try {
         const res = await fetch('/yourtree/api/profiles/recent');
+
         if (!res.ok) {
           throw new Error('Failed to fetch recent profiles');
         }
         const data = await res.json();
+        // console.log(data);
+
         setProfiles(data);
       } catch (err) {
         setError(err.message);
@@ -39,6 +42,8 @@ export default function Recent_Pages() {
   const renderProfilesWithAds = () => {
     const items = [];
     profiles.forEach((profile, index) => {
+      console.log(profile);
+
       items.push(
         <article
           key={profile.profile_id}
@@ -51,7 +56,7 @@ export default function Recent_Pages() {
             optionCheck={profile.theme === 'dark' ? 1 : 0}
             usernameUser={profile.username}
             descriptionInput={profile.bio || "Hello, I'm new here"}
-            imageUrl={profile.image_url ? profile.image_url : LogoUrl}
+            imageUrl={profile.imageUrl ? profile.imageUrl : LogoUrl}
           />
         </article>
       );

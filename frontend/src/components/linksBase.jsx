@@ -15,6 +15,7 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 				if (!profileRes.ok) return;
 				let profile = await profileRes.json();
 
+
 				if (profile.id) {
 					setProfileId(profile.id);
 					let linksRes = await fetch(`/yourtree/api/links/${profile.id}`);
@@ -43,7 +44,7 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 					link.urlImage.startsWith("https://");
 
 				let iconUrl = "";
-				console.log(link);
+				// console.log(link);
 
 				if (isImage) {
 					const url = link.urlImage.split('https://')[1].split('/', 2)[1];

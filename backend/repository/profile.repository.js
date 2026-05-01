@@ -11,6 +11,32 @@ class profileRepository {
     const sql = "select * from profiles where user_id = $1 limit 1";
     return pool.query(sql, [userId]).then(({ rows }) => rows[0] || null);
   }
+  getRecentProfiles() {
+    const sql = `
+        SELECT 
+            p.id as profile_id, p.first_name, p.last_name, p.image_url, p.theme, p.bio,
+            u.username, u.created_at,
+            (
+                SELECT json_agg(json_build_object('id', l.id, 'title', l.title, 'url', l.url, 'url_image', l.url_image))
+                FROM (
+                    SELECT * FROM links 
+                    WHERE profile_id = p.id AND is_visible = true
+                    ORDER BY position ASC 
+                    LIMIT 3
+                ) l
+            ) as recent_links
+        FROM profiles p
+        JOIN users u ON p.user_id = u.id
+        WHERE p.is_public = true 
+          AND EXISTS (
+              SELECT 1 FROM links 
+              WHERE profile_id = p.id AND is_visible = true
+          )
+        ORDER BY u.created_at DESC
+        LIMIT 30
+    `;
+return pool.query(sql, []).then(({ rows }) => rows);
+  }
 
   /**
    *  Obtener perfil por id de perfil.
@@ -21,6 +47,11 @@ class profileRepository {
   getProfile(id) {
     const sql = "select * from profiles where id = $1 limit 1";
     return pool.query(sql, [id]).then(({ rows }) => rows[0] || null);
+  }
+  
+  getProfileUser(username) {
+    const sql = "select p.* from profiles p join users u on p.user_id = u.id where u.username = $1";
+    return pool.query(sql, [username]).then(({ rows }) => rows[0] || null);
   }
 
   /**
