@@ -42,7 +42,7 @@ export default function Recent_Pages() {
   const renderProfilesWithAds = () => {
     const items = [];
     profiles.forEach((profile, index) => {
-      console.log(profile);
+      // console.log(profile);
 
       items.push(
         <article
