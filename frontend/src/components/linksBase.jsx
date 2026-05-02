@@ -47,11 +47,11 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 				// console.log(link);
 
 				if (isImage) {
-					const url = link.urlImage.split('https://')[1].split('/', 2)[1];
+					const url = link.urlImage.split('https://')[1].split('/');
 					// console.log(url);
 
 					// con esto hacemos que la imagen de url , si no tiene un .(imagen) en el primer corte de la url se descarte
-					const isImageFile = /\.(svg|png|jpe?g|webp|gif|ico)$/i.test(url);
+					const isImageFile = /\.(svg|png|jpe?g|webp|gif|ico)$/i.test(url[link.length - 1]);
 
 					if (isImageFile) {
 						iconUrl = link.urlImage;
