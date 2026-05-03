@@ -130,6 +130,7 @@ function YourTree() {
 			<SEO
 				title="YourTree Editor - Create Custom Link Page"
 				description="Customize your link-in-bio on YourTree: add links, change colors, upload photo, and share your unique profile."
+				index={false}
 			/>
 			<section id="general_area">
 				<section id="general_settings">

@@ -3,6 +3,7 @@ Allow: /
 Disallow: /Sign_in
 Disallow: /Register
 Disallow: /admin
+Disallow: /YourTree
 
 User-agent: GPTBot
 Allow: /
