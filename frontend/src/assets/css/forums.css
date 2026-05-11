@@ -422,8 +422,14 @@
   margin-top: 20px;
 }
 
+.dialog_open {
+  overflow: hidden;
+}
+
 .forum_detail_dialog {
   width: 80%;
+  overscroll-behavior: contain;
+  overflow-y: auto;
 }
 
 

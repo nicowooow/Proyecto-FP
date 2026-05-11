@@ -174,7 +174,7 @@ export default function Forums() {
     };
 
     return (
-        <main id="forums_page">
+        <main id="forums_page" className={selectedForum ? "dialog_open" : ""}>
             <SEO
                 title="YourTree Forums - Creator Community"
                 description="Join conversations in YourTree forums. Discuss ideas, share links, and connect with fellow creators."
