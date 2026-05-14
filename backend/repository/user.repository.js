@@ -2,6 +2,15 @@ import pool from "../db/connection_db.model.js";
 // import User from "./../models/user.model.js";
 class UserRepository {
 	/**
+	 * Obtener un usuario por su id.
+	 * @param {number} id
+	 * @returns {Promise<Object>} usuario correspondiente al id
+	 */
+	getUserById = (id) => {
+		const sql = `select * from users where id = $1 limit 1`;
+		return pool.query(sql, [id]).then(({ rows }) => rows[0] || null);
+	};
+	/**
 	 * Obtener un usuario por su nombre de usuario.
 	 *
 	 * @param {string} username - nombre de usuario

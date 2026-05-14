@@ -15,8 +15,12 @@ export const signIn = async (username_or_email, password) => {
 
   if (!isValid) throw new Error("INVALID_CREDENTIALS");
 
+  // Incrementar token_version
+  const newTokenVersion = (user.token_version || 0) + 1;
+  await userRepository.patchUser(user.id, null, null, null, null, null, newTokenVersion);
+
   const accessToken = createAccessToken(safeUser.getId(), safeUser.username, safeUser.getRole());
-  const refreshToken = createRefreshToken(safeUser.getId(), safeUser.getTokenVersion());
+  const refreshToken = createRefreshToken(safeUser.getId(), newTokenVersion);
 
   return {
     user: safeUser.toPublic(),

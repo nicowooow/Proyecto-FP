@@ -2,13 +2,12 @@
 // import path from "path";
 import jwt from "jsonwebtoken";
 import { JWT_ACCESS_SECRET } from "../config/config.js";
+import userRepository from "../repository/user.repository.js";
 import { crearClaveAuth } from "../utils/crearclave.js";
 import { sendEmail } from "../utils/nodemailer.utils.js";
 //middleware para saber si el usuario esta autentificado o no
-export const authenticate = (req, res, next) => {
+export const authenticate = async (req, res, next) => {
 	try {
-		// el frontend nos manda por el req, el header y dicho header contiene el JWT
-		// de autenticacion
 		const authHeader = req.headers.authorization || req.headers.Authorization;
 		if (!authHeader || typeof authHeader !== "string") {
 			return res.status(401).json({
@@ -30,18 +29,24 @@ export const authenticate = (req, res, next) => {
 			});
 		}
 
-		// verify lanza error si el token es inválido o expiró
 		const payload = jwt.verify(token, JWT_ACCESS_SECRET);
 
-		// guarda los datos del usuario para usarlos en el controller
-		req.user = payload; // { id, username, role }
-		req.isLogged = true;
+		// Validar token_version si existe en el payload
+		if (payload.id && payload.tokenVersion !== undefined) {
+			const user = await userRepository.getUserById(payload.id);
+			if (!user || user.token_version !== payload.tokenVersion) {
+				return res.status(401).json({
+					message: "invalid or expired access key",
+					isLogged: false,
+				});
+			}
+		}
 
-		// console.log("TOKEN OK:", payload);
+		req.user = payload;
+		req.isLogged = true;
 		next();
 	} catch (error) {
 		console.log(error);
-
 		return res.status(401).json({
 			message: "invalid or expired access key",
 			isLogged: false,
