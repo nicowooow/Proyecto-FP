@@ -13,6 +13,7 @@ function Sign_up() {
   // iniciamos los valores de Password y ConfirmPassword en vacio
   let [Password, setPassword] = useState("");
   let [ConfirmPassword, setConfirmPassword] = useState("");
+  let [Username, setUsername] = useState("");
   // los metemos en la funcion VerifyPassword para obtener si son iguales, la clase css y el mensaje de error
   let [message, setMessage] = useState("");
   const { isSame, confirmedClass, action } = VerifyPassword(
@@ -66,10 +67,10 @@ function Sign_up() {
 
   return (
     <main id="main_sign">
-<SEO 
-  title="Sign Up - YourTree Link in Bio"
-  description="Create free YourTree account and start building your custom link page."
-/>
+      <SEO
+        title="Sign Up - YourTree Link in Bio"
+        description="Create free YourTree account and start building your custom link page."
+      />
       <section id="sign">
         <section id="message_sign">
           <h2>Hello there</h2>
@@ -77,7 +78,14 @@ function Sign_up() {
         <section>
           <form id="form_sign" onSubmit={handleSubmit}>
             <label htmlFor="username">Username :*</label>
-            <input type="text" name="username" id="username" required />
+            <input
+              type="text"
+              name="username"
+              id="username"
+              required
+              value={Username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <label htmlFor="email">Email :*</label>
             <input type="email" name="email" id="email" required />
             <label htmlFor="password">Password :*</label>
@@ -102,7 +110,10 @@ function Sign_up() {
             {(message || action) && (
               <p className="error">{message || action}</p>
             )}
-            <input type="submit" disabled={!isSame} />
+            <input
+              type="submit"
+              disabled={!isSame || Username.includes(" ")}
+            />
           </form>
         </section>
       </section>
