@@ -47,20 +47,36 @@ export const PutLinks = React.memo(({ username, children, ...rest }) => {
 				// console.log(link);
 
 				if (isImage) {
-					const url = link.urlImage.split('https://')[1].split('/');
-					// console.log(url);
-
-					// con esto hacemos que la imagen de url , si no tiene un .(imagen) en el primer corte de la url se descarte
-					const isImageFile = /\.(svg|png|jpe?g|webp|gif|ico)$/i.test(url[link.length - 1]);
+					const urlParts = link.urlImage.split('https://')[1].split('/');
+					const lastPart = urlParts[urlParts.length - 1];
+					const isImageFile = /\.(svg|png|jpe?g|webp|gif|ico)$/i.test(lastPart);
 
 					if (isImageFile) {
+						// 1. Si termina en extensión de imagen, usar esa imagen
 						iconUrl = link.urlImage;
 					} else {
-						const hostname = new URL(link.urlImage).hostname;
-						try {
-							iconUrl = `https://www.google.com/s2/favicons?domain=https://${hostname}&sz=64`;
-
-						} catch (_) { }
+						// 2. Tomar solo el primer subenlace (primer dominio.com/sub-enlace)
+						let firstSubUrl = '';
+						if (urlParts.length > 1) {
+							firstSubUrl = `https://${urlParts[0]}/${urlParts[1]}`;
+							const firstSubUrlLast = urlParts[1];
+							const isFirstSubImage = /\.(svg|png|jpe?g|webp|gif|ico)$/i.test(firstSubUrlLast);
+							if (isFirstSubImage) {
+								iconUrl = firstSubUrl;
+							} else {
+								// 3. Si no, usar favicon de Google
+								try {
+									const hostname = new URL(link.urlImage).hostname;
+									iconUrl = `https://www.google.com/s2/favicons?domain=https://${hostname}&sz=64`;
+								} catch (_) { }
+							}
+						} else {
+							// Si no hay subenlace, usar favicon de Google
+							try {
+								const hostname = new URL(link.urlImage).hostname;
+								iconUrl = `https://www.google.com/s2/favicons?domain=https://${hostname}&sz=64`;
+							} catch (_) { }
+						}
 					}
 				}
 
