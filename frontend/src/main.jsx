@@ -2,7 +2,7 @@ import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "./components/auth.jsx";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { HelmetProvider } from "react-helmet-async";
 
 //import "./assets/css/index.css";
 import Header from "./components/header";
@@ -53,10 +53,6 @@ function AppWithHeader() {
 
 	return (
 		<>
-			<Helmet>
-				<html lang="en" />
-				<meta name="theme-color" content="#ffffff" />
-			</Helmet>
 			<AnalyticsTracker />
 			{!hideHeader && <Header />}
 
@@ -73,7 +69,6 @@ function AppWithHeader() {
 					<Route path="/" element={<Home />} />
 					<Route path="/YourTree" element={<YourTree />} />
 					<Route path="/YourTree/:username" element={<YourTreeUser />} />
-					<Route path="/" element={<Home />} />
 					<Route path="/Forums" element={<Forums />} />
 					<Route path="/Forums/:forumId" element={<Forums />} />
 					<Route path="/Recent_Pages" element={<Recent_Pages />} />
@@ -84,8 +79,8 @@ function AppWithHeader() {
 					<Route path="/Sign_up" element={<Sign_up />} />
 					<Route path="/Forgot_Password" element={<Forgot_Password />} />
 					<Route path="/Reset_Password" element={<Reset_Password />} />
-					<Route path="/*" element={<NotFound />} />
 					<Route path="/404" element={<NotFound />} />
+					<Route path="/*" element={<NotFound />} />
 				</Routes>
 				<BuyMeACoffee />
 			</Suspense >
