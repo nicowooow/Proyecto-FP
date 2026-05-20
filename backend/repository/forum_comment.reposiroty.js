@@ -18,7 +18,7 @@ class forumCommentRepository {
 			LEFT JOIN profiles p ON fc.profile_id = p.id
 			LEFT JOIN users u ON p.user_id = u.id
 			WHERE fc.forum_id = $1 
-			ORDER BY fc.created_at DESC
+			ORDER BY fc.created_at asc
 		`;
 		return pool.query(sql, [forumId]).then(({ rows }) => rows || []);
 	}

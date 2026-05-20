@@ -25,7 +25,7 @@ class forumRepository {
    * Obtener todos los foros permitiendo paginacion con limit y offset
    */
   getForums(limit = 10, offset = 0) {
-    const sql = "select * from forums order by created_at asc LIMIT $1 OFFSET $2";
+    const sql = "select * from forums order by created_at desc LIMIT $1 OFFSET $2";
     return pool.query(sql, [limit, offset]).then(({ rows }) => rows);
   }
 

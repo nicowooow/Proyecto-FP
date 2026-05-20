@@ -243,6 +243,15 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
         }
     }, [forum.id, isLogged, currentUsername]);
 
+    // Refrescar foros cada cierto tiempo mientras el diálogo está abierto
+    useEffect(() => {
+        if (!refreshForums) return;
+        const interval = setInterval(() => {
+            refreshForums(0, true);
+        }, 10000); // cada 10 segundos
+        return () => clearInterval(interval);
+    }, [refreshForums]);
+
     const handleClose = () => {
         if (dialogRef.current) dialogRef.current.close();
         onClose();
