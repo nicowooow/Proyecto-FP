@@ -13,7 +13,9 @@ function Home() {
 				title="YourTree - Share links and connect with creators"
 				description="Discover YourTree: create your custom link-in-bio page, join forums, and share with the community. Full-stack React+Node demo."
 			/>
-			{isLogged && <FormCodeVerification />}
+			<div>
+				{isLogged && <FormCodeVerification />}
+			</div>
 			<section id="introduction" className=" flex flex-col items-center md:gap-20 mb-20 w-full ">
 				<section className="flex flex-col items-center text-center w-full">
 					<svg id="YourTree" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 639.96 211.34">
