@@ -4,12 +4,43 @@ dialog,
     align-self: center;
     padding: 2.5rem;
     border-radius: 16px;
-    background-color: var(--color-fondo);
-    border: 1px solid var(--color-borde);
-    color: var(--color-texto);
+    background-color: #181a20f2;
+    /* fondo más oscuro y opaco */
+    border: 2px solid #e5534b;
+    /* borde rojo fuerte */
+    color: #fff;
     box-shadow:
-        0 20px 25px -5px var(--color-sombra),
-        0 8px 10px -6px var(--color-sombra);
+        0 20px 25px -5px #000a,
+        0 8px 10px -6px #0008;
+    transition: background 0.2s, border 0.2s;
+}
+
+dialog.form_delete {
+    background: #181a20f2;
+    border: 2px solid #e5534b;
+    color: #fff;
+    box-shadow: 0 8px 32px 0 rgba(229, 83, 75, 0.25);
+}
+
+dialog.form_delete button,
+dialog.form_delete .btn-constrast {
+    background: #e5534b;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    padding: 0.5em 1.2em;
+    margin: 0.5em 0.5em 0 0;
+    font-weight: bold;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px #0003;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+dialog.form_delete button:hover,
+dialog.form_delete .btn-constrast:hover {
+    background: #fff;
+    color: #e5534b;
+    border: 1px solid #e5534b;
 }
 
 #upload_photo,

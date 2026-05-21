@@ -269,6 +269,51 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
         // console.log("Commented on", forum.id);
     };
 
+    const handleCommentAsync = async () => {
+        console.log("Submitting comment:", newCommentText);
+        if (!isLogged) {
+            navigate("/Sign_in");
+            return;
+        }
+        if (newCommentText.trim() === "") return;
+        if (!myProfileId) {
+            return;
+        }
+
+        const token = getToken();
+        if (!token) {
+            navigate('/Sign_in');
+            return;
+        }
+        try {
+            const res = await fetch('/yourtree/api/forum/comment/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    profileId: myProfileId,
+                    forumId: forum.id,
+                    content: newCommentText,
+                    status: 'active'
+                })
+            });
+            if (res.ok) {
+                // Fake pushing the comment to UI immediately for responsivness, wait for refresh on reopen
+                setCommentsList([{ id: Date.now(), username: currentUsername || "You", content: newCommentText, created_at: new Date().toISOString() }, ...commentsList]);
+                setNewCommentText("");
+                showAlert('success', 'submit comment.');
+            } else {
+                console.error("Failed to submit the comment");
+                showAlert('error', 'Failed to submit your comment.');
+            }
+        } catch (error) {
+            console.error(error);
+            showAlert('error', 'There was an error to submitting your comment.');
+        }
+    }
+
     return (
         <dialog className="forum_detail_dialog" ref={dialogRef} onCancel={handleClose}>
             <AlertBanner alert={muiAlert} onClose={clearAlert} />
@@ -323,7 +368,10 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
 
                 <div className="comments_section_detail">
                     {/* Add Comment Area */}
-                    <div className="add_comment_container">
+                    <form className="add_comment_container" onSubmit={(e) => {
+                        e.preventDefault();
+                        handleCommentAsync();
+                    }}>
                         <textarea
                             className="comment_input_box"
                             placeholder="add comment..."
@@ -337,55 +385,12 @@ function ForumDetailDialog({ forum, onClose, isLogged, currentUsername, refreshF
                             }}
                         />
                         <button
-                            type='button'
+                            type='submit'
                             className="btn_submit_comment"
-                            onClick={async () => {
-                                if (!isLogged) {
-                                    navigate("/Sign_in");
-                                    return;
-                                }
-                                if (newCommentText.trim() === "") return;
-                                if (!myProfileId) {
-                                    return;
-                                }
-
-                                const token = getToken();
-                                if (!token) {
-                                    navigate('/Sign_in');
-                                    return;
-                                }
-                                try {
-                                    const res = await fetch('/yourtree/api/forum/comment/', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'Authorization': `Bearer ${token}`
-                                        },
-                                        body: JSON.stringify({
-                                            profileId: myProfileId,
-                                            forumId: forum.id,
-                                            content: newCommentText,
-                                            status: 'active'
-                                        })
-                                    });
-                                    if (res.ok) {
-                                        // Fake pushing the comment to UI immediately for responsivness, wait for refresh on reopen
-                                        setCommentsList([{ id: Date.now(), username: currentUsername || "You", content: newCommentText, created_at: new Date().toISOString() }, ...commentsList]);
-                                        setNewCommentText("");
-                                        showAlert('success', 'submit comment.');
-                                    } else {
-                                        console.error("Failed to submit the comment");
-                                        showAlert('error', 'Failed to submit your comment.');
-                                    }
-                                } catch (error) {
-                                    console.error(error);
-                                    showAlert('error', 'There was an error to submitting your comment.');
-                                }
-                            }}
                         >
                             Post comment
                         </button>
-                    </div>
+                    </form>
 
                     {commentsList.length === 0 ? (
                         <p className="comment_text no_comments_text">No comments yet, this is a placeholder mimicking the UI.</p>
