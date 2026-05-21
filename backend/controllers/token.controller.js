@@ -24,9 +24,11 @@ export const refreshToken = async (req, res) => {
 		const { refreshToken } = req.body;
 		const newToken = await tokenService.refreshAccessToken(refreshToken);
 		
-		return res.status(201).json({
-			token: newToken,
-		});
+        return res.status(201).json({
+            token: tokens.accessToken,      
+			accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken, 
+        });
 	} catch (error) {
 		// si no encontramos el refreshToken enviamos un estado y un mensaje de que necesitamos el token
 		if (error.message === "REFRESH_REQUIRED") {
