@@ -79,7 +79,9 @@ function Sign_in() {
 						<Link to="/Forgot_Password" style={{ display: 'block', marginTop: '10px', fontSize: '0.9rem', color: 'var(--text_2)', textDecoration: 'underline' }}>
 							I've forgotten my password
 						</Link>
-						{message && <p className="error">{message}</p>}
+						<div>
+							{message && <p className="error">{message}</p>}
+						</div>
 						<input type="submit" value="sing_in" />
 					</form>
 				</section>
