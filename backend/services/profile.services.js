@@ -10,11 +10,12 @@ export const get_profiles = async () => {
 
 export const get_recent_profiles = async () => {
 let rows = await profileRepository.getRecentProfiles();
+//    console.log(rows);
    
     return rows.map(row => ({
         username : row.username,
         imageUrl : row.image_url,
-        BIO : row.BIO,
+        bio : row.bio,
         recent_links: row.recent_links || []
     }));
 };
