@@ -42,20 +42,20 @@ export function AuthProvider({ children }) {
 
 	// esta sera una funcion para almacenar los tokens en el login
 	const login = (token, refreshToken, userData) => {
-		// token inicial el cual es token de autenticacion original
-		cookies.set("token", token, {
+		console.log(token, refreshToken, userData);
+
+		const isProduction = window.location.protocol === "https:";
+		const cookieOptions = {
 			expires: 1,
-			secure: true,
-			sameSite: "strict",
-		});
+			secure: isProduction,
+			sameSite: isProduction ? "strict" : "lax",
+		};
+		// token inicial el cual es token de autenticacion original
+		cookies.set("token", token, cookieOptions);
 		// este ser el token que usaremos para recargar el anterior antes de que expire
-		cookies.set("refreshToken", refreshToken, {
-			expires: 7,
-			secure: true,
-			sameSite: "strict",
-		});
+		cookies.set("refreshToken", refreshToken, { ...cookieOptions, expires: 7 });
 		// almacena los datos que sacamos de usuario en el almacenamiento local
-		cookies.set("user", JSON.stringify(userData), { secure: true, sameSite: "strict" });
+		cookies.set("user", JSON.stringify(userData), cookieOptions);
 		setUser(userData);
 		// cambiamos el valor de isLogged a true por ende si se logro loguear
 		// console.log("se creo el token y su refresh");

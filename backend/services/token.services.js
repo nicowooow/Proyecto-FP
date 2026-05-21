@@ -13,6 +13,8 @@ export const refreshAccessToken = async (refreshToken) => {
         throw new Error("INVALID_REFRESH");
     }
 
+	console.log(payload);
+	
     // Buscar el usuario para tener username y role
     const user = await userRepository.getUserById(payload.id);
     if (!user || user.token_version !== payload.tokenVersion) {

@@ -565,6 +565,10 @@ export const FormCodeVerification = React.memo(function FormCodeVerification() {
 	const navigate = useNavigate();
 	const { isLogged, isVerify } = useAuth();
 	const user = getUser();
+
+	const [code, setCode] = useState("");
+	const [timeLeft, setTimeLeft] = useState(0);
+
 	const status = user ? user.status : null;
 	const username = user ? user.username : null;
 
@@ -577,9 +581,6 @@ export const FormCodeVerification = React.memo(function FormCodeVerification() {
 		}
 	}, [isVerify, isLogged, status]);
 
-	const [code, setCode] = useState("");
-	const [timeLeft, setTimeLeft] = useState(0);
-
 	useEffect(() => {
 		if (timeLeft > 0) {
 			const timerId = setTimeout(() => {
@@ -588,6 +589,8 @@ export const FormCodeVerification = React.memo(function FormCodeVerification() {
 			return () => clearTimeout(timerId);
 		}
 	}, [timeLeft]);
+
+	if (!user) return null;
 
 	const handleResend = () => {
 		if (timeLeft > 0) return;

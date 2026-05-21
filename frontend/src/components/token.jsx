@@ -2,7 +2,13 @@
 let {logout} = useAuth(); */
 import cookie from "js-cookie";
 export const getUser = () => {
-	return JSON.parse(cookie.get("user"));
+	const raw = cookie.get("user");
+	if (!raw) return null;
+	try {
+		return JSON.parse(raw);
+	} catch {
+		return null;
+	}
 };
 
 export const getToken = () => {
@@ -16,6 +22,12 @@ export const getRefreshToken = () => {
 };
 
 export const refreshToken = async () => {
+	const isProduction = window.location.protocol === "https:";
+	const cookieOptions = {
+		secure: isProduction,
+		sameSite: isProduction ? "strict" : "lax",
+	};
+
 	// traemos el segundo token el cual sera para refrescarlo
 	const refreshToken = getRefreshToken();
 	// si no lo encuentra regresa un valor nulo
@@ -45,16 +57,16 @@ export const refreshToken = async () => {
 	// Guardamos el nuevo access token (asegúrate de si tu backend devuelve .token o .accessToken)
 	const newAccessToken = data.accessToken || data.token;
 
-	cookie.set("token", newAccessToken, { secure: true, sameSite: "strict", expires: 1 });
+	cookie.set("token", newAccessToken, { ...cookieOptions, expires: 1 });
 
 	// Si tu backend genera un nuevo refresh token rotativo por el token_version, guardalo:
 	if (data.refreshToken) {
-		cookie.set("refreshToken", data.refreshToken, { secure: true, sameSite: "strict", expires: 7 });
+		cookie.set("token", newAccessToken, { ...cookieOptions, expires: 1 });
 	}
 
 	// Si tu backend devuelve los datos del usuario actualizados en el refresh, actualiza la cookie
 	if (data.user) {
-		cookie.set("user", JSON.stringify(data.user), { secure: true, sameSite: "strict" });
+		cookie.set("user", JSON.stringify(data.user), cookieOptions);
 	}
 	//regresamos los datos de token
 	return data.token;
