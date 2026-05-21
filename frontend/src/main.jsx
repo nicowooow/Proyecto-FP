@@ -54,7 +54,9 @@ function AppWithHeader() {
 	return (
 		<>
 			<AnalyticsTracker />
-			{!hideHeader && <Header />}
+			<div>
+				{!hideHeader && <Header />}
+			</div>
 
 			<Suspense fallback={
 				<div style={{
