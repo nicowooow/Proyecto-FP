@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
 			setLoading(false);
 			// esto nos serviria para el loader de la paginal si es falso desaparece el loader de la vista princial
 		})();
-	}, [location.pathname]);
+	}, []);
 
 	// esta sera una funcion para almacenar los tokens en el login
 	const login = (token, refreshToken, userData) => {
