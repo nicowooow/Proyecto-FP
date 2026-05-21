@@ -83,6 +83,20 @@ export function AuthProvider({ children }) {
 	// cuales pueden tener elementos adentro
 	const value = { isLogged, isVerify, loading, login, logout, verifyStatus, user };
 
+	if (loading) {
+		return (
+			<div style={{
+				minHeight: "100vh",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				backgroundColor: "#ffffff" // o el color de tu fondo oscuro/claro
+			}}>
+				{/* Puedes poner aquí un spinner elegante o simplemente un texto */}
+				<span>Cargando aplicación...</span>
+			</div>
+		);
+	}
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
