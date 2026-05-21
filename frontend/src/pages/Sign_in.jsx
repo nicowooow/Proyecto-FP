@@ -18,8 +18,8 @@ function Sign_in() {
 		const username_or_email = form.get("username_or_email");
 		const passwd = form.get("password");
 		//// console.log(e)// console.log(form)
-		console.log(username_or_email);
-		console.log(password);
+		// console.log(username_or_email);
+		// console.log(password);
 		try {
 			const res = await fetch("/yourtree/api/sign-in/", {
 				method: "POST",
@@ -38,7 +38,7 @@ function Sign_in() {
 				return setMessage(data.message || "Login failed");
 			}
 			if (res.ok) {
-				console.log("LOGIN OK:", data);
+				// console.log("LOGIN OK:", data);
 				// return setMessage(data.message)
 				//// console.log(data.user);
 

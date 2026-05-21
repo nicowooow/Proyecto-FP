@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
 
 	// esta sera una funcion para almacenar los tokens en el login
 	const login = (token, refreshToken, userData) => {
-		console.log(token, refreshToken, userData);
+		// console.log(token, refreshToken, userData);
 
 		const isProduction = window.location.protocol === "https:";
 		const cookieOptions = {
