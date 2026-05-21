@@ -36,8 +36,26 @@ export const refreshToken = async () => {
 
 	// obtenemos los datos del back
 	let data = await res.json();
+
+	cookie.remove("token");
+	cookie.remove("refreshToken");
+	cookie.remove("user");
+
 	//guardamos el token en las cookies para mantener consistencia
-	cookie.set("token", data.token);
+	// Guardamos el nuevo access token (asegúrate de si tu backend devuelve .token o .accessToken)
+	const newAccessToken = data.accessToken || data.token;
+
+	cookie.set("token", newAccessToken, { secure: true, sameSite: "strict", expires: 1 });
+
+	// Si tu backend genera un nuevo refresh token rotativo por el token_version, guardalo:
+	if (data.refreshToken) {
+		cookie.set("refreshToken", data.refreshToken, { secure: true, sameSite: "strict", expires: 7 });
+	}
+
+	// Si tu backend devuelve los datos del usuario actualizados en el refresh, actualiza la cookie
+	if (data.user) {
+		cookie.set("user", JSON.stringify(data.user), { secure: true, sameSite: "strict" });
+	}
 	//regresamos los datos de token
 	return data.token;
 };

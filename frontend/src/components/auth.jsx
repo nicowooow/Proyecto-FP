@@ -55,7 +55,7 @@ export function AuthProvider({ children }) {
 			sameSite: "strict",
 		});
 		// almacena los datos que sacamos de usuario en el almacenamiento local
-		cookies.set("user", JSON.stringify(userData));
+		cookies.set("user", JSON.stringify(userData), { secure: true, sameSite: "strict" });
 		setUser(userData);
 		// cambiamos el valor de isLogged a true por ende si se logro loguear
 		// console.log("se creo el token y su refresh");
