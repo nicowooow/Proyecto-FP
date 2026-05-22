@@ -281,6 +281,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 						name="title_form_link"
 						id={`${baseId}-title`}
 						placeholder="Title of the link"
+						required
 					/>
 
 					<label htmlFor={`${baseId}-url`}>URL:</label>
@@ -289,6 +290,7 @@ export const FormCreateLink = React.memo(function FormCreateLink({ username }) {
 						name="url_form_link"
 						id={`${baseId}-url`}
 						placeholder="Link you want to share"
+						required
 					/>
 
 					<label htmlFor={`${baseId}-position`}>Position:</label>
