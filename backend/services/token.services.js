@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { JWT_REFRESH_SECRET } from "../config/config.js";
 import { createAccessToken } from "../utils/jwt.utils.js";
-import {userRepository} from "../repository/user.repository.js";
+import userRepository from "../repository/user.repository.js";
 // Validar refresh token y generar nuevo access token
 export const refreshAccessToken = async (refreshToken) => {
     if (!refreshToken) throw new Error("REFRESH_REQUIRED");
