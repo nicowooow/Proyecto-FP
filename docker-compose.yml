@@ -16,7 +16,7 @@ services:
       - "80:80" # El contenedor nginx expone el 80, lo mapeamos al 5173 o al puerto que prefieras
       - "443:443"
     volumes:
-      - /etc/letsencrypt:/etc/letsencrypt:ro  # Certs (vacío OK)
+      - /etc/ssl/cloudflare:/etc/ssl/cloudflare:ro # Certs (vacío OK)
     depends_on:
       - backend
     restart: unless-stopped
